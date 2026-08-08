@@ -11,6 +11,25 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "racing_archive", "-pracing_archive"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  backend:
+    build:
+      context: ./backend
+    container_name: racing-archive-backend
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/racing_archive
+      SPRING_DATASOURCE_USERNAME: racing_archive
+      SPRING_DATASOURCE_PASSWORD: racing_archive
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
 
 volumes:
   mysql_data:

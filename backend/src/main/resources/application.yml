@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: backend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/racing_archive}
+    username: ${SPRING_DATASOURCE_USERNAME:racing_archive}
+    password: ${SPRING_DATASOURCE_PASSWORD:racing_archive}
+  jpa:
+    hibernate:
+      ddl-auto: validate
