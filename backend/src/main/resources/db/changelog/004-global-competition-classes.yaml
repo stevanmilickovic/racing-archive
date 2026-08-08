@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-global-competition-classes
+      author: codex
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: competition_classes
+            constraintName: fk_class_season
+        - dropUniqueConstraint:
+            tableName: competition_classes
+            constraintName: uk_class_season_code
+        - dropColumn:
+            tableName: competition_classes
+            columnName: season_id
+        - addUniqueConstraint:
+            tableName: competition_classes
+            columnNames: code
+            constraintName: uk_competition_class_code
+      rollback:
+        - dropUniqueConstraint:
+            tableName: competition_classes
+            constraintName: uk_competition_class_code
+        - addColumn:
+            tableName: competition_classes
+            columns:
+              - column:
+                  name: season_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_class_season
+                    references: seasons(id)
+        - addUniqueConstraint:
+            tableName: competition_classes
+            columnNames: season_id, code
+            constraintName: uk_class_season_code

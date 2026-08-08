@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CompetitionClassRepository extends JpaRepository<CompetitionClass, Long> {
 
-    Optional<CompetitionClass> findBySeasonIdAndCodeIgnoreCase(Long seasonId, String code);
+    Optional<CompetitionClass> findByCodeIgnoreCase(String code);
 }

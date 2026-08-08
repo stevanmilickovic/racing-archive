@@ -79,9 +79,8 @@ public class SessionResultImportService {
         String displayName = optional(row, "vehicle_display_name");
         String classCode = required(row, "class_code", rowNumber).toUpperCase(Locale.ROOT);
 
-        CompetitionClass competitionClass = competitionClassRepository
-                .findBySeasonIdAndCodeIgnoreCase(session.getRound().getSeason().getId(), classCode)
-                .orElseThrow(() -> badRequest("Row " + rowNumber + ": class '" + classCode + "' does not exist in this session's season"));
+        CompetitionClass competitionClass = competitionClassRepository.findByCodeIgnoreCase(classCode)
+                .orElseThrow(() -> badRequest("Row " + rowNumber + ": class '" + classCode + "' does not exist"));
         Driver driver = findOrCreateDriver(firstName, lastName, nationalityCode, counts);
         Club club = findOrCreateClub(clubName, clubCountryCode, counts);
         Vehicle vehicle = findOrCreateVehicle(manufacturer, model, displayName, counts);

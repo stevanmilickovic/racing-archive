@@ -10,7 +10,7 @@ Create these records through the administrator API before importing results:
 2. Discipline
 3. Championship
 4. Season
-5. Competition classes for the season
+5. Competition classes
 6. Championship round
 7. Race session within that round
 
@@ -44,7 +44,7 @@ The columns must remain exactly in this order:
 driver_first_name,driver_last_name,driver_nationality_code,club_name,club_country_code,vehicle_manufacturer,vehicle_model,vehicle_display_name,class_code,race_number,elapsed_time_millis,position,result_status
 ```
 
-`driver_nationality_code` and `club_country_code` use two-letter country codes. `class_code` must already exist in the session's season. `elapsed_time_millis`, `position`, `race_number`, and `vehicle_display_name` may be empty where they do not apply. `result_status` is one of `FINISHED`, `DNF`, `DNS`, or `DSQ`.
+`driver_nationality_code` and `club_country_code` use two-letter country codes. `class_code` must already exist. `elapsed_time_millis`, `position`, `race_number`, and `vehicle_display_name` may be empty where they do not apply. `result_status` is one of `FINISHED`, `DNF`, `DNS`, or `DSQ`.
 
 Values containing commas must be wrapped in double quotes. A double quote inside a quoted value must be written twice.
 
@@ -58,7 +58,7 @@ POST /admin/sessions/{sessionId}/results/import
 
 For each row, the importer:
 
-1. Finds the competition class within the session's season.
+1. Finds the global competition class.
 2. Reuses a driver with the same first name, last name, and nationality; otherwise creates one.
 3. Reuses a club with the same name and country; otherwise creates one.
 4. Reuses a vehicle with the same manufacturer, model, and display name; otherwise creates one.

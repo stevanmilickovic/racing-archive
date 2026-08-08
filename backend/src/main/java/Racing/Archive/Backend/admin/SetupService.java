@@ -80,7 +80,7 @@ class SetupService {
     private void apply(Discipline discipline, DisciplineRequest request) { discipline.setCode(request.code()); discipline.setName(request.name()); }
     private void apply(Championship championship, ChampionshipRequest request) { championship.setFederation(federation(request.federationId())); championship.setDiscipline(discipline(request.disciplineId())); championship.setName(request.name()); championship.setShortName(request.shortName()); }
     private void apply(Season season, SeasonRequest request) { season.setChampionship(championship(request.championshipId())); season.setYear(request.year()); season.setName(request.name()); }
-    private void apply(CompetitionClass competitionClass, CompetitionClassRequest request) { competitionClass.setSeason(season(request.seasonId())); competitionClass.setCode(request.code()); competitionClass.setName(request.name()); competitionClass.setDisplayOrder(request.displayOrder()); }
+    private void apply(CompetitionClass competitionClass, CompetitionClassRequest request) { competitionClass.setCode(request.code()); competitionClass.setName(request.name()); competitionClass.setDisplayOrder(request.displayOrder()); }
     private void apply(ChampionshipRound round, ChampionshipRoundRequest request) { round.setSeason(season(request.seasonId())); round.setHostFederation(request.hostFederationId() == null ? null : federation(request.hostFederationId())); round.setRoundNumber(request.roundNumber()); round.setName(request.name()); round.setStartsOn(request.startsOn()); round.setEndsOn(request.endsOn()); round.setStatus(request.status()); }
     private void apply(RaceSession session, RaceSessionRequest request) { session.setRound(championshipRound(request.roundId())); session.setName(request.name()); session.setType(request.type()); session.setSessionOrder(request.sessionOrder()); session.setScheduledAt(request.scheduledAt()); }
 
@@ -97,7 +97,7 @@ class SetupService {
     private DisciplineResponse disciplineResponse(Discipline value) { return new DisciplineResponse(value.getId(), value.getCode(), value.getName()); }
     private ChampionshipResponse championshipResponse(Championship value) { return new ChampionshipResponse(value.getId(), value.getFederation().getId(), value.getDiscipline().getId(), value.getName(), value.getShortName()); }
     private SeasonResponse seasonResponse(Season value) { return new SeasonResponse(value.getId(), value.getChampionship().getId(), value.getYear(), value.getName()); }
-    private CompetitionClassResponse competitionClassResponse(CompetitionClass value) { return new CompetitionClassResponse(value.getId(), value.getSeason().getId(), value.getCode(), value.getName(), value.getDisplayOrder()); }
+    private CompetitionClassResponse competitionClassResponse(CompetitionClass value) { return new CompetitionClassResponse(value.getId(), value.getCode(), value.getName(), value.getDisplayOrder()); }
     private ChampionshipRoundResponse championshipRoundResponse(ChampionshipRound value) { return new ChampionshipRoundResponse(value.getId(), value.getSeason().getId(), value.getHostFederation() == null ? null : value.getHostFederation().getId(), value.getRoundNumber(), value.getName(), value.getStartsOn(), value.getEndsOn(), value.getStatus()); }
     private RaceSessionResponse raceSessionResponse(RaceSession value) { return new RaceSessionResponse(value.getId(), value.getRound().getId(), value.getName(), value.getType(), value.getSessionOrder(), value.getScheduledAt()); }
 }

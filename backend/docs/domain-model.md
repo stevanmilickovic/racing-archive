@@ -54,7 +54,7 @@ A reusable vehicle record. A driver may use different vehicles in different roun
 
 ### CompetitionClass
 
-A category that groups competitors with comparable machinery. Class definitions should be scoped to a championship or season so that changed class names, eligibility, and rules do not alter historic results.
+A category that groups competitors with comparable machinery. Competition classes are global reference data and can be reused across seasons. A round entry stores the class used by a driver in that round, preserving historic results when a driver changes class.
 
 ### Entry
 
