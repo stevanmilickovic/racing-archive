@@ -1,0 +1,137 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-scoring-rules
+      author: codex
+      changes:
+        - createTable:
+            tableName: points_schemes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: competition_class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+                    foreignKeyName: fk_points_scheme_class
+                    references: competition_classes(id)
+              - column:
+                  name: minimum_competitors_for_full_points
+                  type: INT
+                  defaultValueNumeric: 1
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reduced_points_factor
+                  type: DECIMAL(4,2)
+                  defaultValueNumeric: 1.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: award_full_points_for_foreign_host
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: points_scheme_positions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: points_scheme_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_points_scheme_position_scheme
+                    references: points_schemes(id)
+              - column:
+                  name: position
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: points
+                  type: DECIMAL(8,2)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: points_scheme_positions
+            columnNames: points_scheme_id, position
+            constraintName: uk_points_scheme_position
+        - createTable:
+            tableName: drop_score_rules
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: season_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+                    foreignKeyName: fk_drop_score_rule_season
+                    references: seasons(id)
+              - column:
+                  name: results_to_drop
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: disqualified_result_eligible
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: club_scoring_rules
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: competition_class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+                    foreignKeyName: fk_club_scoring_rule_class
+                    references: competition_classes(id)
+              - column:
+                  name: count_all_results
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: results_to_count
+                  type: INT
+      rollback:
+        - dropTable:
+            tableName: club_scoring_rules
+        - dropTable:
+            tableName: drop_score_rules
+        - dropTable:
+            tableName: points_scheme_positions
+        - dropTable:
+            tableName: points_schemes

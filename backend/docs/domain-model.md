@@ -91,7 +91,12 @@ ClassificationResult = official ranked and scored outcome derived from sessions
 
 ## Scoring and standings
 
-Scoring rules must be versioned configuration associated with a season, and optionally overridden for a class, round, or classification. Calculation belongs in application services, not database triggers or entity-specific logic.
+Scoring rules are versioned configuration associated with a season or competition class. Calculation belongs in application services, not database triggers or entity-specific logic.
+
+- `PointsScheme` belongs to one competition class and defines its minimum competitor threshold, reduced-points factor, and foreign-host exception.
+- `PointsSchemePosition` defines the points awarded for each finishing position in a points scheme.
+- `DropScoreRule` belongs to a season and defines how many results are deducted and whether disqualifications may be deducted.
+- `ClubScoringRule` belongs to one competition class and either counts all results or a configured number of the best driver results.
 
 The initial rules that need to be represented are:
 

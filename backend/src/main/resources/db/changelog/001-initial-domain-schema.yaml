@@ -1,0 +1,542 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-initial-domain-schema
+      author: codex
+      changes:
+        - createTable:
+            tableName: federations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_code
+                  type: CHAR(2)
+        - createTable:
+            tableName: disciplines
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: championships
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: federation_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_championship_federation
+                    references: federations(id)
+              - column:
+                  name: discipline_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_championship_discipline
+                    references: disciplines(id)
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: short_name
+                  type: VARCHAR(50)
+        - createTable:
+            tableName: seasons
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: championship_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_season_championship
+                    references: championships(id)
+              - column:
+                  name: season_year
+                  type: SMALLINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+        - addUniqueConstraint:
+            tableName: seasons
+            columnNames: championship_id, season_year
+            constraintName: uk_season_championship_year
+        - createTable:
+            tableName: clubs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: federation_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_club_federation
+                    references: federations(id)
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_code
+                  type: CHAR(2)
+        - createTable:
+            tableName: drivers
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_of_birth
+                  type: DATE
+              - column:
+                  name: nationality_code
+                  type: CHAR(2)
+        - createTable:
+            tableName: vehicles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: manufacturer
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: model
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_name
+                  type: VARCHAR(150)
+        - createTable:
+            tableName: championship_rounds
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: season_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_round_season
+                    references: seasons(id)
+              - column:
+                  name: host_federation_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_round_host_federation
+                    references: federations(id)
+              - column:
+                  name: round_number
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: starts_on
+                  type: DATE
+              - column:
+                  name: ends_on
+                  type: DATE
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: SCHEDULED
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: championship_rounds
+            columnNames: season_id, round_number
+            constraintName: uk_round_season_number
+        - createTable:
+            tableName: race_sessions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: round_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_session_round
+                    references: championship_rounds(id)
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: session_order
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scheduled_at
+                  type: DATETIME(6)
+        - addUniqueConstraint:
+            tableName: race_sessions
+            columnNames: round_id, session_order
+            constraintName: uk_session_round_order
+        - createTable:
+            tableName: competition_classes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: season_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_class_season
+                    references: seasons(id)
+              - column:
+                  name: code
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_order
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: competition_classes
+            columnNames: season_id, code
+            constraintName: uk_class_season_code
+        - createTable:
+            tableName: entries
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: round_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_entry_round
+                    references: championship_rounds(id)
+              - column:
+                  name: driver_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_entry_driver
+                    references: drivers(id)
+              - column:
+                  name: vehicle_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_entry_vehicle
+                    references: vehicles(id)
+              - column:
+                  name: club_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_entry_club
+                    references: clubs(id)
+              - column:
+                  name: competition_class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_entry_class
+                    references: competition_classes(id)
+              - column:
+                  name: race_number
+                  type: INT
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: ENTERED
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: entries
+            columnNames: round_id, driver_id
+            constraintName: uk_entry_round_driver
+        - createTable:
+            tableName: session_results
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: session_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_session_result_session
+                    references: race_sessions(id)
+              - column:
+                  name: entry_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_session_result_entry
+                    references: entries(id)
+              - column:
+                  name: elapsed_time_millis
+                  type: BIGINT
+              - column:
+                  name: position
+                  type: INT
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: session_results
+            columnNames: session_id, entry_id
+            constraintName: uk_session_result_entry
+        - createTable:
+            tableName: classifications
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: round_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_classification_round
+                    references: championship_rounds(id)
+              - column:
+                  name: competition_class_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_classification_class
+                    references: competition_classes(id)
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: PROVISIONAL
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: classifications
+            columnNames: round_id, competition_class_id, name
+            constraintName: uk_classification_round_class_name
+        - createTable:
+            tableName: classification_sessions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: classification_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_classification_session_classification
+                    references: classifications(id)
+              - column:
+                  name: session_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_classification_session_session
+                    references: race_sessions(id)
+              - column:
+                  name: source_order
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: classification_sessions
+            columnNames: classification_id, session_id
+            constraintName: uk_classification_session
+        - addUniqueConstraint:
+            tableName: classification_sessions
+            columnNames: classification_id, source_order
+            constraintName: uk_classification_source_order
+        - createTable:
+            tableName: classification_results
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: classification_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_classification_result_classification
+                    references: classifications(id)
+              - column:
+                  name: entry_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_classification_result_entry
+                    references: entries(id)
+              - column:
+                  name: position
+                  type: INT
+              - column:
+                  name: points
+                  type: DECIMAL(8,2)
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: classification_results
+            columnNames: classification_id, entry_id
+            constraintName: uk_classification_result_entry
+      rollback:
+        - dropTable:
+            tableName: classification_results
+        - dropTable:
+            tableName: classification_sessions
+        - dropTable:
+            tableName: classifications
+        - dropTable:
+            tableName: session_results
+        - dropTable:
+            tableName: entries
+        - dropTable:
+            tableName: competition_classes
+        - dropTable:
+            tableName: race_sessions
+        - dropTable:
+            tableName: championship_rounds
+        - dropTable:
+            tableName: vehicles
+        - dropTable:
+            tableName: drivers
+        - dropTable:
+            tableName: clubs
+        - dropTable:
+            tableName: seasons
+        - dropTable:
+            tableName: championships
+        - dropTable:
+            tableName: disciplines
+        - dropTable:
+            tableName: federations
