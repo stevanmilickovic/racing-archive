@@ -25,6 +25,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/racing_archive
       SPRING_DATASOURCE_USERNAME: racing_archive
       SPRING_DATASOURCE_PASSWORD: racing_archive
+      RACING_ARCHIVE_ADMIN_USERNAME: ${RACING_ARCHIVE_ADMIN_USERNAME:-admin}
+      RACING_ARCHIVE_ADMIN_PASSWORD: ${RACING_ARCHIVE_ADMIN_PASSWORD:?Set RACING_ARCHIVE_ADMIN_PASSWORD before starting the backend}
     ports:
       - "8080:8080"
     depends_on:

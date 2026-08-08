@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/001-initial-domain-schema.yaml
   - include:
       file: db/changelog/002-scoring-rules.yaml
+  - include:
+      file: db/changelog/003-app-users.yaml

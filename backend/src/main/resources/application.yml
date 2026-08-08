@@ -8,3 +8,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+racing-archive:
+  admin:
+    username: ${RACING_ARCHIVE_ADMIN_USERNAME:admin}
+    password: ${RACING_ARCHIVE_ADMIN_PASSWORD:}
