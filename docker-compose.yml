@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: racing-archive-mysql
+    environment:
+      MYSQL_DATABASE: racing_archive
+      MYSQL_USER: racing_archive
+      MYSQL_PASSWORD: racing_archive
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
