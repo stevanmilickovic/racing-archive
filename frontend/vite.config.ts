@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       '/admin': 'http://localhost:8080',
       '/csrf': 'http://localhost:8080',
+      '/default-ui.css': 'http://localhost:8080',
       '/login': {
         target: 'http://localhost:8080',
         configure: (proxy) => {
