@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClubRepository extends JpaRepository<Club, Long> {
 
-    Optional<Club> findFirstByNameIgnoreCaseAndCountryCode(String name, String countryCode);
+    Optional<Club> findFirstByNameIgnoreCase(String name);
 }

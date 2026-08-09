@@ -28,6 +28,8 @@ type ImportSummary = {
   updatedSessionResults: number
 }
 
+type ImportError = { rowNumber: number; subject: string; message: string }
+
 function App() {
   const [records, setRecords] = useState<Record<ResourceKey, RecordValue[]>>({
     federations: [], disciplines: [], championships: [], seasons: [], 'competition-classes': [], rounds: [], sessions: [],
@@ -41,6 +43,7 @@ function App() {
   const [importSessionId, setImportSessionId] = useState('')
   const [importFile, setImportFile] = useState<File | null>(null)
   const [importSummary, setImportSummary] = useState<ImportSummary | null>(null)
+  const [importErrors, setImportErrors] = useState<ImportError[]>([])
 
   const resources = useMemo<Resource[]>(() => [
     { key: 'federations', label: 'Federations', fields: [text('name', 'Name', true), text('countryCode', 'Country code')] },
@@ -152,6 +155,7 @@ function App() {
     if (!importSessionId || !importFile) return
     setError(null)
     setImportSummary(null)
+    setImportErrors([])
     try {
       const formData = new FormData()
       formData.append('file', importFile)
@@ -161,7 +165,11 @@ function App() {
       form.reset()
       await loadRecords()
     } catch (requestError) {
-      setError(messageFor(requestError))
+      if (requestError instanceof ApiError && requestError.importErrors.length > 0) {
+        setImportErrors(requestError.importErrors)
+      } else {
+        setError(messageFor(requestError))
+      }
     }
   }
 
@@ -193,6 +201,7 @@ function App() {
 
       {error && <div className="notice error">{error} <a href="/login">Sign in</a></div>}
       {message && <div className="notice success">{message}</div>}
+      {importErrors.length > 0 && <div className="modal-backdrop" role="presentation"><section className="error-modal" role="dialog" aria-modal="true" aria-labelledby="import-errors-title"><div className="modal-heading"><div><p className="eyebrow">Import not saved</p><h2 id="import-errors-title">Fix these {importErrors.length} errors</h2></div><button aria-label="Close errors" onClick={() => setImportErrors([])}>×</button></div><ul>{importErrors.map((importError, index) => <li key={`${importError.rowNumber}-${index}`}><strong>Row {importError.rowNumber} · {importError.subject}</strong><span>{importError.message}</span></li>)}</ul><button className="primary" onClick={() => setImportErrors([])}>Close</button></section></div>}
 
       <section className="workspace">
         <div className="list-panel">
@@ -234,13 +243,25 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const isFormData = init?.body instanceof FormData
   const needsCsrfToken = init?.method != null && !['GET', 'HEAD', 'OPTIONS'].includes(init.method)
   const response = await fetch(`/admin${path}`, { credentials: 'include', headers: { Accept: 'application/json', ...(init?.body && !isFormData ? { 'Content-Type': 'application/json' } : {}), ...(needsCsrfToken && csrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(csrfToken) } : {}) }, ...init })
-  if (!response.ok) throw new Error(`Request failed (${response.status})`)
+  if (!response.ok) {
+    const body = await response.json().catch(() => null) as { detail?: string; errors?: ImportError[] } | null
+    throw new ApiError(body?.detail ?? `Request failed (${response.status})`, body?.errors ?? [])
+  }
   if (response.status === 204) return undefined as T
   if (!response.headers.get('content-type')?.includes('application/json')) throw new Error('Your administrator session has expired.')
   return response.json() as Promise<T>
 }
 
 function messageFor(error: unknown) { return error instanceof Error ? error.message : 'The request could not be completed.' }
+
+class ApiError extends Error {
+  readonly importErrors: ImportError[]
+
+  constructor(message: string, importErrors: ImportError[]) {
+    super(message)
+    this.importErrors = importErrors
+  }
+}
 
 function FieldInput({ field, value, onChange }: { field: Field; value: string; onChange: (value: string) => void }) {
   return <label>{field.label}{field.type === 'select' ? <select required={field.required} value={value} onChange={(event) => onChange(event.target.value)}><option value="">Select…</option>{field.options?.().map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input type={field.type ?? 'text'} required={field.required} value={value} onChange={(event) => onChange(event.target.value)} />}</label>

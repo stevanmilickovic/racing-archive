@@ -41,10 +41,10 @@ GET /admin/import-templates/session-results
 The columns must remain exactly in this order:
 
 ```text
-driver_first_name,driver_last_name,driver_nationality_code,club_name,club_country_code,vehicle_manufacturer,vehicle_model,vehicle_display_name,class_code,race_number,elapsed_time_millis,position,result_status
+driver_first_name,driver_last_name,club_name,vehicle_manufacturer,vehicle_model,vehicle_display_name,class_code,race_number,elapsed_time_millis,position,result_status
 ```
 
-`driver_nationality_code` and `club_country_code` use two-letter country codes. `class_code` must already exist. `elapsed_time_millis`, `position`, `race_number`, and `vehicle_display_name` may be empty where they do not apply. `result_status` is one of `FINISHED`, `DNF`, `DNS`, or `DSQ`.
+`class_code` must already exist. `elapsed_time_millis`, `position`, `race_number`, and `vehicle_display_name` may be empty where they do not apply. `result_status` is one of `FINISHED`, `DNF`, `DNS`, or `DSQ`.
 
 Values containing commas must be wrapped in double quotes. A double quote inside a quoted value must be written twice.
 
@@ -59,11 +59,12 @@ POST /admin/sessions/{sessionId}/results/import
 For each row, the importer:
 
 1. Finds the global competition class.
-2. Reuses a driver with the same first name, last name, and nationality; otherwise creates one.
-3. Reuses a club with the same name and country; otherwise creates one.
-4. Reuses a vehicle with the same manufacturer, model, and display name; otherwise creates one.
-5. Reuses or creates the driver's round entry, then creates or updates the raw result for that session.
+2. Reuses a driver with the same first and last name; otherwise creates one.
+3. Rejects the complete import if multiple existing driver records have that same name, including records with different nationalities.
+4. Reuses a club with the same name; otherwise creates one.
+5. Reuses a vehicle with the same manufacturer, model, and display name; otherwise creates one.
+6. Reuses or creates the driver's round entry, then creates or updates the raw result for that session.
 
 The import runs as one transaction. A validation error rejects the complete file, so no partial results are saved.
 
-Name-based matching is an intentional first version. Before importing historic data with drivers who share the same name and nationality, add a stable source identifier to the input and domain model.
+Name-based matching is an intentional first version. Duplicate driver names must be resolved before import. A stable source identifier can be added later if the archive requires distinct drivers with the same name.
