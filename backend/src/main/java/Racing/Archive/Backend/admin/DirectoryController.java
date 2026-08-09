@@ -13,6 +13,7 @@ import Racing.Archive.Backend.repository.RaceSessionRepository;
 import Racing.Archive.Backend.repository.SessionResultRepository;
 import Racing.Archive.Backend.repository.VehicleRepository;
 import Racing.Archive.Backend.repository.CompetitionClassRepository;
+import Racing.Archive.Backend.repository.ScoringSystemRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -42,8 +43,10 @@ class DirectoryController {
     private final RaceSessionRepository raceSessionRepository;
     private final EntryRepository entryRepository;
     private final CompetitionClassRepository competitionClassRepository;
+    private final ScoringSystemRepository scoringSystemRepository;
 
     @GetMapping("/drivers") List<DriverResponse> drivers() { return driverRepository.findAll().stream().map(this::driver).toList(); }
+    @GetMapping("/scoring-systems") List<ScoringSystemResponse> scoringSystems() { return scoringSystemRepository.findAll().stream().map(value -> new ScoringSystemResponse(value.getId(), value.getName())).toList(); }
     @PostMapping("/drivers") @ResponseStatus(HttpStatus.CREATED) DriverResponse createDriver(@Valid @RequestBody DriverRequest request) { Driver value = new Driver(); apply(value, request); return driver(driverRepository.save(value)); }
     @PutMapping("/drivers/{id}") DriverResponse updateDriver(@PathVariable Long id, @Valid @RequestBody DriverRequest request) { Driver value = driverEntity(id); apply(value, request); return driver(value); }
     @DeleteMapping("/drivers/{id}") @ResponseStatus(HttpStatus.NO_CONTENT) void deleteDriver(@PathVariable Long id) { driverRepository.delete(driverEntity(id)); }
@@ -85,3 +88,4 @@ record VehicleResponse(Long id, String manufacturer, String model, String displa
 record SessionResultUpdateRequest(Long vehicleId, Long elapsedTimeMillis) {}
 record ManualSessionResultRequest(@NotNull Long driverId, @NotNull Long vehicleId, @NotNull Long competitionClassId, Long elapsedTimeMillis, Integer position, @NotNull ResultStatus status) {}
 record SessionResultResponse(Long id, String driverName, Long vehicleId, Integer position, Long elapsedTimeMillis, String status) {}
+record ScoringSystemResponse(Long id, String name) {}

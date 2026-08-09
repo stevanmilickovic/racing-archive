@@ -14,6 +14,7 @@ import Racing.Archive.Backend.repository.DisciplineRepository;
 import Racing.Archive.Backend.repository.FederationRepository;
 import Racing.Archive.Backend.repository.RaceSessionRepository;
 import Racing.Archive.Backend.repository.SeasonRepository;
+import Racing.Archive.Backend.repository.ScoringSystemRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,7 @@ class SetupService {
     private final CompetitionClassRepository competitionClassRepository;
     private final ChampionshipRoundRepository championshipRoundRepository;
     private final RaceSessionRepository raceSessionRepository;
+    private final ScoringSystemRepository scoringSystemRepository;
 
     @Transactional(readOnly = true)
     List<FederationResponse> findFederations() { return federationRepository.findAll().stream().map(this::federationResponse).toList(); }
@@ -79,7 +81,7 @@ class SetupService {
     private void apply(Federation federation, FederationRequest request) { federation.setName(request.name()); federation.setCountryCode(request.countryCode()); }
     private void apply(Discipline discipline, DisciplineRequest request) { discipline.setCode(request.code()); discipline.setName(request.name()); }
     private void apply(Championship championship, ChampionshipRequest request) { championship.setFederation(federation(request.federationId())); championship.setDiscipline(discipline(request.disciplineId())); championship.setName(request.name()); championship.setShortName(request.shortName()); }
-    private void apply(Season season, SeasonRequest request) { season.setChampionship(championship(request.championshipId())); season.setYear(request.year()); season.setName(request.name()); season.setActive(request.active()); }
+    private void apply(Season season, SeasonRequest request) { season.setChampionship(championship(request.championshipId())); season.setYear(request.year()); season.setName(request.name()); season.setActive(request.active()); season.setScoringSystem(request.scoringSystemId() == null ? null : scoringSystemRepository.findById(request.scoringSystemId()).orElseThrow(() -> notFound("Scoring system", request.scoringSystemId()))); }
     private void apply(CompetitionClass competitionClass, CompetitionClassRequest request) { competitionClass.setCode(request.code()); }
     private void apply(ChampionshipRound round, ChampionshipRoundRequest request) { round.setSeason(season(request.seasonId())); round.setHostFederation(request.hostFederationId() == null ? null : federation(request.hostFederationId())); round.setRoundNumber(request.roundNumber()); round.setName(request.name()); round.setStartsOn(request.startsOn()); round.setEndsOn(request.endsOn()); round.setStatus(request.status()); }
     private void apply(RaceSession session, RaceSessionRequest request) { session.setRound(championshipRound(request.roundId())); session.setName(request.name()); session.setType(request.type()); session.setSessionOrder(request.sessionOrder()); session.setScheduledAt(request.scheduledAt()); }
@@ -96,7 +98,7 @@ class SetupService {
     private FederationResponse federationResponse(Federation value) { return new FederationResponse(value.getId(), value.getName(), value.getCountryCode()); }
     private DisciplineResponse disciplineResponse(Discipline value) { return new DisciplineResponse(value.getId(), value.getCode(), value.getName()); }
     private ChampionshipResponse championshipResponse(Championship value) { return new ChampionshipResponse(value.getId(), value.getFederation().getId(), value.getDiscipline().getId(), value.getName(), value.getShortName()); }
-    private SeasonResponse seasonResponse(Season value) { return new SeasonResponse(value.getId(), value.getChampionship().getId(), value.getYear(), value.getName(), value.isActive()); }
+    private SeasonResponse seasonResponse(Season value) { return new SeasonResponse(value.getId(), value.getChampionship().getId(), value.getYear(), value.getName(), value.isActive(), value.getScoringSystem() == null ? null : value.getScoringSystem().getId()); }
     private CompetitionClassResponse competitionClassResponse(CompetitionClass value) { return new CompetitionClassResponse(value.getId(), value.getCode()); }
     private ChampionshipRoundResponse championshipRoundResponse(ChampionshipRound value) { return new ChampionshipRoundResponse(value.getId(), value.getSeason().getId(), value.getHostFederation() == null ? null : value.getHostFederation().getId(), value.getRoundNumber(), value.getName(), value.getStartsOn(), value.getEndsOn(), value.getStatus()); }
     private RaceSessionResponse raceSessionResponse(RaceSession value) { return new RaceSessionResponse(value.getId(), value.getRound().getId(), value.getName(), value.getType(), value.getSessionOrder(), value.getScheduledAt()); }

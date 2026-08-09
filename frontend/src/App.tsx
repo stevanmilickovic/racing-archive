@@ -54,6 +54,7 @@ function App() {
   const [converting, setConverting] = useState<'drivers' | 'results' | null>(null)
   const [resultsSession, setResultsSession] = useState<RecordValue | null>(null)
   const [sessionResults, setSessionResults] = useState<RecordValue[]>([])
+  const [scoringSystems, setScoringSystems] = useState<RecordValue[]>([])
   const [manualResult, setManualResult] = useState({ driverId: '', vehicleId: '', competitionClassId: '', elapsedTime: '', position: '', status: 'FINISHED' })
 
   const resources = useMemo<Resource[]>(() => [
@@ -69,7 +70,7 @@ function App() {
     {
       key: 'seasons', label: 'Seasons', fields: [
         select('championshipId', 'Championship', () => options(records.championships)),
-        number('year', 'Year', true), text('name', 'Name'), { key: 'active', label: 'Active', type: 'select', required: true, options: () => enumOptions(['true', 'false']) },
+        number('year', 'Year', true), text('name', 'Name'), { key: 'active', label: 'Active', type: 'select', required: true, options: () => enumOptions(['true', 'false']) }, select('scoringSystemId', 'Scoring system', () => options(scoringSystems), false),
       ],
     },
     {
@@ -95,7 +96,7 @@ function App() {
     },
     { key: 'drivers', label: 'Drivers', fields: [text('firstName', 'First name', true), text('lastName', 'Last name', true), text('nationalityCode', 'Nationality')] },
     { key: 'vehicles', label: 'Car models', fields: [text('manufacturer', 'Manufacturer', true), text('model', 'Model'), text('displayName', 'Display name')] },
-  ], [records])
+  ], [records, scoringSystems])
 
   const resource = resources.find((item) => item.key === activeResource)!
 
@@ -108,6 +109,7 @@ function App() {
       await fetch('/csrf', { credentials: 'include' })
       const loaded = await Promise.all(resourcesForLoading.map(async (key) => [key, await api<RecordValue[]>(`/${key}`)] as const))
       setRecords(Object.fromEntries(loaded) as Record<ResourceKey, RecordValue[]>)
+      setScoringSystems(await api<RecordValue[]>('/scoring-systems'))
     } catch (requestError) {
       setError(messageFor(requestError))
     } finally {

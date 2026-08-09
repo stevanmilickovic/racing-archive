@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 009-repair-scoring-system-seed
+      author: codex
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: scoring_system_positions
+            constraintName: fk_scoring_position_system
+        - dropIndex:
+            tableName: scoring_system_positions
+            indexName: uk_scoring_system_position
+        - addUniqueConstraint:
+            tableName: scoring_system_positions
+            columnNames: "scoring_system_id,position"
+            constraintName: uk_scoring_system_position
+        - addForeignKeyConstraint:
+            baseTableName: scoring_system_positions
+            baseColumnNames: scoring_system_id
+            referencedTableName: scoring_systems
+            referencedColumnNames: id
+            constraintName: fk_scoring_position_system
+        - sql:
+            sql: INSERT IGNORE INTO scoring_systems (id, name, minimum_competitors_for_full_points, reduced_points_percentage, award_full_points_for_foreign_host, results_to_drop, disqualified_result_eligible_for_drop) VALUES (1, 'Modern hillclimb scoring system', 3, 50, 1, 1, 0)
+        - sql:
+            sql: INSERT IGNORE INTO scoring_system_positions (scoring_system_id, position, points) VALUES (1,1,25),(1,2,18),(1,3,15),(1,4,12),(1,5,10),(1,6,8),(1,7,6),(1,8,4),(1,9,2),(1,10,1)

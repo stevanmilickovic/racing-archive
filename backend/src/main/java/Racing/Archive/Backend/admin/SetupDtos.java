@@ -28,10 +28,10 @@ record ChampionshipRequest(@NotNull Long federationId, @NotNull Long disciplineI
 record ChampionshipResponse(Long id, Long federationId, Long disciplineId, String name, String shortName) {
 }
 
-record SeasonRequest(@NotNull Long championshipId, @NotNull @Min(1900) @Max(3000) Short year, String name, boolean active) {
+record SeasonRequest(@NotNull Long championshipId, @NotNull @Min(1900) @Max(3000) Short year, String name, boolean active, Long scoringSystemId) {
 }
 
-record SeasonResponse(Long id, Long championshipId, Short year, String name, boolean active) {
+record SeasonResponse(Long id, Long championshipId, Short year, String name, boolean active, Long scoringSystemId) {
 }
 
 record CompetitionClassRequest(@NotBlank String code) {

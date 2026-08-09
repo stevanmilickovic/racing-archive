@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008-scoring-systems
+      author: codex
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: scoring_systems
+      changes:
+        - createTable:
+            tableName: scoring_systems
+            columns:
+              - column: { name: id, type: BIGINT, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: name, type: VARCHAR(150), constraints: { nullable: false, unique: true } }
+              - column: { name: minimum_competitors_for_full_points, type: INT, constraints: { nullable: false } }
+              - column: { name: reduced_points_percentage, type: INT, constraints: { nullable: false } }
+              - column: { name: award_full_points_for_foreign_host, type: TINYINT, constraints: { nullable: false } }
+              - column: { name: results_to_drop, type: INT, constraints: { nullable: false } }
+              - column: { name: disqualified_result_eligible_for_drop, type: TINYINT, constraints: { nullable: false } }
+        - createTable:
+            tableName: scoring_system_positions
+            columns:
+              - column: { name: id, type: BIGINT, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: scoring_system_id, type: BIGINT, constraints: { nullable: false, foreignKeyName: fk_scoring_position_system, references: scoring_systems(id) } }
+              - column: { name: position, type: INT, constraints: { nullable: false } }
+              - column: { name: points, type: "DECIMAL(8,2)", constraints: { nullable: false } }
+        - addUniqueConstraint: { tableName: scoring_system_positions, columnNames: "scoring_system_id,position", constraintName: uk_scoring_system_position }
+        - addColumn:
+            tableName: seasons
+            columns:
+              - column: { name: scoring_system_id, type: BIGINT, constraints: { foreignKeyName: fk_season_scoring_system, references: scoring_systems(id) } }
+        - insert: { tableName: scoring_systems, columns: [ { column: { name: id, valueNumeric: 1 } }, { column: { name: name, value: Modern hillclimb scoring system } }, { column: { name: minimum_competitors_for_full_points, valueNumeric: 3 } }, { column: { name: reduced_points_percentage, valueNumeric: 50 } }, { column: { name: award_full_points_for_foreign_host, valueBoolean: true } }, { column: { name: results_to_drop, valueNumeric: 1 } }, { column: { name: disqualified_result_eligible_for_drop, valueBoolean: false } } ] }
+        - sql:
+            sql: INSERT INTO scoring_system_positions (scoring_system_id, position, points) VALUES (1,1,25),(1,2,18),(1,3,15),(1,4,12),(1,5,10),(1,6,8),(1,7,6),(1,8,4),(1,9,2),(1,10,1)

@@ -35,6 +35,10 @@ public class Season {
     @Column(length = 200)
     private String name;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "scoring_system_id")
+    private ScoringSystem scoringSystem;
+
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean active;
 }

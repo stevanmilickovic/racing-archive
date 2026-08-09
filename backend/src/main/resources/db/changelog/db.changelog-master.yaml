@@ -13,3 +13,7 @@ databaseChangeLog:
       file: db/changelog/006-optional-vehicle-model.yaml
   - include:
       file: db/changelog/007-season-active.yaml
+  - include:
+      file: db/changelog/008-scoring-systems.yaml
+  - include:
+      file: db/changelog/009-repair-scoring-system-seed.yaml
