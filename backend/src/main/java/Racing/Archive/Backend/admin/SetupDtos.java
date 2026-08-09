@@ -7,10 +7,11 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-record FederationRequest(@NotBlank String name, String countryCode) {
+record FederationRequest(@NotBlank String name, @Size(max = 3) String countryCode) {
 }
 
 record FederationResponse(Long id, String name, String countryCode) {

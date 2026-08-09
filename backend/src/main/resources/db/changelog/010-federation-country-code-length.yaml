@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-federation-country-code-length
+      author: codex
+      changes:
+        - modifyDataType:
+            tableName: federations
+            columnName: country_code
+            newDataType: VARCHAR(3)

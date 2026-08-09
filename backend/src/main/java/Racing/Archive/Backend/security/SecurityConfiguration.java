@@ -25,7 +25,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
                         .anyRequest().permitAll())
-                .formLogin(withDefaults())
+                .formLogin(login -> login.defaultSuccessUrl("/?view=admin", true))
                 .build();
     }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { FormEvent } from 'react'
+import type { FormEvent, ReactNode } from 'react'
 import './App.css'
 
 type RecordValue = Record<string, unknown>
@@ -32,6 +32,7 @@ type ImportError = { rowNumber: number; subject: string; message: string }
 type DriverImportSummary = { importedRows: number; createdDrivers: number; existingDrivers: number }
 
 function App() {
+  if (new URLSearchParams(window.location.search).get('view') !== 'admin') return <PublicDashboardNew />
   const [records, setRecords] = useState<Record<ResourceKey, RecordValue[]>>({
     federations: [], disciplines: [], championships: [], seasons: [], 'competition-classes': [], rounds: [], sessions: [], drivers: [], vehicles: [],
   })
@@ -414,5 +415,37 @@ function displayValue(key: string, value: unknown, records: Record<ResourceKey, 
   if (key === 'seasonId') { const season = find(records.seasons); const championship = records.championships.find((item) => String(item.id) === String(season?.championshipId)); return `${season?.year ?? '—'} · ${championship?.name ?? '—'}` }
   return String(value ?? '—')
 }
+
+type PublicSeason = { id: number; championshipName: string; championshipShortName: string | null; year: number; completedRounds: { id: number; roundNumber: number; name: string; startsOn: string | null }[]; standings: { classCode: string; drivers: { driverId: number; driverName: string; rawPoints: number; adjustedPoints: number }[] }[] }
+type PublicSession = { id: number; name: string; type: string; sessionOrder: number }
+type PublicSessionResult = { driverId: number; driverName: string; classCode: string; position: number | null; elapsedTimeMillis: number | null; status: string }
+
+function PublicDashboard() {
+  const [language, setLanguage] = useState<'sr' | 'en'>('sr')
+  const [seasons, setSeasons] = useState<PublicSeason[]>([])
+  const [query, setQuery] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => { fetch('/public/dashboard').then(async (response) => { if (!response.ok) throw new Error('Unable to load dashboard'); return response.json() as Promise<PublicSeason[]> }).then(setSeasons).catch((reason) => setError(messageFor(reason))) }, [])
+  const t = language === 'sr' ? { title: 'Racing Archive', active: 'Aktivne sezone', completed: 'Završene trke', raw: 'Sirovi poredak', live: 'Trenutni poredak', driver: 'Vozač', points: 'Bodovi', search: 'Pretraži vozače, sezone i prvenstva', empty: 'Nema aktivnih sezona.' } : { title: 'Racing Archive', active: 'Active seasons', completed: 'Completed rounds', raw: 'Raw standings', live: 'Adjusted standings', driver: 'Driver', points: 'Points', search: 'Search drivers, seasons and championships', empty: 'No active seasons.' }
+  const matches = (value: string) => value.toLowerCase().includes(query.toLowerCase())
+  return <main className="public-shell"><header className="public-header"><a href="/" className="brand">{t.title}</a><nav><a href="#seasons">{t.active}</a><a href="/?view=admin">Administracija</a><select value={language} onChange={(event) => setLanguage(event.target.value as 'sr' | 'en')}><option value="sr">Srpski</option><option value="en">English</option></select></nav></header><section className="public-hero"><p>{t.active}</p><h1>{t.title}</h1><input placeholder={t.search} value={query} onChange={(event) => setQuery(event.target.value)} /></section>{error && <p className="public-error">{error}</p>}<section id="seasons" className="season-grid">{seasons.filter((season) => matches(`${season.championshipName} ${season.year}`) || season.standings.some((group) => group.drivers.some((driver) => matches(driver.driverName)))).map((season) => <article className="season-card" key={season.id}><p>{season.year} · {season.championshipShortName ?? season.championshipName}</p><h2>{season.championshipName}</h2><h3>{t.completed}</h3><ol className="round-list">{season.completedRounds.map((round) => <li key={round.id}>{round.roundNumber}. {round.name}</li>)}</ol>{season.standings.map((group) => <section className="standing" key={group.classCode}><h3>{group.classCode}</h3><table><thead><tr><th>{t.driver}</th><th>{t.raw}</th><th>{t.live}</th></tr></thead><tbody>{group.drivers.filter((driver) => !query || matches(driver.driverName)).map((driver) => <tr key={driver.driverName}><td>{driver.driverName}</td><td>{driver.rawPoints}</td><td><strong>{driver.adjustedPoints}</strong></td></tr>)}</tbody></table></section>)}</article>)}{seasons.length === 0 && <p>{t.empty}</p>}</section></main>
+}
+
+function PublicDashboardNew() {
+  const route = new URLSearchParams(window.location.search)
+  if (route.get('page') === 'round') return <PublicRoundPage roundId={Number(route.get('id'))} />
+  if (route.get('page') === 'session') return <PublicSessionPage sessionId={Number(route.get('id'))} />
+  if (route.get('page') === 'driver') return <PublicDriverPage driverId={Number(route.get('id'))} />
+  const [seasons, setSeasons] = useState<PublicSeason[]>([])
+  useEffect(() => { void fetch('/public/dashboard').then((response) => response.json() as Promise<PublicSeason[]>).then(setSeasons) }, [])
+  return <main className="public-shell"><header className="public-header"><a className="brand" href="/">Racing Archive</a><nav><a href="/?view=admin">Administracija</a><span>Srpski · English</span></nav></header><section className="public-hero"><p>Aktivne sezone</p><h1>Racing Archive</h1></section><section className="season-grid">{seasons.map((season) => <article className="season-card" key={season.id}><p>{season.year} · {season.championshipShortName ?? season.championshipName}</p><h2>{season.championshipName}</h2><h3>Završene trke</h3><ol className="round-list">{season.completedRounds.map((round) => <li key={round.id}><a href={`/?page=round&id=${round.id}`}>{round.roundNumber}. {round.name}</a></li>)}</ol>{season.standings.map((group) => <section className="standing" key={group.classCode}><h3>{group.classCode}</h3><table><thead><tr><th>Vozač</th><th>Sirovi poredak</th><th>Trenutni poredak</th></tr></thead><tbody>{group.drivers.map((driver) => <tr key={driver.driverName}><td>{driver.driverName}</td><td>{driver.rawPoints}</td><td><strong>{driver.adjustedPoints}</strong></td></tr>)}</tbody></table></section>)}</article>)}</section></main>
+}
+
+function PublicRoundPage({ roundId }: { roundId: number }) { const [sessions, setSessions] = useState<PublicSession[]>([]); useEffect(() => { void fetch(`/public/rounds/${roundId}/sessions`).then((response) => response.json() as Promise<PublicSession[]>).then(setSessions) }, [roundId]); return <PublicPage title="Sesije trke"><ul className="round-list">{sessions.map((session) => <li key={session.id}><a href={`/?page=session&id=${session.id}`}>{session.name} · {session.type}</a></li>)}</ul></PublicPage> }
+function PublicSessionPage({ sessionId }: { sessionId: number }) { const [results, setResults] = useState<PublicSessionResult[]>([]); useEffect(() => { void fetch(`/public/sessions/${sessionId}/results`).then((response) => response.json() as Promise<PublicSessionResult[]>).then(setResults) }, [sessionId]); return <PublicPage title="Rezultati sesije"><table><thead><tr><th>Vozač</th><th>Klasa</th><th>Plasman</th><th>Vrijeme</th><th>Status</th></tr></thead><tbody>{results.map((result) => <tr key={`${result.driverId}-${result.classCode}`}><td><a href={`/?page=driver&id=${result.driverId}`}>{result.driverName}</a></td><td>{result.classCode}</td><td>{result.position ?? '—'}</td><td>{formatRaceTime(result.elapsedTimeMillis)}</td><td>{result.status}</td></tr>)}</tbody></table></PublicPage> }
+function PublicDriverPage({ driverId }: { driverId: number }) { const [profile, setProfile] = useState<{ driverName: string; results: { roundName: string; sessionName: string; classCode: string; position: number | null; elapsedTimeMillis: number | null; status: string }[] } | null>(null); useEffect(() => { void fetch(`/public/drivers/${driverId}/results`).then((response) => response.json() as Promise<NonNullable<typeof profile>>).then(setProfile) }, [driverId]); return <PublicPage title={profile?.driverName ?? 'Vozač'}><table><thead><tr><th>Trka</th><th>Sesija</th><th>Klasa</th><th>Plasman</th><th>Vrijeme</th><th>Status</th></tr></thead><tbody>{profile?.results.map((result, index) => <tr key={index}><td>{result.roundName}</td><td>{result.sessionName}</td><td>{result.classCode}</td><td>{result.position ?? '—'}</td><td>{formatRaceTime(result.elapsedTimeMillis)}</td><td>{result.status}</td></tr>)}</tbody></table></PublicPage> }
+function PublicPage({ title, children }: { title: string; children: ReactNode }) { return <main className="public-shell"><header className="public-header"><a className="brand" href="/">Racing Archive</a></header><section className="season-card"><a href="/">← Nazad</a><h1>{title}</h1>{children}</section></main> }
+
+void PublicDashboard
 
 export default App

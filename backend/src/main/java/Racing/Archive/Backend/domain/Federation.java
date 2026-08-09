@@ -24,6 +24,6 @@ public class Federation {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(length = 2)
+    @Column(length = 3)
     private String countryCode;
 }

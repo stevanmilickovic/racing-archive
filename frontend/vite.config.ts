@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/admin': 'http://localhost:8080',
+      '/public': 'http://localhost:8080',
       '/csrf': 'http://localhost:8080',
       '/default-ui.css': 'http://localhost:8080',
       '/login': {
