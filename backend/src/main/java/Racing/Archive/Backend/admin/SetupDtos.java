@@ -34,10 +34,10 @@ record SeasonRequest(@NotNull Long championshipId, @NotNull @Min(1900) @Max(3000
 record SeasonResponse(Long id, Long championshipId, Short year, String name) {
 }
 
-record CompetitionClassRequest(@NotBlank String code, @NotBlank String name, @NotNull Integer displayOrder) {
+record CompetitionClassRequest(@NotBlank String code) {
 }
 
-record CompetitionClassResponse(Long id, String code, String name, Integer displayOrder) {
+record CompetitionClassResponse(Long id, String code) {
 }
 
 record ChampionshipRoundRequest(

@@ -1,0 +1,175 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-initial-clubs-and-classes
+      author: codex
+      changes:
+        - addColumn:
+            tableName: clubs
+            columns:
+              - column:
+                  name: code
+                  type: VARCHAR(50)
+        - addUniqueConstraint:
+            tableName: clubs
+            columnNames: country_code, code
+            constraintName: uk_club_country_code
+        - dropNotNullConstraint:
+            tableName: competition_classes
+            columnName: name
+            columnDataType: VARCHAR(150)
+        - addDefaultValue:
+            tableName: competition_classes
+            columnName: display_order
+            defaultValueNumeric: 0
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Kotor" }
+              - column: { name: code, value: "KOTOR" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK AP Sport" }
+              - column: { name: code, value: "AP SPORT" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Podi" }
+              - column: { name: code, value: "PODI" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Herceg Novi" }
+              - column: { name: code, value: "HN" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Crmnica" }
+              - column: { name: code, value: "CRMNICA" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Gorstak" }
+              - column: { name: code, value: "GORSTAK" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Tivat" }
+              - column: { name: code, value: "TIVAT" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMKK Lovcen R.T." }
+              - column: { name: code, value: "LOVCEN" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMK Podgorica R.T." }
+              - column: { name: code, value: "PG" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMK Monteracing" }
+              - column: { name: code, value: "MONTERACING" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Vlahovic" }
+              - column: { name: code, value: "VLAHOVIC" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: clubs
+            columns:
+              - column: { name: name, value: "AMSK Nilovic Racing" }
+              - column: { name: code, value: "NILOVIC" }
+              - column: { name: country_code, value: "ME" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "H 1000" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "N 1150" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "A 1150" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "H 1150" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "N 1400" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "A 1400" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "H 1400" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "N 1600" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "A 1600" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "H 1600" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "N 2000" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "N 2000+" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "D/E2/CN" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "E2SH" }
+        - insert:
+            tableName: competition_classes
+            columns:
+              - column: { name: code, value: "E1 1200" }
+      rollback:
+        - delete:
+            tableName: competition_classes
+            where: "code IN ('H 1000', 'N 1150', 'A 1150', 'H 1150', 'N 1400', 'A 1400', 'H 1400', 'N 1600', 'A 1600', 'H 1600', 'N 2000', 'N 2000+', 'D/E2/CN', 'E2SH', 'E1 1200')"
+        - delete:
+            tableName: clubs
+            where: "country_code = 'ME' AND code IN ('KOTOR', 'AP SPORT', 'PODI', 'HN', 'CRMNICA', 'GORSTAK', 'TIVAT', 'LOVCEN', 'PG', 'MONTERACING', 'VLAHOVIC', 'NILOVIC')"
+        - dropDefaultValue:
+            tableName: competition_classes
+            columnName: display_order
+        - addNotNullConstraint:
+            tableName: competition_classes
+            columnName: name
+            columnDataType: VARCHAR(150)
+        - dropUniqueConstraint:
+            tableName: clubs
+            constraintName: uk_club_country_code
+        - dropColumn:
+            tableName: clubs
+            columnName: code

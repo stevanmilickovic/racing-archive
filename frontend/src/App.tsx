@@ -60,7 +60,7 @@ function App() {
     },
     {
       key: 'competition-classes', label: 'Classes', fields: [
-        text('code', 'Code', true), text('name', 'Name', true), number('displayOrder', 'Display order', true),
+        text('code', 'Code', true),
       ],
     },
     {

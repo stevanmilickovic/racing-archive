@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/003-app-users.yaml
   - include:
       file: db/changelog/004-global-competition-classes.yaml
+  - include:
+      file: db/changelog/005-initial-clubs-and-classes.yaml

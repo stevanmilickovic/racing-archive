@@ -24,9 +24,9 @@ public class CompetitionClass {
     @Column(nullable = false, length = 50)
     private String code;
 
-    @Column(nullable = false, length = 150)
+    @Column(length = 150)
     private String name;
 
     @Column(nullable = false)
-    private Integer displayOrder;
+    private Integer displayOrder = 0;
 }

@@ -31,6 +31,9 @@ public class Club {
     @Column(nullable = false, length = 150)
     private String name;
 
+    @Column(length = 50)
+    private String code;
+
     @Column(length = 2)
     private String countryCode;
 }
