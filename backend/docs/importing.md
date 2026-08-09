@@ -68,3 +68,19 @@ For each row, the importer:
 The import runs as one transaction. A validation error rejects the complete file, so no partial results are saved.
 
 Name-based matching is an intentional first version. Duplicate driver names must be resolved before import. A stable source identifier can be added later if the archive requires distinct drivers with the same name.
+
+## Driver directory import
+
+The separate driver-directory import is intended for registration lists such as the supplied hillclimb PDF. It imports only the driver details and does not create or change clubs, vehicles, classes, entries, or results.
+
+Download its template from `GET /admin/import-templates/drivers`.
+
+The required CSV columns are:
+
+```text
+first_name,last_name,nationality_code
+```
+
+Upload it as multipart form field `file` to `POST /admin/drivers/import`.
+
+`nationality_code` is a two-letter country code. If no matching driver exists, one is created. If the one matching driver has no nationality, the import fills it in. Conflicting nationalities or duplicate existing records with the same name are reported together and no rows are saved.

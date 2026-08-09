@@ -29,6 +29,7 @@ type ImportSummary = {
 }
 
 type ImportError = { rowNumber: number; subject: string; message: string }
+type DriverImportSummary = { importedRows: number; createdDrivers: number; existingDrivers: number }
 
 function App() {
   const [records, setRecords] = useState<Record<ResourceKey, RecordValue[]>>({
@@ -44,6 +45,8 @@ function App() {
   const [importFile, setImportFile] = useState<File | null>(null)
   const [importSummary, setImportSummary] = useState<ImportSummary | null>(null)
   const [importErrors, setImportErrors] = useState<ImportError[]>([])
+  const [driverImportFile, setDriverImportFile] = useState<File | null>(null)
+  const [driverImportSummary, setDriverImportSummary] = useState<DriverImportSummary | null>(null)
 
   const resources = useMemo<Resource[]>(() => [
     { key: 'federations', label: 'Federations', fields: [text('name', 'Name', true), text('countryCode', 'Country code')] },
@@ -173,6 +176,29 @@ function App() {
     }
   }
 
+  async function importDrivers(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const form = event.currentTarget
+    if (!driverImportFile) return
+    setError(null)
+    setDriverImportSummary(null)
+    setImportErrors([])
+    try {
+      const formData = new FormData()
+      formData.append('file', driverImportFile)
+      const summary = await api<DriverImportSummary>('/drivers/import', { method: 'POST', body: formData })
+      setDriverImportSummary(summary)
+      setDriverImportFile(null)
+      form.reset()
+    } catch (requestError) {
+      if (requestError instanceof ApiError && requestError.importErrors.length > 0) {
+        setImportErrors(requestError.importErrors)
+      } else {
+        setError(messageFor(requestError))
+      }
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -193,6 +219,16 @@ function App() {
           <a className="template-link" href="/admin/import-templates/session-results">Download template</a>
         </form>
         {importSummary && <p className="import-summary">Imported {importSummary.importedRows} rows · new: {importSummary.createdDrivers} drivers, {importSummary.createdClubs} clubs, {importSummary.createdVehicles} vehicles, {importSummary.createdEntries} entries · updated results: {importSummary.updatedSessionResults}</p>}
+      </section>
+
+      <section className="import-panel driver-import-panel">
+        <div className="import-copy"><p className="eyebrow">Driver directory</p><h2>Import drivers</h2><p>Use the registration list to enter driver first name, last name, and nationality only.</p></div>
+        <form className="import-form driver-import-form" onSubmit={importDrivers}>
+          <input aria-label="Drivers CSV file" type="file" accept=".csv,text/csv" required onChange={(event) => setDriverImportFile(event.target.files?.[0] ?? null)} />
+          <button className="primary" type="submit" disabled={!driverImportFile}>Import drivers</button>
+          <a className="template-link" href="/admin/import-templates/drivers">Download drivers template</a>
+        </form>
+        {driverImportSummary && <p className="import-summary">Imported {driverImportSummary.importedRows} rows; new drivers: {driverImportSummary.createdDrivers}; existing drivers: {driverImportSummary.existingDrivers}</p>}
       </section>
 
       <nav className="resource-nav" aria-label="Administration sections">

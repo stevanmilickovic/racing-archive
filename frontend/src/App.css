@@ -7,6 +7,7 @@ h1, h2 { color: #1c2630; } h1 { margin: 0; font-size: 2rem; } h2 { margin: 0; fo
 .import-copy h2 { margin: 0 0 7px; } .import-copy > p:last-child { color: #52616e; font-size: .9rem; }
 .import-form { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 10px; } .import-form input { min-width: 0; } .template-link { grid-column: 1 / -1; color: #8d321e; font-size: .86rem; font-weight: 700; text-decoration: none; }
 .import-summary { grid-column: 1 / -1; border-top: 1px solid #e5eaed; margin: 0; padding-top: 14px; color: #236238; font-size: .88rem; }
+.driver-import-panel { border-left-color: #536d7a; }.driver-import-form { grid-template-columns: 1fr auto; }.driver-import-form .template-link { grid-column: 1 / -1; }
 .login-link, button { border-radius: 6px; font: inherit; cursor: pointer; }
 .login-link, .primary { background: #a83b25; color: white; padding: 9px 14px; text-decoration: none; border: 1px solid #a83b25; }
 button { padding: 7px 10px; border: 1px solid #cbd4db; background: white; color: #283742; } button:hover { border-color: #7e8d97; }

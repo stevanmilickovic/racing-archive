@@ -31,6 +31,15 @@ public class SessionResultImportController {
                 .body(template.getInputStream().readAllBytes());
     }
 
+    @GetMapping(value = "/import-templates/drivers", produces = "text/csv")
+    ResponseEntity<byte[]> downloadDriversTemplate() throws IOException {
+        ClassPathResource template = new ClassPathResource("import-templates/drivers.csv");
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename("drivers.csv").build().toString())
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(template.getInputStream().readAllBytes());
+    }
+
     @PostMapping(value = "/sessions/{sessionId}/results/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     SessionResultImportSummary importResults(@PathVariable Long sessionId, @RequestParam("file") MultipartFile file) {
         return sessionResultImportService.importFile(sessionId, file);
