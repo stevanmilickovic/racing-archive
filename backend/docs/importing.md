@@ -44,7 +44,7 @@ The columns must remain exactly in this order:
 driver_first_name,driver_last_name,club_name,vehicle_manufacturer,vehicle_model,vehicle_display_name,class_code,race_number,elapsed_time_millis,position,result_status
 ```
 
-`class_code` must already exist. `elapsed_time_millis`, `position`, `race_number`, and `vehicle_display_name` may be empty where they do not apply. `result_status` is one of `FINISHED`, `DNF`, `DNS`, or `DSQ`.
+`class_code` must already exist. `vehicle_model`, `run_1_elapsed_time_millis`, `run_2_elapsed_time_millis`, and `elapsed_time_millis` may be empty where they do not apply. The last of these is the aggregate/final time. Each status column is one of `FINISHED`, `DNF`, `DNS`, or `DSQ`.
 
 Values containing commas must be wrapped in double quotes. A double quote inside a quoted value must be written twice.
 
@@ -55,6 +55,14 @@ Upload the CSV as multipart form field `file`:
 ```text
 POST /admin/sessions/{sessionId}/results/import
 ```
+
+For a hillclimb document containing two timed runs, create two `TIMED_RUN` sessions for the same round and use the **Two timed runs** option in the administrator screen. It sends the CSV to:
+
+```text
+POST /admin/sessions/results/import-two-runs?firstSessionId={firstSessionId}
+```
+
+with `secondSessionId` and `file` as multipart fields. This stores each run in its own session; the aggregate time remains in the CSV for review and later classification work.
 
 For each row, the importer:
 

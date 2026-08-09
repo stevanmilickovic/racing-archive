@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class PdfConversionService {
 
     private static final String DRIVER_HEADER = "first_name,last_name,nationality_code";
-    private static final String RESULT_HEADER = "driver_first_name,driver_last_name,club_name,vehicle_manufacturer,vehicle_model,vehicle_display_name,class_code,race_number,elapsed_time_millis,position,result_status";
+    private static final String RESULT_HEADER = "driver_first_name,driver_last_name,club_name,vehicle_manufacturer,vehicle_model,vehicle_display_name,class_code,race_number,run_1_elapsed_time_millis,run_1_status,run_2_elapsed_time_millis,run_2_status,elapsed_time_millis,position,result_status";
     private static final Pattern FINISHED_ENTRY = Pattern.compile("^\\d+\\s+\\d+\\s+[12]$");
     private static final Pattern NON_FINISHER_ENTRY = Pattern.compile("^\\d+\\s+[12]$");
     private static final Pattern TIME = Pattern.compile("(\\d+):(\\d{2})\\.(\\d{3})");
@@ -70,11 +70,11 @@ public class PdfConversionService {
 
             if (FINISHED_ENTRY.matcher(line).matches() && index + 10 < lines.size()) {
                 String[] start = line.split("\\s+");
-                ResultRow row = resultRow(start[0], start[1], lines.get(index + 1), lines.get(index + 5), lines.get(index + 6), lines.get(index + 8), lines.get(index + 10));
+                ResultRow row = resultRow(start[0], start[1], lines.get(index + 1), lines.get(index + 5), lines.get(index + 6), lines.get(index + 8), lines.get(index + 8), lines.get(index + 9), lines.get(index + 10));
                 if (row != null) csvRows.add(row.csv());
             } else if (NON_FINISHER_ENTRY.matcher(line).matches() && index + 5 < lines.size()) {
                 String[] start = line.split("\\s+");
-                ResultRow row = resultRow("", start[0], lines.get(index + 1), nameAfterClass(lines.get(index + 1)), lines.get(index + 2), lines.get(index + 4), lines.get(index + 5));
+                ResultRow row = resultRow("", start[0], lines.get(index + 1), nameAfterClass(lines.get(index + 1)), lines.get(index + 2), lines.get(index + 4), lines.get(index + 4), lines.get(index + 5), lines.get(index + 6));
                 if (row != null) csvRows.add(row.csv());
             }
         }
@@ -82,15 +82,18 @@ public class PdfConversionService {
         return String.join("\n", csvRows).concat("\n").getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
 
-    private ResultRow resultRow(String position, String raceNumber, String classLine, String driverLine, String vehicleLine, String clubLine, String finalLine) {
+    private ResultRow resultRow(String position, String raceNumber, String classLine, String driverLine, String vehicleLine, String clubLine, String firstRunLine, String secondRunLine, String finalLine) {
         String[] driver = driverLine.trim().split("\\s+", 2);
         if (driver.length != 2) return null;
         String vehicle = vehicleLine.trim().replaceAll("\\s+", " ");
         String[] vehicleParts = vehicle.split("\\s+", 2);
         String status = status(finalLine);
         String club = clubName(clubLine);
+        String firstRunStatus = status(firstRunLine);
+        String secondRunStatus = status(secondRunLine);
         return new ResultRow(driver[0], driver[1], club, vehicleParts[0], vehicleParts.length == 2 ? vehicleParts[1] : "", vehicle,
-                normalizeClass(classLine), raceNumber, status.equals("FINISHED") ? timeMillis(finalLine) : "", position, status);
+                normalizeClass(classLine), raceNumber, timeMillis(firstRunLine), firstRunStatus, timeMillis(secondRunLine), secondRunStatus,
+                status.equals("FINISHED") ? timeMillis(finalLine) : "", position, status);
     }
 
     private String nameAfterClass(String line) {
@@ -153,7 +156,8 @@ public class PdfConversionService {
     }
 
     private record ResultRow(String firstName, String lastName, String clubName, String manufacturer, String model, String displayName,
-                             String classCode, String raceNumber, String elapsedTimeMillis, String position, String status) {
-        String csv() { return PdfConversionService.csv(firstName, lastName, clubName, manufacturer, model, displayName, classCode, raceNumber, elapsedTimeMillis, position, status); }
+                             String classCode, String raceNumber, String firstRunTime, String firstRunStatus, String secondRunTime, String secondRunStatus,
+                             String elapsedTimeMillis, String position, String status) {
+        String csv() { return PdfConversionService.csv(firstName, lastName, clubName, manufacturer, model, displayName, classCode, raceNumber, firstRunTime, firstRunStatus, secondRunTime, secondRunStatus, elapsedTimeMillis, position, status); }
     }
 }

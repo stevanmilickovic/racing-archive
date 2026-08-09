@@ -42,6 +42,8 @@ function App() {
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [importSessionId, setImportSessionId] = useState('')
+  const [secondImportSessionId, setSecondImportSessionId] = useState('')
+  const [resultImportMode, setResultImportMode] = useState<'single' | 'two-runs'>('single')
   const [importFile, setImportFile] = useState<File | null>(null)
   const [importSummary, setImportSummary] = useState<ImportSummary | null>(null)
   const [importErrors, setImportErrors] = useState<ImportError[]>([])
@@ -165,7 +167,11 @@ function App() {
     try {
       const formData = new FormData()
       formData.append('file', importFile)
-      const summary = await api<ImportSummary>(`/sessions/${importSessionId}/results/import`, { method: 'POST', body: formData })
+      if (resultImportMode === 'two-runs') formData.append('secondSessionId', secondImportSessionId)
+      const path = resultImportMode === 'two-runs'
+        ? `/sessions/results/import-two-runs?firstSessionId=${importSessionId}`
+        : `/sessions/${importSessionId}/results/import`
+      const summary = await api<ImportSummary>(path, { method: 'POST', body: formData })
       setImportSummary(summary)
       setImportFile(null)
       form.reset()
@@ -233,9 +239,11 @@ function App() {
       <section className="import-panel">
         <div className="import-copy"><p className="eyebrow">Session results</p><h2>Import a CSV file</h2><p>Convert an official results PDF first, review the CSV, then import it into an existing session.</p></div>
         <form className="import-form" onSubmit={importResults}>
+          <select aria-label="Result import mode" value={resultImportMode} onChange={(event) => setResultImportMode(event.target.value as 'single' | 'two-runs')}><option value="single">One session</option><option value="two-runs">Two timed runs</option></select>
           <select aria-label="Session" required value={importSessionId} onChange={(event) => setImportSessionId(event.target.value)}><option value="">Select a session…</option>{options(records.sessions).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+          {resultImportMode === 'two-runs' && <select aria-label="Second timed-run session" required value={secondImportSessionId} onChange={(event) => setSecondImportSessionId(event.target.value)}><option value="">Select timed run 2…</option>{options(records.sessions).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>}
           <input aria-label="CSV file" type="file" accept=".csv,text/csv" required onChange={(event) => setImportFile(event.target.files?.[0] ?? null)} />
-          <button className="primary" type="submit" disabled={!importSessionId || !importFile}>Import results</button>
+          <button className="primary" type="submit" disabled={!importSessionId || !importFile || (resultImportMode === 'two-runs' && !secondImportSessionId)}>Import results</button>
           <a className="template-link" href="/admin/import-templates/session-results">Download template</a>
         </form>
         <div className="pdf-converter"><label>Official results PDF<input aria-label="Official results PDF" type="file" accept="application/pdf,.pdf" onChange={(event) => setResultsPdf(event.target.files?.[0] ?? null)} /></label><button type="button" onClick={() => void convertPdf('results')} disabled={!resultsPdf || converting !== null}>{converting === 'results' ? 'Converting…' : 'Convert PDF to CSV'}</button><p>The converter uses the overall classification only. Review the downloaded CSV before importing.</p></div>

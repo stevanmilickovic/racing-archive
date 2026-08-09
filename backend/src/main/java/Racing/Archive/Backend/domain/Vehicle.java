@@ -24,7 +24,7 @@ public class Vehicle {
     @Column(nullable = false, length = 100)
     private String manufacturer;
 
-    @Column(nullable = false, length = 150)
+    @Column(length = 150)
     private String model;
 
     @Column(length = 150)

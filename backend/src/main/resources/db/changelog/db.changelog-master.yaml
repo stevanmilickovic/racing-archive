@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/004-global-competition-classes.yaml
   - include:
       file: db/changelog/005-initial-clubs-and-classes.yaml
+  - include:
+      file: db/changelog/006-optional-vehicle-model.yaml

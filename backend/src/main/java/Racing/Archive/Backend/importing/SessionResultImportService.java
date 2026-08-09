@@ -38,7 +38,8 @@ public class SessionResultImportService {
 
     private static final List<String> REQUIRED_COLUMNS = List.of(
             "driver_first_name", "driver_last_name", "club_name", "vehicle_manufacturer", "vehicle_model",
-            "vehicle_display_name", "class_code", "race_number", "elapsed_time_millis", "position", "result_status");
+            "vehicle_display_name", "class_code", "race_number", "run_1_elapsed_time_millis", "run_1_status",
+            "run_2_elapsed_time_millis", "run_2_status", "elapsed_time_millis", "position", "result_status");
 
     private final RaceSessionRepository raceSessionRepository;
     private final CompetitionClassRepository competitionClassRepository;
@@ -61,12 +62,26 @@ public class SessionResultImportService {
 
         ImportCounts counts = new ImportCounts();
         Map<String, Driver> drivers = new HashMap<>();
-        for (ImportRow row : rows) {
-            importRow(session, row, drivers, counts);
-        }
+        for (ImportRow row : rows) importRow(session, row, drivers, counts, row.elapsedTimeMillis(), row.resultStatus());
 
         return new SessionResultImportSummary(rows.size(), counts.createdDrivers, counts.createdClubs,
                 counts.createdVehicles, counts.createdEntries, counts.updatedSessionResults);
+    }
+
+    @Transactional
+    public SessionResultImportSummary importTwoRuns(Long firstSessionId, Long secondSessionId, MultipartFile file) {
+        RaceSession firstSession = raceSessionRepository.findById(firstSessionId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Race session " + firstSessionId + " was not found"));
+        RaceSession secondSession = raceSessionRepository.findById(secondSessionId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Race session " + secondSessionId + " was not found"));
+        if (!firstSession.getRound().getId().equals(secondSession.getRound().getId())) throw badRequest("Both timed-run sessions must belong to the same round");
+        List<ImportRow> rows = parseRows(readRows(file));
+        validateRows(rows);
+        ImportCounts counts = new ImportCounts();
+        Map<String, Driver> drivers = new HashMap<>();
+        for (ImportRow row : rows) {
+            importRow(firstSession, row, drivers, counts, row.runOneElapsedTimeMillis(), row.runOneStatus());
+            importRow(secondSession, row, drivers, counts, row.runTwoElapsedTimeMillis(), row.runTwoStatus());
+        }
+        return new SessionResultImportSummary(rows.size(), counts.createdDrivers, counts.createdClubs, counts.createdVehicles, counts.createdEntries, counts.updatedSessionResults);
     }
 
     private List<ImportRow> parseRows(List<Map<String, String>> csvRows) {
@@ -93,10 +108,14 @@ public class SessionResultImportService {
                 required(row, "driver_last_name"),
                 required(row, "club_name"),
                 required(row, "vehicle_manufacturer"),
-                required(row, "vehicle_model"),
+                optional(row, "vehicle_model"),
                 optional(row, "vehicle_display_name"),
                 required(row, "class_code").toUpperCase(Locale.ROOT),
                 integerValue(optional(row, "race_number"), "race_number"),
+                longValue(optional(row, "run_1_elapsed_time_millis"), "run_1_elapsed_time_millis"),
+                optionalEnumValue(optional(row, "run_1_status"), ResultStatus.class, "run_1_status"),
+                longValue(optional(row, "run_2_elapsed_time_millis"), "run_2_elapsed_time_millis"),
+                optionalEnumValue(optional(row, "run_2_status"), ResultStatus.class, "run_2_status"),
                 longValue(optional(row, "elapsed_time_millis"), "elapsed_time_millis"),
                 integerValue(optional(row, "position"), "position"),
                 enumValue(required(row, "result_status"), ResultStatus.class, "result_status"));
@@ -120,7 +139,8 @@ public class SessionResultImportService {
         }
     }
 
-    private void importRow(RaceSession session, ImportRow row, Map<String, Driver> drivers, ImportCounts counts) {
+    private void importRow(RaceSession session, ImportRow row, Map<String, Driver> drivers, ImportCounts counts, Long elapsedTimeMillis, ResultStatus status) {
+        if (status == null) return;
         CompetitionClass competitionClass = competitionClassRepository.findByCodeIgnoreCase(row.classCode()).orElseThrow();
         Driver driver = drivers.computeIfAbsent(row.driverKey(), ignored -> findOrCreateDriver(row, counts));
         Club club = findOrCreateClub(row.clubName(), counts);
@@ -132,9 +152,9 @@ public class SessionResultImportService {
         boolean existing = result.getId() != null;
         result.setSession(session);
         result.setEntry(entry);
-        result.setElapsedTimeMillis(row.elapsedTimeMillis());
+        result.setElapsedTimeMillis(elapsedTimeMillis);
         result.setPosition(row.position());
-        result.setStatus(row.resultStatus());
+        result.setStatus(status);
         sessionResultRepository.save(result);
         if (existing) {
             counts.updatedSessionResults++;
@@ -260,12 +280,17 @@ public class SessionResultImportService {
         catch (IllegalArgumentException exception) { throw new IllegalArgumentException(name + " is invalid"); }
     }
 
+    private <T extends Enum<T>> T optionalEnumValue(String value, Class<T> type, String name) {
+        return value == null ? null : enumValue(value, type, name);
+    }
+
     private String driverName(Map<String, String> row) { return String.join(" ", optional(row, "driver_first_name") == null ? "Unknown" : optional(row, "driver_first_name"), optional(row, "driver_last_name") == null ? "driver" : optional(row, "driver_last_name")); }
     private String removeBom(String value) { return value.startsWith("\uFEFF") ? value.substring(1) : value; }
     private ResponseStatusException badRequest(String message) { return new ResponseStatusException(HttpStatus.BAD_REQUEST, message); }
 
     private record ImportRow(int rowNumber, String firstName, String lastName, String clubName, String manufacturer,
                              String model, String displayName, String classCode, Integer raceNumber,
+                             Long runOneElapsedTimeMillis, ResultStatus runOneStatus, Long runTwoElapsedTimeMillis, ResultStatus runTwoStatus,
                              Long elapsedTimeMillis, Integer position, ResultStatus resultStatus) {
         String driverName() { return firstName + " " + lastName; }
         String driverKey() { return firstName.toLowerCase(Locale.ROOT) + "|" + lastName.toLowerCase(Locale.ROOT); }

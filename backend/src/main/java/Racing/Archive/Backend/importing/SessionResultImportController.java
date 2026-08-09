@@ -44,4 +44,9 @@ public class SessionResultImportController {
     SessionResultImportSummary importResults(@PathVariable Long sessionId, @RequestParam("file") MultipartFile file) {
         return sessionResultImportService.importFile(sessionId, file);
     }
+
+    @PostMapping(value = "/sessions/results/import-two-runs", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    SessionResultImportSummary importTwoRuns(@RequestParam Long firstSessionId, @RequestParam Long secondSessionId, @RequestParam("file") MultipartFile file) {
+        return sessionResultImportService.importTwoRuns(firstSessionId, secondSessionId, file);
+    }
 }

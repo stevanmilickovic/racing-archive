@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-optional-vehicle-model
+      author: codex
+      changes:
+        - dropNotNullConstraint:
+            tableName: vehicles
+            columnName: model
+            columnDataType: VARCHAR(150)
