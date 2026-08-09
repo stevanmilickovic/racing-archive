@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-season-active
+      author: codex
+      changes:
+        - addColumn:
+            tableName: seasons
+            columns:
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

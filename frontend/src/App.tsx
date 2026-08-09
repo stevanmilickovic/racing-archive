@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import './App.css'
 
 type RecordValue = Record<string, unknown>
-type ResourceKey = 'federations' | 'disciplines' | 'championships' | 'seasons' | 'competition-classes' | 'rounds' | 'sessions'
+type ResourceKey = 'federations' | 'disciplines' | 'championships' | 'seasons' | 'competition-classes' | 'rounds' | 'sessions' | 'drivers' | 'vehicles'
 
 type Field = {
   key: string
@@ -33,7 +33,7 @@ type DriverImportSummary = { importedRows: number; createdDrivers: number; exist
 
 function App() {
   const [records, setRecords] = useState<Record<ResourceKey, RecordValue[]>>({
-    federations: [], disciplines: [], championships: [], seasons: [], 'competition-classes': [], rounds: [], sessions: [],
+    federations: [], disciplines: [], championships: [], seasons: [], 'competition-classes': [], rounds: [], sessions: [], drivers: [], vehicles: [],
   })
   const [activeResource, setActiveResource] = useState<ResourceKey>('federations')
   const [editing, setEditing] = useState<RecordValue | null>(null)
@@ -52,6 +52,9 @@ function App() {
   const [driverPdf, setDriverPdf] = useState<File | null>(null)
   const [resultsPdf, setResultsPdf] = useState<File | null>(null)
   const [converting, setConverting] = useState<'drivers' | 'results' | null>(null)
+  const [resultsSession, setResultsSession] = useState<RecordValue | null>(null)
+  const [sessionResults, setSessionResults] = useState<RecordValue[]>([])
+  const [manualResult, setManualResult] = useState({ driverId: '', vehicleId: '', competitionClassId: '', elapsedTime: '', position: '', status: 'FINISHED' })
 
   const resources = useMemo<Resource[]>(() => [
     { key: 'federations', label: 'Federations', fields: [text('name', 'Name', true), text('countryCode', 'Country code')] },
@@ -66,7 +69,7 @@ function App() {
     {
       key: 'seasons', label: 'Seasons', fields: [
         select('championshipId', 'Championship', () => options(records.championships)),
-        number('year', 'Year', true), text('name', 'Name'),
+        number('year', 'Year', true), text('name', 'Name'), { key: 'active', label: 'Active', type: 'select', required: true, options: () => enumOptions(['true', 'false']) },
       ],
     },
     {
@@ -90,6 +93,8 @@ function App() {
         number('sessionOrder', 'Order', true), { key: 'scheduledAt', label: 'Scheduled at', type: 'datetime-local' },
       ],
     },
+    { key: 'drivers', label: 'Drivers', fields: [text('firstName', 'First name', true), text('lastName', 'Last name', true), text('nationalityCode', 'Nationality')] },
+    { key: 'vehicles', label: 'Car models', fields: [text('manufacturer', 'Manufacturer', true), text('model', 'Model'), text('displayName', 'Display name')] },
   ], [records])
 
   const resource = resources.find((item) => item.key === activeResource)!
@@ -225,6 +230,45 @@ function App() {
     }
   }
 
+  async function openSessionResults(session: RecordValue) {
+    setError(null)
+    try {
+      setSessionResults(await api<RecordValue[]>(`/sessions/${session.id}/results`))
+      setResultsSession(session)
+    } catch (requestError) { setError(messageFor(requestError)) }
+  }
+
+  async function updateResultVehicle(resultId: unknown, vehicleId: string) {
+    if (!vehicleId) return
+    try {
+      await api(`/session-results/${resultId}`, { method: 'PUT', body: JSON.stringify({ vehicleId: Number(vehicleId) }) })
+      if (resultsSession) await openSessionResults(resultsSession)
+    } catch (requestError) { setError(messageFor(requestError)) }
+  }
+
+  async function deleteResult(resultId: unknown) {
+    if (!window.confirm('Delete this result from this session?')) return
+    try {
+      await api(`/session-results/${resultId}`, { method: 'DELETE' })
+      if (resultsSession) await openSessionResults(resultsSession)
+    } catch (requestError) { setError(messageFor(requestError)) }
+  }
+
+  async function saveResultTime(resultId: unknown, value: string) {
+    try { await api(`/session-results/${resultId}`, { method: 'PUT', body: JSON.stringify({ elapsedTimeMillis: parseRaceTime(value) }) }); if (resultsSession) await openSessionResults(resultsSession) }
+    catch (requestError) { setError(messageFor(requestError)) }
+  }
+
+  async function addManualResult(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!resultsSession) return
+    try {
+      await api(`/sessions/${resultsSession.id}/results`, { method: 'POST', body: JSON.stringify({ driverId: Number(manualResult.driverId), vehicleId: Number(manualResult.vehicleId), competitionClassId: Number(manualResult.competitionClassId), elapsedTimeMillis: parseRaceTime(manualResult.elapsedTime), position: manualResult.position ? Number(manualResult.position) : null, status: manualResult.status }) })
+      setManualResult({ driverId: '', vehicleId: '', competitionClassId: '', elapsedTime: '', position: '', status: 'FINISHED' })
+      await openSessionResults(resultsSession)
+    } catch (requestError) { setError(messageFor(requestError)) }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -269,10 +313,12 @@ function App() {
       {message && <div className="notice success">{message}</div>}
       {importErrors.length > 0 && <div className="modal-backdrop" role="presentation"><section className="error-modal" role="dialog" aria-modal="true" aria-labelledby="import-errors-title"><div className="modal-heading"><div><p className="eyebrow">Import not saved</p><h2 id="import-errors-title">Fix these {importErrors.length} errors</h2></div><button aria-label="Close errors" onClick={() => setImportErrors([])}>×</button></div><ul>{importErrors.map((importError, index) => <li key={`${importError.rowNumber}-${index}`}><strong>Row {importError.rowNumber} · {importError.subject}</strong><span>{importError.message}</span></li>)}</ul><button className="primary" onClick={() => setImportErrors([])}>Close</button></section></div>}
 
+      {resultsSession && <section className="list-panel session-results"><div className="section-heading"><div><h2>{labelFor(resultsSession)} results</h2><p>Vehicle changes apply to this driver’s entry for the round.</p></div><button onClick={() => setResultsSession(null)}>Close</button></div><form className="manual-result-form" onSubmit={addManualResult}><select required value={manualResult.driverId} onChange={(event) => setManualResult({ ...manualResult, driverId: event.target.value })}><option value="">Driver…</option>{options(records.drivers).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select><select required value={manualResult.vehicleId} onChange={(event) => setManualResult({ ...manualResult, vehicleId: event.target.value })}><option value="">Vehicle…</option>{options(records.vehicles).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select><select required value={manualResult.competitionClassId} onChange={(event) => setManualResult({ ...manualResult, competitionClassId: event.target.value })}><option value="">Class…</option>{options(records['competition-classes']).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select><input placeholder="4:57.539" value={manualResult.elapsedTime} onChange={(event) => setManualResult({ ...manualResult, elapsedTime: event.target.value })} /><input type="number" placeholder="Position" value={manualResult.position} onChange={(event) => setManualResult({ ...manualResult, position: event.target.value })} /><button className="primary">Add result</button></form><div className="table-scroll"><table><thead><tr><th>Driver</th><th>Position</th><th>Time</th><th>Status</th><th>Vehicle</th><th>Actions</th></tr></thead><tbody>{sessionResults.map((result) => <tr key={String(result.id)}><td>{String(result.driverName)}</td><td>{String(result.position ?? '—')}</td><td><input className="time-input" defaultValue={formatRaceTime(result.elapsedTimeMillis)} onBlur={(event) => void saveResultTime(result.id, event.target.value)} /></td><td>{String(result.status)}</td><td><select value={String(result.vehicleId ?? '')} onChange={(event) => void updateResultVehicle(result.id, event.target.value)}><option value="">Select vehicle…</option>{options(records.vehicles).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></td><td><button className="danger" onClick={() => void deleteResult(result.id)}>Delete result</button></td></tr>)}</tbody></table></div></section>}
+
       <section className="workspace">
         <div className="list-panel">
           <div className="section-heading"><div><h2>{resource.label}</h2><p>{records[resource.key].length} records</p></div><button className="primary" onClick={beginCreate}>Add {resource.label.slice(0, -1)}</button></div>
-          {loading ? <p className="empty">Loading…</p> : <RecordTable fields={resource.fields} values={records[resource.key]} onEdit={beginEdit} onDelete={remove} />}
+          {loading ? <p className="empty">Loading…</p> : <RecordTable fields={resource.fields} values={records[resource.key]} records={records} onEdit={beginEdit} onDelete={remove} onResults={resource.key === 'sessions' ? openSessionResults : undefined} />}
         </div>
 
         <aside className="form-panel">
@@ -287,20 +333,21 @@ function App() {
   )
 }
 
-const resourcesForLoading: ResourceKey[] = ['federations', 'disciplines', 'championships', 'seasons', 'competition-classes', 'rounds', 'sessions']
+const resourcesForLoading: ResourceKey[] = ['federations', 'disciplines', 'championships', 'seasons', 'competition-classes', 'rounds', 'sessions', 'drivers', 'vehicles']
 const text = (key: string, label: string, required = false): Field => ({ key, label, required })
 const number = (key: string, label: string, required = false): Field => ({ key, label, type: 'number', required })
 const select = (key: string, label: string, options: () => { value: string; label: string }[], required = true): Field => ({ key, label, type: 'select', options, required })
 const enumOptions = (values: string[]) => values.map((value) => ({ value, label: value.replaceAll('_', ' ') }))
 const options = (values: RecordValue[]) => values.map((value) => ({ value: String(value.id), label: labelFor(value) }))
-const labelFor = (value: RecordValue) => String(value.name ?? value.code ?? value.year ?? value.id)
+const labelFor = (value: RecordValue) => String(value.displayName || [value.manufacturer, value.model].filter(Boolean).join(' ') || value.name || value.code || value.year || value.id)
 const toInputValue = (value: unknown) => value == null ? '' : String(value).slice(0, 16)
-const defaultValue = (field: Field) => field.key === 'status' ? 'SCHEDULED' : field.key === 'type' ? 'PRACTICE' : ''
+const defaultValue = (field: Field) => field.key === 'status' ? 'SCHEDULED' : field.key === 'type' ? 'PRACTICE' : field.key === 'active' ? 'false' : ''
 const defaultValues = (resource: Resource) => Object.fromEntries(resource.fields.map((field) => [field.key, defaultValue(field)]))
 
 function valueForApi(field: Field, value: string | undefined): unknown {
   value ??= defaultValue(field)
   if (!value) return field.required ? value : null
+  if (field.key === 'active') return value === 'true'
   return field.type === 'number' ? Number(value) : value
 }
 
@@ -336,6 +383,9 @@ async function downloadCsv(path: string, formData: FormData, fallbackFilename: s
 
 function messageFor(error: unknown) { return error instanceof Error ? error.message : 'The request could not be completed.' }
 
+function formatRaceTime(value: unknown) { if (value == null) return ''; const total = Number(value); const minutes = Math.floor(total / 60000); const seconds = Math.floor((total % 60000) / 1000); const milliseconds = total % 1000; return `${minutes}:${String(seconds).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}` }
+function parseRaceTime(value: string) { if (!value) return null; const match = value.match(/^(\d+):(\d{2})\.(\d{3})$/); if (!match || Number(match[2]) > 59) throw new Error('Time must use minutes:seconds.milliseconds, for example 4:57.539'); return (Number(match[1]) * 60 + Number(match[2])) * 1000 + Number(match[3]) }
+
 class ApiError extends Error {
   readonly importErrors: ImportError[]
 
@@ -349,9 +399,18 @@ function FieldInput({ field, value, onChange }: { field: Field; value: string; o
   return <label>{field.label}{field.type === 'select' ? <select required={field.required} value={value} onChange={(event) => onChange(event.target.value)}><option value="">Select…</option>{field.options?.().map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input type={field.type ?? 'text'} required={field.required} value={value} onChange={(event) => onChange(event.target.value)} />}</label>
 }
 
-function RecordTable({ fields, values, onEdit, onDelete }: { fields: Field[]; values: RecordValue[]; onEdit: (value: RecordValue) => void; onDelete: (value: RecordValue) => void }) {
+function RecordTable({ fields, values, records, onEdit, onDelete, onResults }: { fields: Field[]; values: RecordValue[]; records: Record<ResourceKey, RecordValue[]>; onEdit: (value: RecordValue) => void; onDelete: (value: RecordValue) => void; onResults?: (value: RecordValue) => void }) {
   if (values.length === 0) return <p className="empty">No records yet.</p>
-  return <div className="table-scroll"><table><thead><tr>{fields.map((field) => <th key={field.key}>{field.label}</th>)}<th>Actions</th></tr></thead><tbody>{values.map((value) => <tr key={String(value.id)}>{fields.map((field) => <td key={field.key}>{String(value[field.key] ?? '—')}</td>)}<td className="actions"><button onClick={() => onEdit(value)}>Edit</button><button className="danger" onClick={() => onDelete(value)}>Delete</button></td></tr>)}</tbody></table></div>
+  return <div className="table-scroll"><table><thead><tr>{fields.map((field) => <th key={field.key}>{field.label}</th>)}<th>Actions</th></tr></thead><tbody>{values.map((value) => <tr key={String(value.id)}>{fields.map((field) => <td key={field.key}>{displayValue(field.key, value[field.key], records)}</td>)}<td className="actions">{onResults && <button onClick={() => void onResults(value)}>Results</button>}<button onClick={() => onEdit(value)}>Edit</button><button className="danger" onClick={() => onDelete(value)}>Delete</button></td></tr>)}</tbody></table></div>
+}
+
+function displayValue(key: string, value: unknown, records: Record<ResourceKey, RecordValue[]>) {
+  const find = (items: RecordValue[]) => items.find((item) => String(item.id) === String(value))
+  if (key === 'federationId' || key === 'hostFederationId') { const item = find(records.federations); return String(item?.countryCode ?? item?.name ?? '—') }
+  if (key === 'disciplineId') return String(find(records.disciplines)?.code ?? '—')
+  if (key === 'championshipId') { const item = find(records.championships); return String(item?.shortName ?? item?.name ?? '—') }
+  if (key === 'seasonId') { const season = find(records.seasons); const championship = records.championships.find((item) => String(item.id) === String(season?.championshipId)); return `${season?.year ?? '—'} · ${championship?.name ?? '—'}` }
+  return String(value ?? '—')
 }
 
 export default App

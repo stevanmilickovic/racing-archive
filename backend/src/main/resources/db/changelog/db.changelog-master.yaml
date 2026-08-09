@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/005-initial-clubs-and-classes.yaml
   - include:
       file: db/changelog/006-optional-vehicle-model.yaml
+  - include:
+      file: db/changelog/007-season-active.yaml

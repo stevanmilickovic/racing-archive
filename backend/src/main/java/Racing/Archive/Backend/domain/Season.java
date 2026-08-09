@@ -34,4 +34,7 @@ public class Season {
 
     @Column(length = 200)
     private String name;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean active;
 }
