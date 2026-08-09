@@ -47,6 +47,9 @@ function App() {
   const [importErrors, setImportErrors] = useState<ImportError[]>([])
   const [driverImportFile, setDriverImportFile] = useState<File | null>(null)
   const [driverImportSummary, setDriverImportSummary] = useState<DriverImportSummary | null>(null)
+  const [driverPdf, setDriverPdf] = useState<File | null>(null)
+  const [resultsPdf, setResultsPdf] = useState<File | null>(null)
+  const [converting, setConverting] = useState<'drivers' | 'results' | null>(null)
 
   const resources = useMemo<Resource[]>(() => [
     { key: 'federations', label: 'Federations', fields: [text('name', 'Name', true), text('countryCode', 'Country code')] },
@@ -199,6 +202,23 @@ function App() {
     }
   }
 
+  async function convertPdf(kind: 'drivers' | 'results') {
+    const file = kind === 'drivers' ? driverPdf : resultsPdf
+    if (!file) return
+    setError(null)
+    setConverting(kind)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      await downloadCsv(`/pdf-conversions/${kind === 'drivers' ? 'drivers' : 'session-results'}`, formData,
+        kind === 'drivers' ? 'drivers-converted.csv' : 'session-results-converted.csv')
+    } catch (requestError) {
+      setError(messageFor(requestError))
+    } finally {
+      setConverting(null)
+    }
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -211,23 +231,25 @@ function App() {
       </section>
 
       <section className="import-panel">
-        <div className="import-copy"><p className="eyebrow">Session results</p><h2>Import a CSV file</h2><p>Download the template, fill one row per driver, then import it into an existing session.</p></div>
+        <div className="import-copy"><p className="eyebrow">Session results</p><h2>Import a CSV file</h2><p>Convert an official results PDF first, review the CSV, then import it into an existing session.</p></div>
         <form className="import-form" onSubmit={importResults}>
           <select aria-label="Session" required value={importSessionId} onChange={(event) => setImportSessionId(event.target.value)}><option value="">Select a session…</option>{options(records.sessions).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
           <input aria-label="CSV file" type="file" accept=".csv,text/csv" required onChange={(event) => setImportFile(event.target.files?.[0] ?? null)} />
           <button className="primary" type="submit" disabled={!importSessionId || !importFile}>Import results</button>
           <a className="template-link" href="/admin/import-templates/session-results">Download template</a>
         </form>
+        <div className="pdf-converter"><label>Official results PDF<input aria-label="Official results PDF" type="file" accept="application/pdf,.pdf" onChange={(event) => setResultsPdf(event.target.files?.[0] ?? null)} /></label><button type="button" onClick={() => void convertPdf('results')} disabled={!resultsPdf || converting !== null}>{converting === 'results' ? 'Converting…' : 'Convert PDF to CSV'}</button><p>The converter uses the overall classification only. Review the downloaded CSV before importing.</p></div>
         {importSummary && <p className="import-summary">Imported {importSummary.importedRows} rows · new: {importSummary.createdDrivers} drivers, {importSummary.createdClubs} clubs, {importSummary.createdVehicles} vehicles, {importSummary.createdEntries} entries · updated results: {importSummary.updatedSessionResults}</p>}
       </section>
 
       <section className="import-panel driver-import-panel">
-        <div className="import-copy"><p className="eyebrow">Driver directory</p><h2>Import drivers</h2><p>Use the registration list to enter driver first name, last name, and nationality only.</p></div>
+        <div className="import-copy"><p className="eyebrow">Driver directory</p><h2>Import drivers</h2><p>Convert a registration-list PDF or use the template, then review names and nationalities before importing.</p></div>
         <form className="import-form driver-import-form" onSubmit={importDrivers}>
           <input aria-label="Drivers CSV file" type="file" accept=".csv,text/csv" required onChange={(event) => setDriverImportFile(event.target.files?.[0] ?? null)} />
           <button className="primary" type="submit" disabled={!driverImportFile}>Import drivers</button>
           <a className="template-link" href="/admin/import-templates/drivers">Download drivers template</a>
         </form>
+        <div className="pdf-converter"><label>Registration list PDF<input aria-label="Registration list PDF" type="file" accept="application/pdf,.pdf" onChange={(event) => setDriverPdf(event.target.files?.[0] ?? null)} /></label><button type="button" onClick={() => void convertPdf('drivers')} disabled={!driverPdf || converting !== null}>{converting === 'drivers' ? 'Converting…' : 'Convert PDF to CSV'}</button><p>This only produces first name, last name, and nationality columns. Review the downloaded CSV before importing.</p></div>
         {driverImportSummary && <p className="import-summary">Imported {driverImportSummary.importedRows} rows; new drivers: {driverImportSummary.createdDrivers}; existing drivers: {driverImportSummary.existingDrivers}</p>}
       </section>
 
@@ -286,6 +308,22 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
   if (response.status === 204) return undefined as T
   if (!response.headers.get('content-type')?.includes('application/json')) throw new Error('Your administrator session has expired.')
   return response.json() as Promise<T>
+}
+
+async function downloadCsv(path: string, formData: FormData, fallbackFilename: string) {
+  const csrfToken = document.cookie.split('; ').find((value) => value.startsWith('XSRF-TOKEN='))?.split('=').slice(1).join('=')
+  const response = await fetch(`/admin${path}`, { method: 'POST', credentials: 'include', headers: { Accept: 'text/csv', ...(csrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(csrfToken) } : {}) }, body: formData })
+  if (!response.ok) {
+    const body = await response.json().catch(() => null) as { detail?: string } | null
+    throw new Error(body?.detail ?? `Conversion failed (${response.status})`)
+  }
+  const filename = response.headers.get('content-disposition')?.match(/filename="?([^";]+)"?/)?.[1] ?? fallbackFilename
+  const url = URL.createObjectURL(await response.blob())
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(url)
 }
 
 function messageFor(error: unknown) { return error instanceof Error ? error.message : 'The request could not be completed.' }

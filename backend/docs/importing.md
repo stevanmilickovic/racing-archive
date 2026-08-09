@@ -84,3 +84,12 @@ first_name,last_name,nationality_code
 Upload it as multipart form field `file` to `POST /admin/drivers/import`.
 
 `nationality_code` is a two-letter country code. If no matching driver exists, one is created. If the one matching driver has no nationality, the import fills it in. Conflicting nationalities or duplicate existing records with the same name are reported together and no rows are saved.
+
+## PDF to CSV conversion
+
+The administrator screen can convert the two supplied PDF layouts into the matching CSV templates. Conversion never writes to the database: download the CSV, inspect and correct it, then use the normal CSV import.
+
+- Registration list PDF: `POST /admin/pdf-conversions/drivers`
+- Official hillclimb result PDF: `POST /admin/pdf-conversions/session-results`
+
+Both endpoints accept the PDF as multipart form field `file` and return a CSV attachment. The results converter uses the first overall classification only, so the repeated class classifications in the PDF are not imported twice. PDF text extraction can lose characters from some source PDFs or make an unfamiliar club/car layout ambiguous; those cells should be corrected in the downloaded CSV before importing.
