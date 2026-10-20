@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 011-round-season-participations
+      author: codex
+      changes:
+        - createTable:
+            tableName: round_season_participations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: round_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_round_participation_round
+                    references: championship_rounds(id)
+              - column:
+                  name: season_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_round_participation_season
+                    references: seasons(id)
+        - addUniqueConstraint:
+            tableName: round_season_participations
+            columnNames: "round_id,season_id"
+            constraintName: uk_round_season_participation
+        - sql:
+            sql: INSERT INTO round_season_participations (round_id, season_id) SELECT id, season_id FROM championship_rounds

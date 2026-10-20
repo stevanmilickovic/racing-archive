@@ -7,6 +7,7 @@ import Racing.Archive.Backend.domain.SessionResult;
 import Racing.Archive.Backend.domain.Season;
 import Racing.Archive.Backend.repository.ChampionshipRoundRepository;
 import Racing.Archive.Backend.repository.RaceSessionRepository;
+import Racing.Archive.Backend.repository.RoundSeasonParticipationRepository;
 import Racing.Archive.Backend.repository.ScoringSystemPositionRepository;
 import Racing.Archive.Backend.repository.SeasonRepository;
 import Racing.Archive.Backend.repository.SessionResultRepository;
@@ -31,6 +32,7 @@ public class PublicDashboardController {
     private final SeasonRepository seasonRepository;
     private final ChampionshipRoundRepository roundRepository;
     private final RaceSessionRepository sessionRepository;
+    private final RoundSeasonParticipationRepository roundSeasonParticipationRepository;
     private final SessionResultRepository resultRepository;
     private final ScoringSystemPositionRepository scoringPositionRepository;
 
@@ -61,8 +63,8 @@ public class PublicDashboardController {
     }
 
     private PublicSeasonResponse season(Season season) {
-        List<ChampionshipRound> rounds = roundRepository.findAll().stream()
-                .filter(round -> round.getSeason().getId().equals(season.getId()))
+        List<ChampionshipRound> rounds = roundSeasonParticipationRepository.findBySeasonId(season.getId()).stream()
+                .map(participation -> participation.getRound())
                 .filter(round -> round.getStatus().name().equals("COMPLETED"))
                 .sorted(Comparator.comparing(ChampionshipRound::getRoundNumber)).toList();
         Map<String, Map<Long, DriverScore>> byClass = new HashMap<>();

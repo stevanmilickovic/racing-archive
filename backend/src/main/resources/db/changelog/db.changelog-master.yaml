@@ -19,3 +19,5 @@ databaseChangeLog:
       file: db/changelog/009-repair-scoring-system-seed.yaml
   - include:
       file: db/changelog/010-federation-country-code-length.yaml
+  - include:
+      file: db/changelog/011-round-season-participations.yaml

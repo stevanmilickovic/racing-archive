@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 record FederationRequest(@NotBlank String name, @Size(max = 3) String countryCode) {
 }
@@ -43,7 +44,7 @@ record CompetitionClassResponse(Long id, String code) {
 
 record ChampionshipRoundRequest(
         @NotNull Long seasonId,
-        Long hostFederationId,
+        List<Long> guestSeasonIds,
         @NotNull @Min(1) Integer roundNumber,
         @NotBlank String name,
         LocalDate startsOn,
@@ -54,6 +55,7 @@ record ChampionshipRoundRequest(
 record ChampionshipRoundResponse(
         Long id,
         Long seasonId,
+        List<Long> guestSeasonIds,
         Long hostFederationId,
         Integer roundNumber,
         String name,

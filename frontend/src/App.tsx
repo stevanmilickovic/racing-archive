@@ -8,7 +8,7 @@ type ResourceKey = 'federations' | 'disciplines' | 'championships' | 'seasons' |
 type Field = {
   key: string
   label: string
-  type?: 'text' | 'number' | 'date' | 'datetime-local' | 'select'
+  type?: 'text' | 'number' | 'date' | 'datetime-local' | 'select' | 'multi-select'
   required?: boolean
   options?: () => { value: string; label: string }[]
 }
@@ -81,8 +81,8 @@ function App() {
     },
     {
       key: 'rounds', label: 'Rounds', fields: [
-        select('seasonId', 'Season', () => options(records.seasons)),
-        select('hostFederationId', 'Guest federation (international round only)', () => options(records.federations), false),
+        select('seasonId', 'Host championship season', () => seasonOptions(records.seasons, records.championships, records.federations)),
+        { key: 'guestSeasonIds', label: 'Guest federation seasons (Ctrl/Cmd for more)', type: 'multi-select', options: () => seasonOptions(records.seasons, records.championships, records.federations) },
         number('roundNumber', 'Round number', true), text('name', 'Name', true),
         { key: 'startsOn', label: 'Starts on', type: 'date' }, { key: 'endsOn', label: 'Ends on', type: 'date' },
         { key: 'status', label: 'Status', type: 'select', required: true, options: () => enumOptions(['SCHEDULED', 'COMPLETED', 'CANCELLED']) },
@@ -287,8 +287,8 @@ function App() {
         <div className="import-copy"><p className="eyebrow">Session results</p><h2>Import a CSV file</h2><p>Convert an official results PDF first, review the CSV, then import it into an existing session.</p></div>
         <form className="import-form" onSubmit={importResults}>
           <select aria-label="Result import mode" value={resultImportMode} onChange={(event) => setResultImportMode(event.target.value as 'single' | 'two-runs')}><option value="single">One session</option><option value="two-runs">Two timed runs</option></select>
-          <select aria-label="Session" required value={importSessionId} onChange={(event) => setImportSessionId(event.target.value)}><option value="">Select a session…</option>{options(records.sessions).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
-          {resultImportMode === 'two-runs' && <select aria-label="Second timed-run session" required value={secondImportSessionId} onChange={(event) => setSecondImportSessionId(event.target.value)}><option value="">Select timed run 2…</option>{options(records.sessions).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>}
+          <select aria-label="Session" required value={importSessionId} onChange={(event) => setImportSessionId(event.target.value)}><option value="">Select a session…</option>{sessionOptionsForImport(records.sessions, records.rounds, records.seasons).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>
+          {resultImportMode === 'two-runs' && <select aria-label="Second timed-run session" required value={secondImportSessionId} onChange={(event) => setSecondImportSessionId(event.target.value)}><option value="">Select timed run 2…</option>{sessionOptionsForImport(records.sessions, records.rounds, records.seasons).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select>}
           <input aria-label="CSV file" type="file" accept=".csv,text/csv" required onChange={(event) => setImportFile(event.target.files?.[0] ?? null)} />
           <button className="primary" type="submit" disabled={!importSessionId || !importFile || (resultImportMode === 'two-runs' && !secondImportSessionId)}>Import results</button>
           <a className="template-link" href="/admin/import-templates/session-results">Download template</a>
@@ -342,6 +342,16 @@ const number = (key: string, label: string, required = false): Field => ({ key, 
 const select = (key: string, label: string, options: () => { value: string; label: string }[], required = true): Field => ({ key, label, type: 'select', options, required })
 const enumOptions = (values: string[]) => values.map((value) => ({ value, label: value.replaceAll('_', ' ') }))
 const options = (values: RecordValue[]) => values.map((value) => ({ value: String(value.id), label: labelFor(value) }))
+const seasonOptions = (seasons: RecordValue[], championships: RecordValue[], federations: RecordValue[] = []) => seasons.map((season) => {
+  const championship = championships.find((value) => String(value.id) === String(season.championshipId))
+  const federation = federations.find((value) => String(value.id) === String(championship?.federationId))
+  return { value: String(season.id), label: `${season.year} · ${championship?.shortName || championship?.name || 'Unknown championship'}${federation?.countryCode ? ` (${federation.countryCode})` : ''}` }
+})
+const sessionOptionsForImport = (sessions: RecordValue[], rounds: RecordValue[], seasons: RecordValue[]) => sessions.map((session) => {
+  const round = rounds.find((value) => String(value.id) === String(session.roundId))
+  const season = seasons.find((value) => String(value.id) === String(round?.seasonId))
+  return { value: String(session.id), label: `${season?.year ?? '—'} · ${round?.name ?? 'Unknown round'} · ${session.name ?? 'Unnamed session'}` }
+})
 const labelFor = (value: RecordValue) => String(value.displayName || [value.manufacturer, value.model].filter(Boolean).join(' ') || value.name || value.code || value.year || value.id)
 const toInputValue = (value: unknown) => value == null ? '' : String(value).slice(0, 16)
 const defaultValue = (field: Field) => field.key === 'status' ? 'SCHEDULED' : field.key === 'type' ? 'PRACTICE' : field.key === 'active' ? 'false' : ''
@@ -349,6 +359,7 @@ const defaultValues = (resource: Resource) => Object.fromEntries(resource.fields
 
 function valueForApi(field: Field, value: string | undefined): unknown {
   value ??= defaultValue(field)
+  if (field.type === 'multi-select') return value ? value.split(',').filter(Boolean).map(Number) : []
   if (!value) return field.required ? value : null
   if (field.key === 'active') return value === 'true'
   return field.type === 'number' ? Number(value) : value
@@ -399,6 +410,7 @@ class ApiError extends Error {
 }
 
 function FieldInput({ field, value, onChange }: { field: Field; value: string; onChange: (value: string) => void }) {
+  if (field.type === 'multi-select') return <label>{field.label}<select multiple value={value ? value.split(',') : []} onChange={(event) => onChange(Array.from(event.target.selectedOptions, (option) => option.value).join(','))}>{field.options?.().map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select></label>
   return <label>{field.label}{field.type === 'select' ? <select required={field.required} value={value} onChange={(event) => onChange(event.target.value)}><option value="">Select…</option>{field.options?.().map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}</select> : <input type={field.type ?? 'text'} required={field.required} value={value} onChange={(event) => onChange(event.target.value)} />}</label>
 }
 
@@ -407,12 +419,14 @@ function RecordTable({ fields, values, records, onEdit, onDelete, onResults }: {
   return <div className="table-scroll"><table><thead><tr>{fields.map((field) => <th key={field.key}>{field.label}</th>)}<th>Actions</th></tr></thead><tbody>{values.map((value) => <tr key={String(value.id)}>{fields.map((field) => <td key={field.key}>{displayValue(field.key, value[field.key], records)}</td>)}<td className="actions">{onResults && <button onClick={() => void onResults(value)}>Results</button>}<button onClick={() => onEdit(value)}>Edit</button><button className="danger" onClick={() => onDelete(value)}>Delete</button></td></tr>)}</tbody></table></div>
 }
 
-function displayValue(key: string, value: unknown, records: Record<ResourceKey, RecordValue[]>) {
+function displayValue(key: string, value: unknown, records: Record<ResourceKey, RecordValue[]>): string {
   const find = (items: RecordValue[]) => items.find((item) => String(item.id) === String(value))
   if (key === 'federationId' || key === 'hostFederationId') { const item = find(records.federations); return String(item?.countryCode ?? item?.name ?? '—') }
   if (key === 'disciplineId') return String(find(records.disciplines)?.code ?? '—')
   if (key === 'championshipId') { const item = find(records.championships); return String(item?.shortName ?? item?.name ?? '—') }
   if (key === 'seasonId') { const season = find(records.seasons); const championship = records.championships.find((item) => String(item.id) === String(season?.championshipId)); return `${season?.year ?? '—'} · ${championship?.name ?? '—'}` }
+  if (key === 'roundId') return String(find(records.rounds)?.name ?? '—')
+  if (key === 'guestSeasonIds') return Array.isArray(value) ? value.map((id) => displayValue('seasonId', id, records)).join(', ') : '—'
   return String(value ?? '—')
 }
 
