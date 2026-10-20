@@ -17,8 +17,9 @@ class PublicDashboardControllerTest {
     private final SessionResultRepository results = mock(SessionResultRepository.class);
     private final ScoringSystemPositionRepository points = mock(ScoringSystemPositionRepository.class);
     private final DriverRepository drivers = mock(DriverRepository.class);
+    private final SeasonStandingsService standings = mock(SeasonStandingsService.class);
     private final PublicDashboardController controller = new PublicDashboardController(
-            seasons, rounds, sessions, participations, results, points, drivers);
+            seasons, rounds, sessions, participations, results, points, drivers, standings);
     private final Driver first = driver(1L);
     private final Driver second = driver(2L);
     private final ChampionshipRound round = new ChampionshipRound();
@@ -60,18 +61,19 @@ class PublicDashboardControllerTest {
     }
 
     @Test
-    void unknownClassIsExcludedFromClassPositionsAndStandings() {
+    void unknownClassDoesNotChangeKnownSessionClassPositions() {
         CompetitionClass competitionClass = new CompetitionClass();
         competitionClass.setId(1L);
         competitionClass.setCode("H 1000");
         SessionResult unknown = result(1L, first, null);
         SessionResult known = result(2L, second, competitionClass);
         known.setPosition(2);
-        SessionResult didNotFinish = result(3L, driver(3L), competitionClass);
-        didNotFinish.setPosition(null);
-        didNotFinish.setStatus(ResultStatus.DNF);
-        when(results.findBySessionIdOrderByPositionAsc(1L)).thenReturn(List.of(unknown, known, didNotFinish));
+        when(results.findBySessionIdOrderByPositionAsc(1L)).thenReturn(List.of(unknown, known));
         assertThat(controller.sessionResults(1L).get(1).position()).isEqualTo(1);
+    }
+
+    @Test
+    void scoringSystemWithoutAPointsScheduleRemainsUnknown() {
         Championship championship = new Championship();
         championship.setName("Test championship");
         Season season = new Season();
@@ -79,82 +81,16 @@ class PublicDashboardControllerTest {
         season.setYear((short) 2026);
         season.setActive(true);
         season.setChampionship(championship);
-        RoundSeasonParticipation participation = new RoundSeasonParticipation();
-        participation.setRound(round);
-        when(seasons.findAll()).thenReturn(List.of(season));
-        when(participations.findBySeasonId(1L)).thenReturn(List.of(participation));
-        when(sessions.findAll()).thenReturn(List.of(session));
-        PublicSeasonResponse published = controller.dashboard().getFirst();
-        assertThat(published.scoringKnown()).isFalse();
-        assertThat(published.standings()).hasSize(1);
-        assertThat(published.standings().getFirst().drivers())
-                .extracting(PublicStandingResponse::driverId).containsExactlyInAnyOrder(2L, 3L);
-        assertThat(published.standings().getFirst().drivers()).allSatisfy(row -> {
-            assertThat(row.rawPoints()).isNull();
-            assertThat(row.adjustedPoints()).isNull();
-        });
-        verifyNoInteractions(points);
-    }
-
-    @Test
-    void knownScoringAwardsPointsAndKeepsGenuineZeroScores() {
-        configureSeason(scoringSystem());
-        CompetitionClass competitionClass = new CompetitionClass();
-        competitionClass.setId(1L);
-        competitionClass.setCode("Reviewed class");
-        SessionResult finisher = result(1L, first, competitionClass);
-        SessionResult retired = result(2L, second, competitionClass);
-        retired.setStatus(ResultStatus.DNF);
-        retired.setPosition(null);
-        when(results.findBySessionIdOrderByPositionAsc(1L)).thenReturn(List.of(finisher, retired));
-        ScoringSystemPosition winner = new ScoringSystemPosition();
-        winner.setPosition(1);
-        winner.setPoints(new java.math.BigDecimal("25"));
-        when(points.findByScoringSystemId(1L)).thenReturn(List.of(winner));
-        PublicSeasonResponse published = controller.dashboard().getFirst();
-        assertThat(published.scoringKnown()).isTrue();
-        List<PublicStandingResponse> standing = published.standings().getFirst().drivers();
-        assertThat(standing.get(0).rawPoints()).isEqualByComparingTo("25");
-        assertThat(standing.get(0).adjustedPoints()).isEqualByComparingTo("25");
-        assertThat(standing.get(1).rawPoints()).isEqualByComparingTo("0");
-        assertThat(standing.get(1).adjustedPoints()).isEqualByComparingTo("0");
-    }
-
-    @Test
-    void scoringSystemWithoutAPointsScheduleIsAlsoUnknown() {
-        configureSeason(scoringSystem());
-        CompetitionClass competitionClass = new CompetitionClass();
-        competitionClass.setId(1L);
-        competitionClass.setCode("Reviewed class");
-        when(results.findBySessionIdOrderByPositionAsc(1L)).thenReturn(List.of(result(1L, first, competitionClass)));
-        PublicSeasonResponse published = controller.dashboard().getFirst();
-        assertThat(published.scoringKnown()).isFalse();
-        assertThat(published.standings().getFirst().drivers().getFirst().rawPoints()).isNull();
-    }
-
-    private ScoringSystem scoringSystem() {
         ScoringSystem scoring = new ScoringSystem();
         scoring.setId(1L);
-        scoring.setMinimumCompetitorsForFullPoints(1);
-        scoring.setReducedPointsPercentage(50);
-        scoring.setResultsToDrop(0);
-        return scoring;
-    }
-
-    private void configureSeason(ScoringSystem scoring) {
-        Championship championship = new Championship();
-        championship.setName("Test championship");
-        Season season = new Season();
-        season.setId(1L);
-        season.setYear((short) 2026);
-        season.setActive(true);
-        season.setChampionship(championship);
         season.setScoringSystem(scoring);
         RoundSeasonParticipation participation = new RoundSeasonParticipation();
         participation.setRound(round);
         when(seasons.findAll()).thenReturn(List.of(season));
         when(participations.findBySeasonId(1L)).thenReturn(List.of(participation));
-        when(sessions.findAll()).thenReturn(List.of(session));
+        assertThat(controller.dashboard().getFirst().scoringKnown()).isFalse();
+        verify(standings).standings(season, List.of(1L), false);
+        verifyNoInteractions(results);
     }
 
     private Driver driver(Long id) {

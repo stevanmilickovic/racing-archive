@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 016-cg-2026-scoring-system
+      author: codex
+      comment: "Programmer approved linking the retained Modern hillclimb scoring system to the CG 2026 hillclimb season on 2026-10-20."
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: >
+              SELECT COUNT(*) FROM seasons s
+              JOIN championships c ON c.id = s.championship_id
+              JOIN federations f ON f.id = c.federation_id
+              JOIN disciplines d ON d.id = c.discipline_id
+              WHERE s.season_year = 2026 AND c.name = 'Šampionat Crne Gore'
+                AND f.name = 'Auto i karting savez Crne Gore' AND f.country_code = 'ME'
+                AND d.code = 'HILLCLIMB'
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM scoring_systems WHERE name = 'Modern hillclimb scoring system'"
+        - sqlCheck:
+            expectedResult: "10"
+            sql: >
+              SELECT COUNT(*) FROM scoring_system_positions p
+              JOIN scoring_systems s ON s.id = p.scoring_system_id
+              WHERE s.name = 'Modern hillclimb scoring system'
+      changes:
+        - update:
+            tableName: seasons
+            columns:
+              - column:
+                  name: scoring_system_id
+                  valueComputed: "(SELECT id FROM scoring_systems WHERE name = 'Modern hillclimb scoring system')"
+            where: >
+              season_year = 2026 AND championship_id IN (
+                SELECT c.id FROM championships c
+                JOIN federations f ON f.id = c.federation_id
+                JOIN disciplines d ON d.id = c.discipline_id
+                WHERE c.name = 'Šampionat Crne Gore'
+                  AND f.name = 'Auto i karting savez Crne Gore' AND f.country_code = 'ME'
+                  AND d.code = 'HILLCLIMB'
+              )

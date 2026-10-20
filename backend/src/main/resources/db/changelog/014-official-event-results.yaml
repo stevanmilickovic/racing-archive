@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 014-official-event-results
+      author: codex
+      changes:
+        - addColumn:
+            tableName: classification_results
+            columns:
+              - column: { name: elapsed_time_millis, type: BIGINT }
+        - createTable:
+            tableName: round_club_results
+            columns:
+              - column: { name: id, type: BIGINT, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: round_id, type: BIGINT, constraints: { nullable: false, foreignKeyName: fk_club_result_round, references: championship_rounds(id) } }
+              - column: { name: club_id, type: BIGINT, constraints: { nullable: false, foreignKeyName: fk_club_result_club, references: clubs(id) } }
+              - column: { name: position, type: INT, constraints: { nullable: false } }
+              - column: { name: points, type: "DECIMAL(8,2)", constraints: { nullable: false } }
+              - column: { name: source_document_id, type: BIGINT, constraints: { nullable: false, foreignKeyName: fk_club_result_source, references: source_documents(id) } }
+              - column: { name: source_locator, type: VARCHAR(250), constraints: { nullable: false } }
+        - addUniqueConstraint:
+            tableName: round_club_results
+            columnNames: round_id, club_id
+            constraintName: uk_round_club_result

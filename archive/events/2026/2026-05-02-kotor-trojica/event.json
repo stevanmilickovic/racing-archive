@@ -1,0 +1,173 @@
+{
+  "eventKey": "2026-05-02-kotor-trojica",
+  "name": "Kotor Trojica",
+  "startsOn": "2026-05-02",
+  "endsOn": "2026-05-03",
+  "status": "verified",
+  "championshipSeasons": [
+    {
+      "championship": "Šampionat Crne Gore",
+      "year": 2026
+    }
+  ],
+  "trackKey": "track-kotor-trojica",
+  "documents": [
+    {
+      "sourceKey": "2026-05-02-kotor-trojica-akscg-official-2026-05-12",
+      "filename": "AKSCG KONACNI.pdf",
+      "title": "Kotor–Trojica 2026 — konačni rezultati Šampionata Crne Gore",
+      "pageCount": 7,
+      "purpose": "Konačne klasifikacije kategorija 1 i 2 i 16 klasa; pojedinačna vremena i statusi obje trkačke vožnje; objavljeni bodovi.",
+      "documentDate": "2026-05-12",
+      "eventDate": "2026-05-03",
+      "revision": null,
+      "finality": "official-final",
+      "printedTimestamp": "2026-05-12 20:40",
+      "metadataCreatedAt": "2026-05-12T20:40:55+02:00",
+      "filePath": "2026/2026-05-02-kotor-trojica/files/AKSCG KONACNI.pdf",
+      "mediaType": "application/pdf",
+      "byteCount": 296292,
+      "sha256": "307eb71f72b6426a2f62f64a741858c3dc5033f4e5ad5ed3cf126da1a5cccfbb",
+      "originalUrl": null
+    },
+    {
+      "sourceKey": "2026-05-02-kotor-trojica-clubs-2026-05-13",
+      "filename": "KLUBOVI.pdf",
+      "title": "Kotor–Trojica 2026 — poredak klubova Šampionata Crne Gore",
+      "pageCount": 4,
+      "purpose": "Poredak 12 klubova, njihove objavljene sume i pojedinačni bodovi svih 68 vozača.",
+      "documentDate": null,
+      "eventDate": "2026-05-03",
+      "revision": null,
+      "finality": "not-explicitly-labelled",
+      "printedTimestamp": null,
+      "metadataCreatedAt": "2026-05-13T21:21:27+02:00",
+      "filePath": "2026/2026-05-02-kotor-trojica/files/KLUBOVI.pdf",
+      "mediaType": "application/pdf",
+      "byteCount": 455741,
+      "sha256": "d49aa2e545559236b693a7efc53b5561fad29d0e1622e7c758528d4869bbf2bb",
+      "originalUrl": null
+    },
+    {
+      "sourceKey": "2026-05-02-kotor-trojica-registrations-2026-04-30",
+      "filename": "LIST PRIJAVA - MBAT _KOTOR TROJICA 2026 -MEMORIJAL TRIPO BUKILICA.pdf",
+      "title": "Kotor–Trojica 2026 — lista prijava od 30. aprila 2026.",
+      "pageCount": 2,
+      "purpose": "133 prijave za AKSCG, BPPA, PH i kupove; imena, klubovi, vozila, kategorije/grupe/klase i nepotpuni/preliminarni startni brojevi.",
+      "documentDate": "2026-04-30",
+      "eventDate": null,
+      "revision": null,
+      "finality": "final-for-akscg-and-ph-open-for-cups",
+      "printedTimestamp": null,
+      "metadataCreatedAt": "2026-04-30T12:54:17+02:00",
+      "filePath": "2026/2026-05-02-kotor-trojica/files/LIST PRIJAVA - MBAT _KOTOR TROJICA 2026 -MEMORIJAL TRIPO BUKILICA.pdf",
+      "mediaType": "application/pdf",
+      "byteCount": 96861,
+      "sha256": "72dce69bd17cb6f723c0708a8daddca7eb7be9de58daab78a65bc9d3fc5b5114",
+      "originalUrl": null
+    }
+  ],
+  "migrations": [
+    "backend/src/main/resources/db/changelog/014-official-event-results.yaml",
+    "backend/src/main/resources/db/changelog/015-kotor-trojica-2026.yaml",
+    "backend/src/main/resources/db/changelog/015-kotor-trojica-identities.sql",
+    "backend/src/main/resources/db/changelog/015-kotor-trojica-event.sql",
+    "backend/src/main/resources/db/changelog/015-kotor-trojica-sources.sql",
+    "backend/src/main/resources/db/changelog/016-cg-2026-scoring-system.yaml"
+  ],
+  "seasonScoring": {
+    "systemName": "Modern hillclimb scoring system",
+    "decisionDate": "2026-10-20",
+    "basis": "Programmer explicitly requested linking the retained scoring system to the CG 2026 season.",
+    "migration": "backend/src/main/resources/db/changelog/016-cg-2026-scoring-system.yaml",
+    "verification": {
+      "backendTests": "15 passed, no failures, errors or skipped tests",
+      "mysqlReplay": "passed",
+      "mysqlUpgrade": "passed with shifted generated IDs and preserved legacy driver",
+      "applicationDatabase": "migration 016 applied; CG 2026 linked to Modern hillclimb scoring system",
+      "publicApiScoringKnown": true,
+      "knownLimitation": null,
+      "seasonStandings": {
+        "basis": "Finalized class classification points; category results are not counted again.",
+        "dropRules": "Configured season drop rules are applied to the published points.",
+        "backendTests": "20 passed, no failures, errors or skipped tests",
+        "frontendBuild": "passed",
+        "frontendLint": "passed",
+        "officialPointsComparison": "All 68 driver totals matched the published class points in isolated MySQL API checks.",
+        "liveApi": "16 classes, 68 drivers, 43 positive scores, two scores of 12.5; frontend labels verified."
+      }
+    }
+  },
+  "reviewFile": "review.md",
+  "reconciliationFile": "reconciliation.json",
+  "programmerSuppliedFacts": {
+    "practiceDate": "2026-05-02",
+    "raceDate": "2026-05-03",
+    "practiceSessionCount": 1,
+    "practiceResultsExpectedLater": true,
+    "firstRaceOf2026": true
+  },
+  "proposedEvent": {
+    "archiveKey": "2026-05-02-kotor-trojica",
+    "name": "Kotor–Trojica 2026 — Memorijal Tripo Bukilica",
+    "trackKey": "track-kotor-trojica",
+    "trackName": "Kotor–Trojica",
+    "trackLocation": "Kotor",
+    "sourceTrackLengthMetres": 4350,
+    "championship": "Šampionat Crne Gore",
+    "federation": "Auto i karting savez Crne Gore",
+    "federationShortName": "AKSCG",
+    "discipline": "Hillclimb",
+    "seasonYear": 2026,
+    "roundNumber": 1,
+    "scoringSystemKey": null,
+    "decision": "accepted"
+  },
+  "catalogComparison": {
+    "checkedOn": "2026-10-20",
+    "endpoint": "http://localhost:8080/public/catalog",
+    "identityCount": 0,
+    "aliasCount": 0,
+    "dashboardEndpoint": "http://localhost:8080/public/dashboard",
+    "activeSeasonCount": 0,
+    "scope": "Public identity catalog plus migrations 001–013; no direct database inventory of inactive seasons or other parent records."
+  },
+  "verification": {
+    "originalHashesVerified": true,
+    "originalsModified": false,
+    "frontendBuild": "passed",
+    "frontendLint": "passed",
+    "backendTests": {
+      "total": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "mysqlReplay": "passed-MySQL-8.4.11",
+    "mysqlUpgrade": "passed-from-013-preserved-legacy-driver-generated-ids-from-10000",
+    "mysqlSchemas": [
+      "racing_archive_verify_kotor_20261020_clean",
+      "racing_archive_verify_kotor_20261020_upgrade"
+    ],
+    "eventMigration": "verified-not-applied-to-application-database",
+    "publicEventResults": "passed-real-isolated-application-18-classifications-3-sessions-and-club-results",
+    "sourceDownloads": "passed-all-3-original-PDFs-SHA256-matched",
+    "sourceComparison": "133-driver-names-136-classification-results-12-club-results-no-differences",
+    "deployed": false
+  },
+  "acceptedCounts": {
+    "drivers": 133,
+    "driverOnly": 65,
+    "clubs": 12,
+    "vehicles": 28,
+    "classes": 16,
+    "tracks": 1,
+    "entries": 68,
+    "sessions": 3,
+    "sessionResults": 136,
+    "classifications": 18,
+    "classificationResults": 136,
+    "clubResults": 12,
+    "sourceDocuments": 3
+  }
+}

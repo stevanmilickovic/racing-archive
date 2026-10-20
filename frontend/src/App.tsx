@@ -4,8 +4,11 @@ import './App.css'
 
 const labels = {
   en: {
-    seasons: 'Active seasons', rounds: 'Completed events', driver: 'Driver', raw: 'Raw points',
-    adjusted: 'Adjusted points', sessions: 'Sessions', sources: 'Source documents', download: 'Download original',
+    seasons: 'Active seasons', rounds: 'Completed events', driver: 'Driver', raw: 'Total points',
+    adjusted: 'Points after drops', sessions: 'Sessions', sources: 'Source documents', download: 'Download original',
+    standingsBasis: 'Points from finalized class results. Season drop rules are applied to the total.',
+    pointsIncomplete: 'Some official points have not been published yet. Incomplete totals are shown as —.',
+    noStandings: 'No finalized class results have been published yet.',
     noSources: 'No source documents published for this event yet.', noSessions: 'No sessions published yet.',
     noSeasons: 'No active seasons published yet.', noResults: 'No results published yet.',
     results: 'Session results', event: 'Event', session: 'Session', competitionClass: 'Class',
@@ -13,10 +16,15 @@ const labels = {
     back: 'Back to seasons', loading: 'Loading…', error: 'Unable to load archive data.',
     unknown: 'Unknown', original: 'Original source URL', checksum: 'SHA-256', track: 'Track',
     scoringUnknown: 'Scoring rules are not yet known for this season. Points are unavailable.',
+    classifications: 'Official classifications', clubs: 'Published club results', points: 'Awarded points',
+    overallPosition: 'Position', raceNumber: 'Race number', backToEvent: 'Back to event',
   },
   sr: {
-    seasons: 'Aktivne sezone', rounds: 'Završene trke', driver: 'Vozač', raw: 'Sirovi bodovi',
-    adjusted: 'Trenutni bodovi', sessions: 'Sesije', sources: 'Izvorni dokumenti', download: 'Preuzmi original',
+    seasons: 'Aktivne sezone', rounds: 'Završene trke', driver: 'Vozač', raw: 'Ukupni bodovi',
+    adjusted: 'Bodovi nakon odbacivanja', sessions: 'Sesije', sources: 'Izvorni dokumenti', download: 'Preuzmi original',
+    standingsBasis: 'Bodovi iz konačnih klasnih rezultata. Na zbir se primjenjuju sezonska pravila odbacivanja rezultata.',
+    pointsIncomplete: 'Neki zvanični bodovi još nijesu objavljeni. Nepotpuni zbirovi prikazani su kao —.',
+    noStandings: 'Još nema objavljenih konačnih klasnih rezultata.',
     noSources: 'Izvorni dokumenti za ovu trku još nisu objavljeni.', noSessions: 'Nema objavljenih sesija.',
     noSeasons: 'Nema objavljenih aktivnih sezona.', noResults: 'Nema objavljenih rezultata.',
     results: 'Rezultati sesije', event: 'Trka', session: 'Sesija', competitionClass: 'Klasa',
@@ -24,6 +32,8 @@ const labels = {
     back: 'Nazad na sezone', loading: 'Učitavanje…', error: 'Nije moguće učitati podatke arhive.',
     unknown: 'Nepoznato', original: 'Originalni izvor', checksum: 'SHA-256', track: 'Staza',
     scoringUnknown: 'Pravila bodovanja za ovu sezonu još nisu poznata. Bodovi nisu dostupni.',
+    classifications: 'Zvanične klasifikacije', clubs: 'Objavljeni poredak klubova', points: 'Dodijeljeni bodovi',
+    overallPosition: 'Plasman', raceNumber: 'Startni broj', backToEvent: 'Nazad na trku',
   },
 }
 type Labels = typeof labels.en
@@ -41,6 +51,9 @@ type Result = {
 type DriverResult = Result & { roundId: number; roundName: string; sessionName: string }
 type Source = { id: number; title: string; mediaType: string; sha256: string; originalUrl: string | null; notes: string | null; downloadUrl: string }
 type RoundDetail = { id: number; name: string; startsOn: string | null; endsOn: string | null; trackName: string | null }
+type Classification = { id: number; roundId: number; name: string; status: string; classCode: string | null }
+type ClassifiedResult = Result & { raceNumber: number | null; points: number | null }
+type ClubResult = { position: number; clubName: string; points: number }
 
 function useArchive<T>(path: string) {
   const [state, setState] = useState<{ data: T | null; error: boolean }>({ data: null, error: false })
@@ -69,6 +82,7 @@ function App() {
   if (validId && page === 'round') content = <RoundPage key={id} id={id} t={t} />
   else if (validId && page === 'session') content = <SessionPage key={id} id={id} t={t} />
   else if (validId && page === 'driver') content = <DriverPage key={id} id={id} t={t} />
+  else if (validId && page === 'classification') content = <ClassificationPage key={id} id={id} t={t} />
   else content = <Dashboard t={t} />
   return <main className="public-shell">
     <header className="public-header">
@@ -98,12 +112,15 @@ function Dashboard({ t }: { t: Labels }) {
         <a href={`/?page=round&id=${round.id}`}>{round.roundNumber}. {round.name}</a>{round.startsOn && ` · ${round.startsOn}`}
       </li>)}</ol>
       {!season.scoringKnown && <p>{t.scoringUnknown}</p>}
+      {season.scoringKnown && season.standings.length > 0 && <p>{t.standingsBasis}</p>}
+      {season.scoringKnown && season.standings.some((group) => group.drivers.some((driver) => driver.rawPoints === null)) && <p>{t.pointsIncomplete}</p>}
+      {season.standings.length === 0 && <p className="empty">{t.noStandings}</p>}
       {season.standings.map((group) => <section className="standing" key={group.classCode}>
         <h3>{group.classCode}</h3><div className="table-scroll"><table>
           <thead><tr><th>{t.driver}</th>{season.scoringKnown && <><th>{t.raw}</th><th>{t.adjusted}</th></>}</tr></thead>
           <tbody>{group.drivers.map((driver) => <tr key={driver.driverId}>
             <td><a href={`/?page=driver&id=${driver.driverId}`}>{driver.driverName}</a></td>
-            {season.scoringKnown && <><td>{driver.rawPoints}</td><td><strong>{driver.adjustedPoints}</strong></td></>}
+            {season.scoringKnown && <><td>{driver.rawPoints ?? '—'}</td><td><strong>{driver.adjustedPoints ?? '—'}</strong></td></>}
           </tr>)}</tbody>
         </table></div>
       </section>)}
@@ -116,10 +133,26 @@ function RoundPage({ id, t }: { id: number; t: Labels }) {
   const round = useArchive<RoundDetail>(`/public/rounds/${id}`)
   const sessions = useArchive<Session[]>(`/public/rounds/${id}/sessions`)
   const sources = useArchive<Source[]>(`/public/rounds/${id}/sources`)
+  const classifications = useArchive<Classification[]>(`/public/rounds/${id}/classifications`)
+  const clubs = useArchive<ClubResult[]>(`/public/rounds/${id}/club-results`)
   return <Page title={round.data?.name ?? t.event} t={t}>
     <LoadState {...round} t={t} />
     {round.data && <p>{round.data.startsOn}{round.data.endsOn && round.data.endsOn !== round.data.startsOn && ` – ${round.data.endsOn}`}
       {round.data.trackName && ` · ${t.track}: ${round.data.trackName}`}</p>}
+    <h2>{t.classifications}</h2><LoadState {...classifications} t={t} />
+    <ul className="round-list">{classifications.data?.map((classification) => <li key={classification.id}>
+      <a href={`/?page=classification&id=${classification.id}`}>{classification.name}</a> · {classification.status}
+    </li>)}</ul>
+    {classifications.data?.length === 0 && <p className="empty">{t.noResults}</p>}
+    <LoadState {...clubs} t={t} />
+    {clubs.data && clubs.data.length > 0 && <>
+      <h2>{t.clubs}</h2><div className="table-scroll"><table>
+        <thead><tr><th>{t.overallPosition}</th><th>{t.team}</th><th>{t.points}</th></tr></thead>
+        <tbody>{clubs.data.map((club) => <tr key={club.clubName}>
+          <td>{club.position}</td><td>{club.clubName}</td><td>{club.points}</td>
+        </tr>)}</tbody>
+      </table></div>
+    </>}
     <h2>{t.sessions}</h2><LoadState {...sessions} t={t} />
     <ul className="round-list">{sessions.data?.map((session) => <li key={session.id}>
       <a href={`/?page=session&id=${session.id}`}>{session.name} · {session.type}</a>
@@ -149,6 +182,28 @@ function SessionPage({ id, t }: { id: number; t: Labels }) {
       <td>{result.clubName ?? t.unknown}</td><td>{result.vehicleName ?? t.unknown}</td><ResultCells result={result} t={t} />
     </tr>)}</tbody></table></div>}
     {data?.length === 0 && <p className="empty">{t.noResults}</p>}
+  </Page>
+}
+
+function ClassificationPage({ id, t }: { id: number; t: Labels }) {
+  const { data, error } = useArchive<{ classification: Classification; results: ClassifiedResult[] }>(`/public/classifications/${id}`)
+  return <Page title={data?.classification.name ?? t.classifications} t={t}>
+    <LoadState data={data} error={error} t={t} />
+    {data && <>
+      <a href={`/?page=round&id=${data.classification.roundId}`}>{t.backToEvent}</a>
+      <p>{data.classification.status}</p>
+      <div className="table-scroll"><table><thead><tr>
+        <th>{t.overallPosition}</th><th>{t.raceNumber}</th><th>{t.driver}</th><th>{t.team}</th><th>{t.car}</th>
+        <th>{t.competitionClass}</th><th>{t.time}</th><th>{t.status}</th><th>{t.points}</th>
+      </tr></thead><tbody>{data.results.map((result) => <tr key={result.driverId}>
+        <td>{result.position ?? '—'}</td><td>{result.raceNumber ?? '—'}</td>
+        <td><a href={`/?page=driver&id=${result.driverId}`}>{result.driverName}</a></td>
+        <td>{result.clubName ?? t.unknown}</td><td>{result.vehicleName ?? t.unknown}</td>
+        <td>{result.classCode ?? t.unknown}</td><td>{formatRaceTime(result.elapsedTimeMillis)}</td>
+        <td>{result.status}</td><td>{result.points ?? '—'}</td>
+      </tr>)}</tbody></table></div>
+      {data.results.length === 0 && <p className="empty">{t.noResults}</p>}
+    </>}
   </Page>
 }
 

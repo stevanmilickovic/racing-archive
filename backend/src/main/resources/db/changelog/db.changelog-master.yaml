@@ -25,3 +25,9 @@ databaseChangeLog:
       file: db/changelog/012-curated-archive.yaml
   - include:
       file: db/changelog/013-retire-unreviewed-reference-seeds.yaml
+  - include:
+      file: db/changelog/014-official-event-results.yaml
+  - include:
+      file: db/changelog/015-kotor-trojica-2026.yaml
+  - include:
+      file: db/changelog/016-cg-2026-scoring-system.yaml

@@ -6,9 +6,11 @@ This document describes the initial domain model for Racing Archive. It is inten
 
 Published archive data is now curated through versioned migrations. Read
 `../../docs/curating-events.md` for the event-source and identity-review workflow.
-The scoring sections below describe the intended domain; the existing dashboard
-still calculates standings from session results and does not yet consume all
-official classification rules.
+The season dashboard sums points from finalized class classifications and applies
+the configured season drop rules. Category classifications are not counted again.
+Published class-size reductions are already included in official points and are
+not reapplied. Raw session results remain available separately. Missing official
+points produce an unavailable total rather than an assumed zero.
 
 ```text
 Federation
@@ -131,6 +133,12 @@ The initial rules that need to be represented are:
 - Club scoring rules, such as counting the best three driver point scores per round.
 
 Awarded points should be stored in `ClassificationResult` when results are finalized. This preserves official historic results even if rules or calculation code later change.
+
+`ClassificationResult.elapsedTimeMillis` preserves an official combined time
+separately from each run's `SessionResult`. Published club positions and awarded
+points are stored in `round_club_results` with their source document and locator.
+The public event page lists recorded classifications and club results; these use
+published values even when the season's scoring configuration is unknown.
 
 Standings may initially be calculated from official classification results. They can be persisted later if auditing or performance makes that necessary.
 

@@ -38,6 +38,9 @@ public class ClassificationResult {
 
     private Integer position;
 
+    @Column(name = "elapsed_time_millis")
+    private Long elapsedTimeMillis;
+
     @Column(precision = 8, scale = 2)
     private BigDecimal points;
 

@@ -63,6 +63,10 @@ Follow `docs/curating-events.md` in full when preparing or processing an event.
   speculative seed lists are retired. Keep the available scoring configuration,
   but leave a season's scoring system null until its rules are established.
   Unknown scoring means unavailable points, never assumed zero points.
+- Season standings sum finalized class classification points and apply season
+  drop rules. Do not recompute awarded points from individual runs, double-count
+  category tables, or apply class-size reductions to published points again.
+  A missing official points value is unknown, not an actual zero score.
 
 ## Sources and migrations
 

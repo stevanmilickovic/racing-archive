@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - include: { file: db/changelog/001-initial-domain-schema.yaml }
+  - include: { file: db/changelog/002-scoring-rules.yaml }
+  - include: { file: db/changelog/003-app-users.yaml }
+  - include: { file: db/changelog/004-global-competition-classes.yaml }
+  - include: { file: db/changelog/005-initial-clubs-and-classes.yaml }
+  - include: { file: db/changelog/006-optional-vehicle-model.yaml }
+  - include: { file: db/changelog/007-season-active.yaml }
+  - include: { file: db/changelog/008-scoring-systems.yaml }
+  - include: { file: db/changelog/009-repair-scoring-system-seed.yaml }
+  - include: { file: db/changelog/010-federation-country-code-length.yaml }
+  - include: { file: db/changelog/011-round-season-participations.yaml }
+  - include: { file: db/changelog/012-curated-archive.yaml }
+  - include: { file: db/changelog/013-retire-unreviewed-reference-seeds.yaml }

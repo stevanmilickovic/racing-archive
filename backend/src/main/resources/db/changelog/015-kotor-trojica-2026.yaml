@@ -1,0 +1,124 @@
+databaseChangeLog:
+  - changeSet:
+      id: 015-kotor-trojica-identities
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Auto i karting savez Crne Gore'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM disciplines WHERE code='HILLCLIMB'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-vojo-radanovic','driver-nikola-toskovic','driver-andrija-durisic','driver-matija-markovic','driver-nikola-lagator','driver-luka-brkan','driver-milorad-raznatovic','driver-petar-zurovac','driver-igor-radmilovic','driver-stevan-milosev','driver-stevan-milickovic','driver-dragan-dzogaz','driver-sava-nikcevic','driver-zarko-lagator','driver-spasoje-nikolic','driver-bozidar-doderovic','driver-dragan-mudresa','driver-petar-jovanovic','driver-milan-roganovic','driver-miljan-nikolic','driver-dejan-donovic','driver-marko-pejovic','driver-milos-vujnovic','driver-dejan-kovacevic','driver-dorde-kovacevic','driver-ilija-sapic','driver-nikola-vlahovic','driver-stefan-bokovac','driver-sakib-durakovic','driver-milutin-krivokapic','driver-marko-adzic','driver-milo-dukanovic','driver-darko-ivanovic','driver-lazar-kostic','driver-duro-popovic','driver-luka-sucur','driver-milan-bracanovic','driver-gligorije-susic','driver-slobodan-mugosa','driver-radivoje-janjusevic','driver-marija-ivanovic','driver-margarita-maltseva','driver-mirko-vujacic','driver-krsto-radovic','driver-damjan-perovic','driver-milos-bojanovic','driver-perica-mardonovic','driver-zlatko-sindik','driver-darko-kokotovic','driver-zeljko-radonjic','driver-tripo-pinjatic','driver-jovan-perunovic','driver-balsa-durickovic','driver-dusan-tujkovic','driver-marko-jankovic','driver-goran-vucetic','driver-radovan-masonicic','driver-radovan-radanovic','driver-almin-corovic','driver-milan-jaksic','driver-dejan-bulatovic','driver-sead-spahic','driver-goran-milosev','driver-vlado-buric','driver-zoran-rajhel','driver-lazar-mujovic','driver-stefan-milinic','driver-dejan-suskavcevic','driver-efimin-dmitri','driver-mile-malovic','driver-goran-vuckovic','driver-backo-vujovic','driver-bozidar-jablan','driver-aldin-corovic','driver-zlatko-brozovic','driver-nenad-grzancic','driver-ante-gacina','driver-sime-simunovic','driver-marijan-hrgovic','driver-jurica-ivanovic','driver-sandro-poldrugovac','driver-maro-slade','driver-dejan-dimitrijevic','driver-viliam-prodan','driver-niko-pulic','driver-simeron-jargic','driver-frano-dubreta','driver-luka-dubreta','driver-tamas-tomcsanyi','driver-peter-jordan','driver-josip-pavic','driver-ante-baric','driver-ivan-batalic','driver-stijepo-manenica','driver-mladen-dajic','driver-fran-kranjac','driver-andelko-vrkic','driver-antonio-tomic','driver-bego-sakanovic','driver-ivica-dragosevic','driver-boris-katic','driver-goran-sikirica','driver-andrej-bule','driver-kornel-nyeki','driver-dino-dominikovic','driver-marijo-barovic','driver-nino-jelicic','driver-ivan-pejkovic','driver-mato-milkovic','driver-milan-tatalic','driver-maro-franic','driver-nikola-radnjic','driver-igor-nikolaus','driver-deni-kmetovic','driver-stipe-bekavac','driver-toni-bebic','driver-ivan-grozdanic','driver-ivan-zivkovic','driver-dino-anticevic','driver-marin-grljusic','driver-jure-mornar','driver-ivan-bekavac','driver-petar-dajak','driver-filip-magdic','driver-aleksandar-vidosavljevic','driver-matija-brusnskole','driver-hysein-iseni','driver-burim-asllani','driver-leutrim-bytyqi','driver-valon-rexhepi','driver-smail-smani','driver-bradhil-canolli','driver-gentjam-shaqiri') OR CONCAT(first_name,' ',last_name) IN ('VOJO RADANOVIĆ','NIKOLA TOŠKOVIĆ','ANDRIJA ĐURIŠIĆ','MATIJA MARKOVIĆ','NIKOLA LAGATOR','LUKA BRKAN','MILORAD RAŽNATOVIĆ','PETAR ZUROVAC','IGOR RADMILOVIĆ','STEVAN MILOŠEV','STEVAN MILIĆEVIĆ','STEVAN MILIČKOVIĆ','DRAGAN DŽOGAZ','SAVA NIKČEVIĆ','ŽARKO LAGATOR','SPASOJE NIKOLIĆ','BOŽIDAR DODEROVIĆ','DRAGAN MUDREŠA','PETAR JOVANOVIĆ','MILAN ROGANOVIĆ','MILJAN NIKOLIĆ','DEJAN ĐONOVIĆ','MARKO PEJOVIĆ','MILOŠ VUJNOVIĆ','DEJAN KOVAČEVIĆ','ĐORĐE KOVAČEVIĆ','ILIJA ŠAPIĆ','NIKOLA VLAHOVIĆ','STEFAN BOKOVAC','SAKIB DURAKOVIĆ','MILUTIN KRIVOKAPIĆ','MARKO ADŽIĆ','MILO ĐUKANOVIĆ','DARKO IVANOVIĆ','LAZAR KOSTIĆ','ĐURO POPOVIĆ','LUKA ŠUĆUR','MILAN BRACANOVIĆ','GLIGORIJE ŠUŠIĆ','SLOBODAN MUGOŠA','RADIVOJE JANJUŠEVIĆ','MARIJA IVANOVIĆ','MARGARITA MALTSEVA','MIRKO VUJAČIĆ','KRSTO RADOVIĆ','DAMJAN PEROVIĆ','MILOŠ BOJANOVIĆ','PERICA MARĐONOVIĆ','ZLATKO SINDIK','DARKO KOKOTOVIĆ','ŽELJKO RADONJIĆ','TRIPO PINJATIĆ','JOVAN PERUNOVIĆ','BALŠA ĐURIČKOVIĆ','DUŠAN TUJKOVIĆ','MARKO JANKOVIĆ','GORAN VUČETIĆ','RADOVAN MASONIČIĆ','RADOVAN RADANOVIĆ','ALMIN ĆOROVIĆ','MILAN JAKŠIĆ','DEJAN BULATOVIĆ','SEAD SPAHIĆ','GORAN MILOŠEV','VLADO BURIĆ','ZORAN RAJHEL','LAZAR MUJOVIĆ','STEFAN MILINIĆ','DEJAN ŠUŠKAVČEVIĆ','EFIMIN DMITRI','MILE MALOVIĆ','GORAN VUČKOVIĆ','BAĆKO VUJOVIĆ','BOŽIDAR JABLAN','ALDIN ĆOROVIĆ','ZLATKO BROZOVIĆ','NENAD GRŽANČIĆ','ANTE GAĆINA','ŠIME ŠIMUNOVIĆ','MARIJAN HRGOVIĆ','JURICA IVANOVIĆ','SANDRO POLDRUGOVAC','MARO SLADE','DEJAN DIMITRIJEVIĆ','VILIAM PRODAN','NIKO PULIĆ','SIMERON JARGIĆ','FRANO DUBRETA','LUKA DUBRETA','TAMAS TOMCSANYI','PETER JORDAN','JOSIP PAVIĆ','ANTE BARIĆ','IVAN BATALIĆ','STIJEPO MANENICA','MLADEN ĐAJIĆ','FRAN KRANJAC','ANĐELKO VRKIĆ','ANTONIO TOMIĆ','BEGO ŠAKANOVIĆ','IVICA DRAGOŠEVIĆ','BORIS KATIĆ','GORAN SIKIRICA','ANDREJ BULE','KORNEL NYEKI','DINO DOMINIKOVIĆ','MARIJO BAROVIĆ','NINO JELIČIĆ','IVAN PEJKOVIĆ','MATO MILKOVIĆ','MILAN TATALIĆ','MARO FRANIĆ','NIKOLA RADNJIĆ','IGOR NIKOLAUS','DENI KMETOVIĆ','STIPE BEKAVAC','TONI BEBIĆ','IVAN GROZDANIĆ','IVAN ŽIVKOVIĆ','DINO ANTIČEVIĆ','MARIN GRLJUŠIĆ','JURE MORNAR','IVAN BEKAVAC','PETAR DAJAK','FILIP MAGDIĆ','ALEKSANDAR VIDOSAVLJEVIĆ','MATIJA BRUSNSKOLE','HYSEIN ISENI','BURIM ASLLANI','LEUTRIM BYTYQI','VALON REXHEPI','SMAIL SMANI','BRADHIL CANOLLI','GENTJAM SHAQIRI')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key IN ('club-amk-monteracing','club-amk-podgorica-rt','club-amkk-lovcen-r-t','club-amsk-ap-sport','club-amsk-crmnica','club-amsk-gorstak','club-amsk-herceg-novi','club-amsk-kotor','club-amsk-nilovic-racing','club-amsk-podi','club-amsk-tivat','club-amsk-vlahovic') OR UPPER(name) IN ('AMK MONTERACING','AMK PODGORICA RT','AMKK LOVĆEN R.T.','AMSK AP SPORT','AMSK CRMNICA','AMSK GORŠTAK','AMSK HERCEG NOVI','AMSK KOTOR','AMSK NILOVIĆ RACING','AMSK PODI','AMSK TIVAT','AMSK VLAHOVIĆ')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key IN ('vehicle-bmw','vehicle-bmw-e46','vehicle-bmw-m3','vehicle-citroen-c2','vehicle-citroen-saxo','vehicle-fiat-500','vehicle-fiat-750','vehicle-fiat-siecento','vehicle-global','vehicle-global-light','vehicle-honda-civic','vehicle-nisan-micra','vehicle-norma-n202b','vehicle-opel-astra','vehicle-opel-corsa','vehicle-peugeot-106','vehicle-peugeot-306','vehicle-rover','vehicle-rover-mg','vehicle-seat-leon','vehicle-suzuki-swift','vehicle-suzuki-swift-gti','vehicle-vw-golf-i','vehicle-vw-golf-v','vehicle-vw-polo','vehicle-wv-polo','vehicle-yugo','vehicle-skoda-felicia') OR UPPER(display_name) IN ('BMW','BMW E46','BMW M3','CITROEN C2','CITROEN SAXO','FIAT 500','FIAT 750','FIAT SIECENTO','GLOBAL','GLOBAL LIGHT','HONDA CIVIC','NISAN MICRA','NORMA N202B','OPEL ASTRA','OPEL CORSA','PEUGEOT 106','PEUGEOT 306','ROVER','ROVER MG','SEAT LEON','SUZUKI SWIFT','SUZUKI SWIFT GTI','VW GOLF I','VW GOLF V','VW POLO','WV POLO','YUGO','ŠKODA FELICIA')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM competition_classes WHERE code IN ('A 1150','A 1400','A 1600','A 2000','D/E2/CN','E1 1200','E2SH','H 1000','H 1400','H 1600','H 2000','H 2000+','N 1150','N 1400','N 1600','N 2000') OR archive_key IN ('class-akscg-a-1150','class-akscg-a-1400','class-akscg-a-1600','class-akscg-a-2000','class-akscg-d-e2-cn','class-akscg-e1-1200','class-akscg-e2sh','class-akscg-h-1000','class-akscg-h-1400','class-akscg-h-1600','class-akscg-h-2000','class-akscg-h-2000-plus','class-akscg-n-1150','class-akscg-n-1400','class-akscg-n-1600','class-akscg-n-2000')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM tracks WHERE archive_key='track-kotor-trojica' OR name='Kotor–Trojica'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM championship_rounds WHERE archive_key='2026-05-02-kotor-trojica' OR (starts_on='2026-05-02' AND (name LIKE '%Kotor%' OR name LIKE '%KOTOR%'))"
+      changes:
+        - sqlFile:
+            path: 015-kotor-trojica-identities.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 015-kotor-trojica-event
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM disciplines WHERE code='HILLCLIMB'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championships WHERE federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB') AND name='Šampionat Crne Gore'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM seasons WHERE championship_id=(SELECT id FROM championships WHERE federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB') AND name='Šampionat Crne Gore') AND season_year=2026 AND scoring_system_id IS NULL"
+        - sqlCheck:
+            expectedResult: "133"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-vojo-radanovic','driver-nikola-toskovic','driver-andrija-durisic','driver-matija-markovic','driver-nikola-lagator','driver-luka-brkan','driver-milorad-raznatovic','driver-petar-zurovac','driver-igor-radmilovic','driver-stevan-milosev','driver-stevan-milickovic','driver-dragan-dzogaz','driver-sava-nikcevic','driver-zarko-lagator','driver-spasoje-nikolic','driver-bozidar-doderovic','driver-dragan-mudresa','driver-petar-jovanovic','driver-milan-roganovic','driver-miljan-nikolic','driver-dejan-donovic','driver-marko-pejovic','driver-milos-vujnovic','driver-dejan-kovacevic','driver-dorde-kovacevic','driver-ilija-sapic','driver-nikola-vlahovic','driver-stefan-bokovac','driver-sakib-durakovic','driver-milutin-krivokapic','driver-marko-adzic','driver-milo-dukanovic','driver-darko-ivanovic','driver-lazar-kostic','driver-duro-popovic','driver-luka-sucur','driver-milan-bracanovic','driver-gligorije-susic','driver-slobodan-mugosa','driver-radivoje-janjusevic','driver-marija-ivanovic','driver-margarita-maltseva','driver-mirko-vujacic','driver-krsto-radovic','driver-damjan-perovic','driver-milos-bojanovic','driver-perica-mardonovic','driver-zlatko-sindik','driver-darko-kokotovic','driver-zeljko-radonjic','driver-tripo-pinjatic','driver-jovan-perunovic','driver-balsa-durickovic','driver-dusan-tujkovic','driver-marko-jankovic','driver-goran-vucetic','driver-radovan-masonicic','driver-radovan-radanovic','driver-almin-corovic','driver-milan-jaksic','driver-dejan-bulatovic','driver-sead-spahic','driver-goran-milosev','driver-vlado-buric','driver-zoran-rajhel','driver-lazar-mujovic','driver-stefan-milinic','driver-dejan-suskavcevic','driver-efimin-dmitri','driver-mile-malovic','driver-goran-vuckovic','driver-backo-vujovic','driver-bozidar-jablan','driver-aldin-corovic','driver-zlatko-brozovic','driver-nenad-grzancic','driver-ante-gacina','driver-sime-simunovic','driver-marijan-hrgovic','driver-jurica-ivanovic','driver-sandro-poldrugovac','driver-maro-slade','driver-dejan-dimitrijevic','driver-viliam-prodan','driver-niko-pulic','driver-simeron-jargic','driver-frano-dubreta','driver-luka-dubreta','driver-tamas-tomcsanyi','driver-peter-jordan','driver-josip-pavic','driver-ante-baric','driver-ivan-batalic','driver-stijepo-manenica','driver-mladen-dajic','driver-fran-kranjac','driver-andelko-vrkic','driver-antonio-tomic','driver-bego-sakanovic','driver-ivica-dragosevic','driver-boris-katic','driver-goran-sikirica','driver-andrej-bule','driver-kornel-nyeki','driver-dino-dominikovic','driver-marijo-barovic','driver-nino-jelicic','driver-ivan-pejkovic','driver-mato-milkovic','driver-milan-tatalic','driver-maro-franic','driver-nikola-radnjic','driver-igor-nikolaus','driver-deni-kmetovic','driver-stipe-bekavac','driver-toni-bebic','driver-ivan-grozdanic','driver-ivan-zivkovic','driver-dino-anticevic','driver-marin-grljusic','driver-jure-mornar','driver-ivan-bekavac','driver-petar-dajak','driver-filip-magdic','driver-aleksandar-vidosavljevic','driver-matija-brusnskole','driver-hysein-iseni','driver-burim-asllani','driver-leutrim-bytyqi','driver-valon-rexhepi','driver-smail-smani','driver-bradhil-canolli','driver-gentjam-shaqiri')"
+        - sqlCheck:
+            expectedResult: "12"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key IN ('club-amk-monteracing','club-amk-podgorica-rt','club-amkk-lovcen-r-t','club-amsk-ap-sport','club-amsk-crmnica','club-amsk-gorstak','club-amsk-herceg-novi','club-amsk-kotor','club-amsk-nilovic-racing','club-amsk-podi','club-amsk-tivat','club-amsk-vlahovic')"
+        - sqlCheck:
+            expectedResult: "28"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key IN ('vehicle-bmw','vehicle-bmw-e46','vehicle-bmw-m3','vehicle-citroen-c2','vehicle-citroen-saxo','vehicle-fiat-500','vehicle-fiat-750','vehicle-fiat-siecento','vehicle-global','vehicle-global-light','vehicle-honda-civic','vehicle-nisan-micra','vehicle-norma-n202b','vehicle-opel-astra','vehicle-opel-corsa','vehicle-peugeot-106','vehicle-peugeot-306','vehicle-rover','vehicle-rover-mg','vehicle-seat-leon','vehicle-suzuki-swift','vehicle-suzuki-swift-gti','vehicle-vw-golf-i','vehicle-vw-golf-v','vehicle-vw-polo','vehicle-wv-polo','vehicle-yugo','vehicle-skoda-felicia')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM competition_classes WHERE archive_key IN ('class-akscg-a-1150','class-akscg-a-1400','class-akscg-a-1600','class-akscg-a-2000','class-akscg-d-e2-cn','class-akscg-e1-1200','class-akscg-e2sh','class-akscg-h-1000','class-akscg-h-1400','class-akscg-h-1600','class-akscg-h-2000','class-akscg-h-2000-plus','class-akscg-n-1150','class-akscg-n-1400','class-akscg-n-1600','class-akscg-n-2000')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM tracks WHERE archive_key IN ('track-kotor-trojica')"
+      changes:
+        - sqlFile:
+            path: 015-kotor-trojica-event.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 015-kotor-trojica-sources
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM disciplines WHERE code='HILLCLIMB'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championships WHERE federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB') AND name='Šampionat Crne Gore'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM seasons WHERE championship_id=(SELECT id FROM championships WHERE federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB') AND name='Šampionat Crne Gore') AND season_year=2026 AND scoring_system_id IS NULL"
+        - sqlCheck:
+            expectedResult: "133"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-vojo-radanovic','driver-nikola-toskovic','driver-andrija-durisic','driver-matija-markovic','driver-nikola-lagator','driver-luka-brkan','driver-milorad-raznatovic','driver-petar-zurovac','driver-igor-radmilovic','driver-stevan-milosev','driver-stevan-milickovic','driver-dragan-dzogaz','driver-sava-nikcevic','driver-zarko-lagator','driver-spasoje-nikolic','driver-bozidar-doderovic','driver-dragan-mudresa','driver-petar-jovanovic','driver-milan-roganovic','driver-miljan-nikolic','driver-dejan-donovic','driver-marko-pejovic','driver-milos-vujnovic','driver-dejan-kovacevic','driver-dorde-kovacevic','driver-ilija-sapic','driver-nikola-vlahovic','driver-stefan-bokovac','driver-sakib-durakovic','driver-milutin-krivokapic','driver-marko-adzic','driver-milo-dukanovic','driver-darko-ivanovic','driver-lazar-kostic','driver-duro-popovic','driver-luka-sucur','driver-milan-bracanovic','driver-gligorije-susic','driver-slobodan-mugosa','driver-radivoje-janjusevic','driver-marija-ivanovic','driver-margarita-maltseva','driver-mirko-vujacic','driver-krsto-radovic','driver-damjan-perovic','driver-milos-bojanovic','driver-perica-mardonovic','driver-zlatko-sindik','driver-darko-kokotovic','driver-zeljko-radonjic','driver-tripo-pinjatic','driver-jovan-perunovic','driver-balsa-durickovic','driver-dusan-tujkovic','driver-marko-jankovic','driver-goran-vucetic','driver-radovan-masonicic','driver-radovan-radanovic','driver-almin-corovic','driver-milan-jaksic','driver-dejan-bulatovic','driver-sead-spahic','driver-goran-milosev','driver-vlado-buric','driver-zoran-rajhel','driver-lazar-mujovic','driver-stefan-milinic','driver-dejan-suskavcevic','driver-efimin-dmitri','driver-mile-malovic','driver-goran-vuckovic','driver-backo-vujovic','driver-bozidar-jablan','driver-aldin-corovic','driver-zlatko-brozovic','driver-nenad-grzancic','driver-ante-gacina','driver-sime-simunovic','driver-marijan-hrgovic','driver-jurica-ivanovic','driver-sandro-poldrugovac','driver-maro-slade','driver-dejan-dimitrijevic','driver-viliam-prodan','driver-niko-pulic','driver-simeron-jargic','driver-frano-dubreta','driver-luka-dubreta','driver-tamas-tomcsanyi','driver-peter-jordan','driver-josip-pavic','driver-ante-baric','driver-ivan-batalic','driver-stijepo-manenica','driver-mladen-dajic','driver-fran-kranjac','driver-andelko-vrkic','driver-antonio-tomic','driver-bego-sakanovic','driver-ivica-dragosevic','driver-boris-katic','driver-goran-sikirica','driver-andrej-bule','driver-kornel-nyeki','driver-dino-dominikovic','driver-marijo-barovic','driver-nino-jelicic','driver-ivan-pejkovic','driver-mato-milkovic','driver-milan-tatalic','driver-maro-franic','driver-nikola-radnjic','driver-igor-nikolaus','driver-deni-kmetovic','driver-stipe-bekavac','driver-toni-bebic','driver-ivan-grozdanic','driver-ivan-zivkovic','driver-dino-anticevic','driver-marin-grljusic','driver-jure-mornar','driver-ivan-bekavac','driver-petar-dajak','driver-filip-magdic','driver-aleksandar-vidosavljevic','driver-matija-brusnskole','driver-hysein-iseni','driver-burim-asllani','driver-leutrim-bytyqi','driver-valon-rexhepi','driver-smail-smani','driver-bradhil-canolli','driver-gentjam-shaqiri')"
+        - sqlCheck:
+            expectedResult: "12"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key IN ('club-amk-monteracing','club-amk-podgorica-rt','club-amkk-lovcen-r-t','club-amsk-ap-sport','club-amsk-crmnica','club-amsk-gorstak','club-amsk-herceg-novi','club-amsk-kotor','club-amsk-nilovic-racing','club-amsk-podi','club-amsk-tivat','club-amsk-vlahovic')"
+        - sqlCheck:
+            expectedResult: "28"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key IN ('vehicle-bmw','vehicle-bmw-e46','vehicle-bmw-m3','vehicle-citroen-c2','vehicle-citroen-saxo','vehicle-fiat-500','vehicle-fiat-750','vehicle-fiat-siecento','vehicle-global','vehicle-global-light','vehicle-honda-civic','vehicle-nisan-micra','vehicle-norma-n202b','vehicle-opel-astra','vehicle-opel-corsa','vehicle-peugeot-106','vehicle-peugeot-306','vehicle-rover','vehicle-rover-mg','vehicle-seat-leon','vehicle-suzuki-swift','vehicle-suzuki-swift-gti','vehicle-vw-golf-i','vehicle-vw-golf-v','vehicle-vw-polo','vehicle-wv-polo','vehicle-yugo','vehicle-skoda-felicia')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM competition_classes WHERE archive_key IN ('class-akscg-a-1150','class-akscg-a-1400','class-akscg-a-1600','class-akscg-a-2000','class-akscg-d-e2-cn','class-akscg-e1-1200','class-akscg-e2sh','class-akscg-h-1000','class-akscg-h-1400','class-akscg-h-1600','class-akscg-h-2000','class-akscg-h-2000-plus','class-akscg-n-1150','class-akscg-n-1400','class-akscg-n-1600','class-akscg-n-2000')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM tracks WHERE archive_key IN ('track-kotor-trojica')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championship_rounds WHERE archive_key='2026-05-02-kotor-trojica'"
+        - sqlCheck:
+            expectedResult: "68"
+            sql: "SELECT COUNT(*) FROM entries WHERE round_id=(SELECT id FROM championship_rounds WHERE archive_key='2026-05-02-kotor-trojica')"
+        - sqlCheck:
+            expectedResult: "3"
+            sql: "SELECT COUNT(*) FROM race_sessions WHERE round_id=(SELECT id FROM championship_rounds WHERE archive_key='2026-05-02-kotor-trojica') AND session_order IN (1,2,3)"
+        - sqlCheck:
+            expectedResult: "18"
+            sql: "SELECT COUNT(*) FROM classifications WHERE round_id=(SELECT id FROM championship_rounds WHERE archive_key='2026-05-02-kotor-trojica') AND name IN ('Kategorija 1','Kategorija 2','Klasa A 1150','Klasa A 1400','Klasa A 1600','Klasa A 2000','Klasa D/E2/CN','Klasa E1 1200','Klasa E2SH','Klasa H 1000','Klasa H 1400','Klasa H 1600','Klasa H 2000','Klasa H 2000+','Klasa N 1150','Klasa N 1400','Klasa N 1600','Klasa N 2000')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM source_documents WHERE source_key IN ('2026-05-02-kotor-trojica-akscg-official-2026-05-12','2026-05-02-kotor-trojica-clubs-2026-05-13','2026-05-02-kotor-trojica-registrations-2026-04-30') OR file_path IN ('2026/2026-05-02-kotor-trojica/files/AKSCG KONACNI.pdf','2026/2026-05-02-kotor-trojica/files/KLUBOVI.pdf','2026/2026-05-02-kotor-trojica/files/LIST PRIJAVA - MBAT _KOTOR TROJICA 2026 -MEMORIJAL TRIPO BUKILICA.pdf')"
+      changes:
+        - sqlFile:
+            path: 015-kotor-trojica-sources.sql
+            relativeToChangelogFile: true

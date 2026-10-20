@@ -23,6 +23,11 @@ Clubs and classes are established from reviewed sources rather than a predefined
 list. The existing scoring configuration remains available; seasons with unknown
 scoring rules show results without calculated points.
 
+Season standings sum the published points from finalized class results, then
+apply season drop rules. Overall/category tables are not counted a second time,
+and already awarded reduced points are not reduced again. Missing official
+points are shown as unavailable rather than zero.
+
 See [the curation workflow](docs/curating-events.md) and [agent instructions](AGENTS.md).
 Existing manually entered records are preserved by schema upgrades; capturing
 legacy data into reviewed migrations is required before those records are also
@@ -90,7 +95,12 @@ upgrade. For a full MySQL replay, provision an empty disposable schema named
 `racing_archive_verify_...` and set `RACING_ARCHIVE_TEST_MYSQL_URL`,
 `RACING_ARCHIVE_TEST_MYSQL_USERNAME` and `RACING_ARCHIVE_TEST_MYSQL_PASSWORD`.
 `MySqlArchiveMigrationTest` runs only when configured and refuses a nonempty
-schema or the application database. Reporting and automated ingestion are outside
-the current scope.
+schema or the application database. It replays the curated event, checks the public
+results and verifies original document downloads. Set
+`RACING_ARCHIVE_TEST_MYSQL_UPGRADE_URL` to a second empty disposable schema to also
+test upgrading from the migrations preceding the first event, preserving legacy
+data and using different generated IDs. Both schemas must have names beginning
+with `racing_archive_verify_`; use new empty schemas for another run.
+Reporting and automated ingestion are outside the current scope.
 
 The event-folder helper can be checked with `node --test tools/prepare-event.test.mjs`.

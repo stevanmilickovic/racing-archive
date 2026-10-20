@@ -3,6 +3,7 @@ package Racing.Archive.Backend;
 import org.junit.jupiter.api.Test;
 import Racing.Archive.Backend.publicapi.PublicDashboardController;
 import Racing.Archive.Backend.publicapi.PublicSourceController;
+import Racing.Archive.Backend.publicapi.SeasonStandingsService;
 import Racing.Archive.Backend.domain.SourceDocument;
 import Racing.Archive.Backend.repository.*;
 import Racing.Archive.Backend.security.SecurityConfiguration;
@@ -30,6 +31,7 @@ class BackendApplicationTests {
     @MockitoBean DriverRepository drivers;
     @MockitoBean SourceDocumentRepository documents;
     @MockitoBean SourceFileService files;
+    @MockitoBean SeasonStandingsService standings;
 
     @Test
     void publicReadsWorkWithoutAnAdministratorOrDatabase() throws Exception {
