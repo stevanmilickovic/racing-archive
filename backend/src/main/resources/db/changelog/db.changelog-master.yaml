@@ -31,3 +31,7 @@ databaseChangeLog:
       file: db/changelog/015-kotor-trojica-2026.yaml
   - include:
       file: db/changelog/016-cg-2026-scoring-system.yaml
+  - include:
+      file: db/changelog/017-merge-polo-spellings.yaml
+  - include:
+      file: db/changelog/018-goc-2026.yaml

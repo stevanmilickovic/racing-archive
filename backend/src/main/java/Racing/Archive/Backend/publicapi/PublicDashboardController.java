@@ -82,10 +82,12 @@ public class PublicDashboardController {
                 .map(participation -> participation.getRound())
                 .filter(round -> round.getStatus().name().equals("COMPLETED"))
                 .sorted(Comparator.comparing(ChampionshipRound::getRoundNumber)).toList();
-        boolean scoringKnown = season.getScoringSystem() != null
-                && !scoringPositionRepository.findByScoringSystemId(season.getScoringSystem().getId()).isEmpty();
+        Map<Integer, BigDecimal> schedule = season.getScoringSystem() == null ? Map.of()
+                : scoringPositionRepository.findByScoringSystemId(season.getScoringSystem().getId()).stream()
+                        .collect(java.util.stream.Collectors.toMap(value -> value.getPosition(), value -> value.getPoints()));
+        boolean scoringKnown = season.getScoringSystem() != null && !schedule.isEmpty();
         List<PublicClassStanding> standings = standingsService.standings(season,
-                rounds.stream().map(ChampionshipRound::getId).toList(), scoringKnown);
+                rounds.stream().map(ChampionshipRound::getId).toList(), schedule);
         return new PublicSeasonResponse(season.getId(), season.getChampionship().getName(),
                 season.getChampionship().getShortName(), season.getYear(), scoringKnown,
                 rounds.stream().map(round -> new PublicRoundResponse(round.getId(), round.getRoundNumber(),
@@ -106,7 +108,7 @@ record PublicSeasonResponse(Long id, String championshipName, String championshi
 record PublicRoundResponse(Long id, Integer roundNumber, String name, java.time.LocalDate startsOn) {}
 record PublicRoundDetailResponse(Long id, String name, java.time.LocalDate startsOn, java.time.LocalDate endsOn, String trackName) {}
 record PublicClassStanding(String classCode, List<PublicStandingResponse> drivers) {}
-record PublicStandingResponse(Long driverId, String driverName, BigDecimal rawPoints, BigDecimal adjustedPoints) {}
+record PublicStandingResponse(Long driverId, String driverName, BigDecimal rawPoints, BigDecimal adjustedPoints, boolean hasCalculatedPoints) {}
 record PublicSessionResponse(Long id, String name, String type, Integer sessionOrder) {}
 record PublicSessionResultResponse(Long driverId, String driverName, String classCode, Integer position, Long elapsedTimeMillis, String status, String clubName, String vehicleName) {}
 record PublicDriverResultResponse(Long roundId, String roundName, String sessionName, String classCode, Integer position, Long elapsedTimeMillis, String status, String clubName, String vehicleName) {}

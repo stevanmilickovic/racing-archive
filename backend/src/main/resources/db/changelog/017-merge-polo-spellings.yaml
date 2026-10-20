@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 017-merge-polo-spellings
+      author: codex
+      comment: "Reviewed correction: the programmer confirmed WV POLO and VW POLO are one reusable vehicle description. Preserve entries and source aliases."
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key='vehicle-vw-polo' AND display_name='VW POLO'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key='vehicle-wv-polo' AND display_name='WV POLO'"
+      changes:
+        - sqlFile:
+            path: 017-merge-polo-spellings.sql
+            relativeToChangelogFile: true

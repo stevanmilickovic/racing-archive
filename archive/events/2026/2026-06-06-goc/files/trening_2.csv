@@ -1,0 +1,47 @@
+﻿sesija,datum,broj,vozac,ime,prezime,klub,klasa,klasa_izvor,vozilo,plasman_generalni,plasman_u_klasi,vrijeme,vrijeme_ms,status,izvor
+trening_2,2026-06-06,14,VUJOVIĆ Baćko,Baćko,VUJOVIĆ,AMSK GORŠTAK,E2SH,E2 SH,NORMA M20,1,1,1:39.128,99128,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,7,VUJAČIĆ Mirko,Mirko,VUJAČIĆ,AMSK CRMNICA,A 1600,A 1600,Citroen C2,2,1,1:44.425,104425,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,80,JANKOVIĆ Marko,Marko,JANKOVIĆ,AMSK GORŠTAK,N 2000,N 2000,Honda Civic,3,1,1:45.740,105740,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,313,MILINIĆ Stefan,Stefan,MILINIĆ,AMSK PODI,H 2000,H 2000,Honda Civic,4,1,1:48.197,108197,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,16,VUČKOVIĆ Goran,Goran,VUČKOVIĆ,AMSK KOTOR,H 2000+,H 2000+,VolksWagen Golf 5,5,1,1:49.157,109157,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,43,MASONIČIĆ Radovan,Radovan,MASONIČIĆ,AMSK CRMNICA,A 2000,A 2000,Honda Civic Type R,6,1,1:51.061,111061,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,217,EFEMKIN Dimitrii,Dimitrii,EFEMKIN,AMSK CRMNICA,H 2000+,H 2000+,BMW M3,7,2,1:51.863,111863,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,89,ĐONOVIĆ Dejan,Dejan,ĐONOVIĆ,AMSK CRMNICA,N 1400,N 1400,Peugeot 106 Rally,8,1,1:55.973,115973,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,197,NIKČEVIĆ Sava,Sava,NIKČEVIĆ,AMSK GORŠTAK,A 1150,A 1150,Zastava Yugo 55,9,1,1:57.670,117670,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,236,MUDREŠA Dragan,Dragan,MUDREŠA,AMSK PODI,A 1150,A 1150,Zastava Yugo 55,10,2,1:58.328,118328,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,115,KRIVOKAPIĆ Milutin,Milutin,KRIVOKAPIĆ,AMSK Herceg Novi,A 1400,A 1400,Peugeot 106,11,1,1:58.927,118927,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,92,DODEROVIĆ Božidar,Božidar,DODEROVIĆ,AMSK PODI,A 1150,A 1150,Zastava Yugo 55,12,3,1:58.986,118986,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,19,KOVAČEVIĆ Dejan,Dejan,KOVAČEVIĆ,AMSK Herceg Novi,N 1400,N 1400,VolksWagen Polo,13,2,1:59.133,119133,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,30,JOVANOVIĆ Petar,Petar,JOVANOVIĆ,ASU Zeka Auto sport,A 1150,A 1150,Zastava Yugo 55,14,4,1:59.399,119399,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,121,ĐURIŠIĆ Andrija,Andrija,ĐURIŠIĆ,AMSK AP sport,H 1000,H 1000,Zastava Yugo 55,15,1,2:00.061,120061,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,506,ĆOROVIĆ Almin,Almin,ĆOROVIĆ,AMSK AP sport,A 2000,A 2000,Opel Astra,16,2,2:00.238,120238,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,119,DURAKOVIĆ Sahib,Sahib,DURAKOVIĆ,AMSK CRMNICA,A 1400,A 1400,Rover,17,2,2:02.033,122033,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,666,PLAKALO Ena,Ena,PLAKALO,AMSK AP sport,N 1600,N 1600,Citroën Saxo,18,1,2:03.852,123852,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,17,ŠAPIĆ Ilija,Ilija,ŠAPIĆ,AMSK Herceg Novi,N 1400,N 1400,Peugeot 106,19,3,2:03.974,123974,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,961,MALTSEVA Margarita,Margarita,MALTSEVA,AMSK CRMNICA,A 1600,A 1600,Citroën Saxo,20,2,2:04.480,124480,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,48,IVANOVIĆ Marija,Marija,IVANOVIĆ,AMK MONTE racing,A 1600,A 1600,Citroën Saxo,21,3,2:04.816,124816,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,33,ŠUŠIĆ Gligorije,Gligorije,ŠUŠIĆ,AMSK PODI,N 1600,N 1600,Citroën Saxo,22,2,2:05.116,125116,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,160,BRKAN Luka,Luka,BRKAN,ASK TIVAT,N 1150,N 1150,Zastava Yugo 55,23,1,2:05.479,125479,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,200,DŽOGAZ Dragan,Dragan,DŽOGAZ,AMSK AP sport,N 1150,N 1150,Zastava Yugo 55,24,2,2:06.184,126184,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,18,KOVAČEVIĆ Đorđe,Đorđe,KOVAČEVIĆ,AMSK Herceg Novi,N 1400,N 1400,Peugeot 106,25,4,2:06.186,126186,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,155,RADMILOVIĆ Igor,Igor,RADMILOVIĆ,AMSK Herceg Novi,N 1150,N 1150,Zastava Yugo 55,26,3,2:06.399,126399,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,76,MILOŠEV Stevan,Stevan,MILOŠEV,AMSK Herceg Novi,N 1150,N 1150,Zastava Yugo 55,27,4,2:07.186,127186,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,510,MILIČKOVIĆ Stevan,Stevan,MILIČKOVIĆ,AMSK AP sport,N 1150,N 1150,Zastava Yugo 55,28,5,2:07.658,127658,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,208,ZUROVAC Petar,Petar,ZUROVAC,AMSK NILOVIĆ Racing,N 1150,N 1150,Zastava Yugo 55,29,6,2:10.770,130770,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,222,ŠUĆUR Luka,Luka,ŠUĆUR,AMSK PODI,H 1400,H 1400,Suzuki Swift GTI,30,1,2:11.273,131273,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,930,RADANOVIĆ Radovan,Radovan,RADANOVIĆ,AMSK Herceg Novi,A 2000,A 2000,Opel Astra,31,3,2:14.355,134355,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,287,RAŽNATOVIĆ Milorad,Milorad,RAŽNATOVIĆ,ASK TIVAT,N 1150,N 1150,Zastava Yugo 55,32,7,2:31.139,151139,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,224,NIKOLIĆ Miljan,Miljan,NIKOLIĆ,AMSK NILOVIĆ Racing,N 1400,N 1400,Peugeot 106 Rally,33,5,2:54.032,174032,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,353,MARKOVIĆ Matija,Matija,MARKOVIĆ,AMKK LOVĆEN racing team,N 1150,N 1150,Zastava Yugo 55,34,8,3:32.849,212849,FIN,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,21,ĆOROVIĆ Aldin,Aldin,ĆOROVIĆ,AMSK AP sport,E2SH,E2 SH,GLOBAL GT LIGHTS,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,310,BOJANOVIĆ Miloš,Miloš,BOJANOVIĆ,AMSK GORŠTAK,H 1600,H 1600,Peugeot 106,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,12,BULATOVIĆ Dejan,Dejan,BULATOVIĆ,AMSK KOTOR,H 2000,H 2000,Peugeot 306,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,26,TUJKOVIĆ Dušan,Dušan,TUJKOVIĆ,AMSK KOTOR,N 2000,N 2000,Honda Civic,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,681,VUČETIĆ Goran,Goran,VUČETIĆ,AMSK PODI,N 2000,N 2000,Honda Civic Type R,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,13,VUJNOVIĆ Miloš,Miloš,VUJNOVIĆ,AMSK Herceg Novi,N 1400,N 1400,Peugeot 106,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,4,DOJČINOVIĆ Goran,Goran,DOJČINOVIĆ,AMSK CRMNICA,E1 1200,Moto 1200,Honda Civic,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,81,RADANOVIĆ Vojo,Vojo,RADANOVIĆ,AMSK Herceg Novi,H 1000,H 1000,Peugeot 106,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,36,PERUNOVIĆ Jovan,Jovan,PERUNOVIĆ,AMSK PODI,E2SH,E2 SH,Fiat 750,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,23,ADŽIĆ Marko,Marko,ADŽIĆ,AMSK PODI,A 1400,A 1400,Rover MG ZR 25,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,29,MUGOŠA Slobodan,Slobodan,MUGOŠA,AMSK AP sport,N 1600,N 1600,Peugeot 106,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trening_2,2026-06-06,416,PEROVIĆ Damjan,Damjan,PEROVIĆ,AMSK KOTOR,H 1600,H 1600,,,,,,DNS,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results

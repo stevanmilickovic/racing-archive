@@ -1,0 +1,148 @@
+databaseChangeLog:
+  - changeSet:
+      id: 018-goc-identities
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM disciplines WHERE code='HILLCLIMB'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championships WHERE id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB'))"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM seasons WHERE id=(SELECT id FROM seasons WHERE championship_id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB')) AND season_year=2026) AND scoring_system_id=(SELECT id FROM scoring_systems WHERE name='Modern hillclimb scoring system')"
+        - sqlCheck:
+            expectedResult: "44"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-mirko-vujacic','driver-dejan-bulatovic','driver-milos-vujnovic','driver-backo-vujovic','driver-goran-vuckovic','driver-ilija-sapic','driver-dorde-kovacevic','driver-dejan-kovacevic','driver-aldin-corovic','driver-marko-adzic','driver-dusan-tujkovic','driver-slobodan-mugosa','driver-petar-jovanovic','driver-gligorije-susic','driver-jovan-perunovic','driver-radovan-masonicic','driver-marija-ivanovic','driver-stevan-milosev','driver-marko-jankovic','driver-vojo-radanovic','driver-dejan-donovic','driver-bozidar-doderovic','driver-milutin-krivokapic','driver-sakib-durakovic','driver-andrija-durisic','driver-igor-radmilovic','driver-luka-brkan','driver-sava-nikcevic','driver-dragan-dzogaz','driver-petar-zurovac','driver-efimin-dmitri','driver-luka-sucur','driver-miljan-nikolic','driver-dragan-mudresa','driver-milorad-raznatovic','driver-milos-bojanovic','driver-stefan-milinic','driver-matija-markovic','driver-damjan-perovic','driver-almin-corovic','driver-stevan-milickovic','driver-goran-vucetic','driver-radovan-radanovic','driver-margarita-maltseva')"
+        - sqlCheck:
+            expectedResult: "10"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key IN ('club-amsk-crmnica','club-amsk-kotor','club-amsk-herceg-novi','club-amsk-gorstak','club-amsk-ap-sport','club-amsk-podi','club-amk-monteracing','club-amsk-tivat','club-amsk-nilovic-racing','club-amkk-lovcen-r-t')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key IN ('vehicle-honda-civic','vehicle-citroen-c2','vehicle-peugeot-306','vehicle-peugeot-106','vehicle-norma-n202b','vehicle-vw-golf-v','vehicle-vw-polo','vehicle-global','vehicle-rover-mg','vehicle-yugo','vehicle-citroen-saxo','vehicle-fiat-750','vehicle-rover','vehicle-bmw-m3','vehicle-suzuki-swift-gti','vehicle-opel-astra')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM competition_classes WHERE archive_key IN ('class-akscg-e1-1200','class-akscg-a-1600','class-akscg-h-2000','class-akscg-n-1400','class-akscg-d-e2-cn','class-akscg-h-2000-plus','class-akscg-a-1400','class-akscg-n-2000','class-akscg-n-1600','class-akscg-a-1150','class-akscg-e2sh','class-akscg-a-2000','class-akscg-n-1150','class-akscg-h-1000','class-akscg-h-1400','class-akscg-h-1600')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key='vehicle-wv-polo'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Sportski auto i karting savez Srbije'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-goran-dojcinovic','driver-ena-plakalo') OR CONCAT(first_name,' ',last_name) IN ('GORAN DOJČINOVIĆ','ENA PLAKALO')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key='club-asu-zeka-auto-sport' OR UPPER(name)='ASU ZEKA AUTO SPORT'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM tracks WHERE archive_key='track-goc' OR name='Goč'"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM championship_rounds WHERE archive_key='2026-06-06-goc' OR (season_id=(SELECT id FROM seasons WHERE championship_id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB')) AND season_year=2026) AND round_number=2) OR (starts_on='2026-06-06' AND name LIKE '%Goč%')"
+      changes:
+        - sqlFile:
+            path: 018-goc-identities.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 018-goc-event
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM disciplines WHERE code='HILLCLIMB'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championships WHERE id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB'))"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM seasons WHERE id=(SELECT id FROM seasons WHERE championship_id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB')) AND season_year=2026) AND scoring_system_id=(SELECT id FROM scoring_systems WHERE name='Modern hillclimb scoring system')"
+        - sqlCheck:
+            expectedResult: "46"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-goran-dojcinovic','driver-mirko-vujacic','driver-dejan-bulatovic','driver-milos-vujnovic','driver-backo-vujovic','driver-goran-vuckovic','driver-ilija-sapic','driver-dorde-kovacevic','driver-dejan-kovacevic','driver-aldin-corovic','driver-marko-adzic','driver-dusan-tujkovic','driver-slobodan-mugosa','driver-petar-jovanovic','driver-gligorije-susic','driver-jovan-perunovic','driver-radovan-masonicic','driver-marija-ivanovic','driver-stevan-milosev','driver-marko-jankovic','driver-vojo-radanovic','driver-dejan-donovic','driver-bozidar-doderovic','driver-milutin-krivokapic','driver-sakib-durakovic','driver-andrija-durisic','driver-igor-radmilovic','driver-luka-brkan','driver-sava-nikcevic','driver-dragan-dzogaz','driver-petar-zurovac','driver-efimin-dmitri','driver-luka-sucur','driver-miljan-nikolic','driver-dragan-mudresa','driver-milorad-raznatovic','driver-milos-bojanovic','driver-stefan-milinic','driver-matija-markovic','driver-damjan-perovic','driver-almin-corovic','driver-stevan-milickovic','driver-ena-plakalo','driver-goran-vucetic','driver-radovan-radanovic','driver-margarita-maltseva')"
+        - sqlCheck:
+            expectedResult: "11"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key IN ('club-amsk-crmnica','club-amsk-kotor','club-amsk-herceg-novi','club-amsk-gorstak','club-amsk-ap-sport','club-amsk-podi','club-asu-zeka-auto-sport','club-amk-monteracing','club-amsk-tivat','club-amsk-nilovic-racing','club-amkk-lovcen-r-t')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key IN ('vehicle-honda-civic','vehicle-citroen-c2','vehicle-peugeot-306','vehicle-peugeot-106','vehicle-norma-n202b','vehicle-vw-golf-v','vehicle-vw-polo','vehicle-global','vehicle-rover-mg','vehicle-yugo','vehicle-citroen-saxo','vehicle-fiat-750','vehicle-rover','vehicle-bmw-m3','vehicle-suzuki-swift-gti','vehicle-opel-astra')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM competition_classes WHERE archive_key IN ('class-akscg-e1-1200','class-akscg-a-1600','class-akscg-h-2000','class-akscg-n-1400','class-akscg-d-e2-cn','class-akscg-h-2000-plus','class-akscg-a-1400','class-akscg-n-2000','class-akscg-n-1600','class-akscg-a-1150','class-akscg-e2sh','class-akscg-a-2000','class-akscg-n-1150','class-akscg-h-1000','class-akscg-h-1400','class-akscg-h-1600')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM tracks WHERE archive_key IN ('track-goc')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Sportski auto i karting savez Srbije' AND country_code='RS'"
+      changes:
+        - sqlFile:
+            path: 018-goc-event.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 018-goc-sources
+      author: codex
+      preConditions:
+        - onFail: HALT
+        - onError: HALT
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM disciplines WHERE code='HILLCLIMB'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championships WHERE id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB'))"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM seasons WHERE id=(SELECT id FROM seasons WHERE championship_id=(SELECT id FROM championships WHERE name='Šampionat Crne Gore' AND federation_id=(SELECT id FROM federations WHERE name='Auto i karting savez Crne Gore' AND country_code='ME') AND discipline_id=(SELECT id FROM disciplines WHERE code='HILLCLIMB')) AND season_year=2026) AND scoring_system_id=(SELECT id FROM scoring_systems WHERE name='Modern hillclimb scoring system')"
+        - sqlCheck:
+            expectedResult: "46"
+            sql: "SELECT COUNT(*) FROM drivers WHERE archive_key IN ('driver-goran-dojcinovic','driver-mirko-vujacic','driver-dejan-bulatovic','driver-milos-vujnovic','driver-backo-vujovic','driver-goran-vuckovic','driver-ilija-sapic','driver-dorde-kovacevic','driver-dejan-kovacevic','driver-aldin-corovic','driver-marko-adzic','driver-dusan-tujkovic','driver-slobodan-mugosa','driver-petar-jovanovic','driver-gligorije-susic','driver-jovan-perunovic','driver-radovan-masonicic','driver-marija-ivanovic','driver-stevan-milosev','driver-marko-jankovic','driver-vojo-radanovic','driver-dejan-donovic','driver-bozidar-doderovic','driver-milutin-krivokapic','driver-sakib-durakovic','driver-andrija-durisic','driver-igor-radmilovic','driver-luka-brkan','driver-sava-nikcevic','driver-dragan-dzogaz','driver-petar-zurovac','driver-efimin-dmitri','driver-luka-sucur','driver-miljan-nikolic','driver-dragan-mudresa','driver-milorad-raznatovic','driver-milos-bojanovic','driver-stefan-milinic','driver-matija-markovic','driver-damjan-perovic','driver-almin-corovic','driver-stevan-milickovic','driver-ena-plakalo','driver-goran-vucetic','driver-radovan-radanovic','driver-margarita-maltseva')"
+        - sqlCheck:
+            expectedResult: "11"
+            sql: "SELECT COUNT(*) FROM clubs WHERE archive_key IN ('club-amsk-crmnica','club-amsk-kotor','club-amsk-herceg-novi','club-amsk-gorstak','club-amsk-ap-sport','club-amsk-podi','club-asu-zeka-auto-sport','club-amk-monteracing','club-amsk-tivat','club-amsk-nilovic-racing','club-amkk-lovcen-r-t')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM vehicles WHERE archive_key IN ('vehicle-honda-civic','vehicle-citroen-c2','vehicle-peugeot-306','vehicle-peugeot-106','vehicle-norma-n202b','vehicle-vw-golf-v','vehicle-vw-polo','vehicle-global','vehicle-rover-mg','vehicle-yugo','vehicle-citroen-saxo','vehicle-fiat-750','vehicle-rover','vehicle-bmw-m3','vehicle-suzuki-swift-gti','vehicle-opel-astra')"
+        - sqlCheck:
+            expectedResult: "16"
+            sql: "SELECT COUNT(*) FROM competition_classes WHERE archive_key IN ('class-akscg-e1-1200','class-akscg-a-1600','class-akscg-h-2000','class-akscg-n-1400','class-akscg-d-e2-cn','class-akscg-h-2000-plus','class-akscg-a-1400','class-akscg-n-2000','class-akscg-n-1600','class-akscg-a-1150','class-akscg-e2sh','class-akscg-a-2000','class-akscg-n-1150','class-akscg-h-1000','class-akscg-h-1400','class-akscg-h-1600')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM tracks WHERE archive_key IN ('track-goc')"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM federations WHERE name='Sportski auto i karting savez Srbije' AND country_code='RS'"
+        - sqlCheck:
+            expectedResult: "1"
+            sql: "SELECT COUNT(*) FROM championship_rounds WHERE archive_key IN ('2026-06-06-goc')"
+        - sqlCheck:
+            expectedResult: "6"
+            sql: "SELECT COUNT(*) FROM race_sessions WHERE round_id=(SELECT id FROM championship_rounds WHERE archive_key='2026-06-06-goc') AND session_order IN (1,2,3,4,5,6)"
+        - sqlCheck:
+            expectedResult: "46"
+            sql: "SELECT COUNT(*) FROM entries WHERE round_id=(SELECT id FROM championship_rounds WHERE archive_key='2026-06-06-goc')"
+        - sqlCheck:
+            expectedResult: "17"
+            sql: "SELECT COUNT(*) FROM classifications WHERE round_id=(SELECT id FROM championship_rounds WHERE archive_key='2026-06-06-goc') AND name IN ('Generalni plasman — SCG','Klasa E1 1200','Klasa A 1600','Klasa H 2000','Klasa N 1400','Klasa D/E2/CN','Klasa H 2000+','Klasa A 1400','Klasa N 2000','Klasa N 1600','Klasa A 1150','Klasa E2SH','Klasa A 2000','Klasa N 1150','Klasa H 1000','Klasa H 1400','Klasa H 1600')"
+        - sqlCheck:
+            expectedResult: "0"
+            sql: "SELECT COUNT(*) FROM source_documents WHERE source_key IN ('2026-06-06-goc-01-svi-rezultati-scg','2026-06-06-goc-originals-bilten-1','2026-06-06-goc-originals-generalni-plasman','2026-06-06-goc-originals-placeni-trening-1','2026-06-06-goc-originals-placeni-trening-2','2026-06-06-goc-originals-pravilnik','2026-06-06-goc-originals-trening-1','2026-06-06-goc-originals-trening-2','2026-06-06-goc-originals-trka-1','2026-06-06-goc-originals-trka-2') OR file_path IN ('2026/2026-06-06-goc/files/01_svi_rezultati_SCG.csv','2026/2026-06-06-goc/files/originals/bilten-1.pdf','2026/2026-06-06-goc/files/originals/generalni_plasman.html','2026/2026-06-06-goc/files/originals/placeni_trening_1.html','2026/2026-06-06-goc/files/originals/placeni_trening_2.html','2026/2026-06-06-goc/files/originals/pravilnik.pdf','2026/2026-06-06-goc/files/originals/trening_1.html','2026/2026-06-06-goc/files/originals/trening_2.html','2026/2026-06-06-goc/files/originals/trka_1.html','2026/2026-06-06-goc/files/originals/trka_2.html')"
+      changes:
+        - sqlFile:
+            path: 018-goc-sources.sql
+            relativeToChangelogFile: true

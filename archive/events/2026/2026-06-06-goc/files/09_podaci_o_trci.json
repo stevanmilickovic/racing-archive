@@ -1,0 +1,45 @@
+{
+  "naziv": "Nagrada Grada Kraljeva — Goč 2026",
+  "lokacija": "Goč, Kraljevo, Srbija",
+  "odrzano_od": "2026-06-06",
+  "odrzano_do": "2026-06-07",
+  "disciplina": "Brdske auto-trke",
+  "duzina_staze_m": 2950,
+  "visinska_razlika_m": 205,
+  "uspon_prosjecni_proc": 6.95,
+  "uspon_maks_proc": 9.34,
+  "start_nadmorska_visina_m": 555,
+  "cilj_nadmorska_visina_m": 760,
+  "prvenstva": [
+    {
+      "code": "SCG",
+      "name": "Šampionat Crne Gore"
+    },
+    {
+      "code": "NSS",
+      "name": "Nacionalni šampionat Srbije"
+    },
+    {
+      "code": "OPS",
+      "name": "Otvoreno prvenstvo Srbije"
+    },
+    {
+      "code": "CEZ",
+      "name": "FIA CEZ brdske trke"
+    },
+    {
+      "code": "OPRS",
+      "name": "Otvoreno prvenstvo Republike Srpske"
+    }
+  ],
+  "detaljni_podaci_prvenstvo": "SCG",
+  "evidentirano_vozaca_SCG": 46,
+  "evidentirano_klubova_SCG": 11,
+  "evidentirano_klasa_SCG": 15,
+  "napomena": "Ucesnici izvedeni iz rezultata, nisu zvanicna prijavna lista; nisu ukljuceni bajtovi PDF dokumenata zbog nedostupnosti preuzimanja.",
+  "izvori": {
+    "timing": "https://timing.gaga.co.rs/event.php?slug=goc-2026",
+    "pravilnik": "https://timing.gaga.co.rs/uploads/doc_10_1780671204_MBAT_CEZ-_Nagrada_Grada_Kraljeva_-_GOC_2026_-_Pravilnik-pp.pdf",
+    "bilten": "https://timing.gaga.co.rs/uploads/doc_10_1780671250_BAT_Nagrada_Grada_Kraljeva_-_Goc_2026_-_Bilten_br__1.pdf"
+  }
+}

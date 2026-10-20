@@ -42,6 +42,11 @@ Follow `docs/curating-events.md` in full when preparing or processing an event.
 
 - Names are labels, never identity keys. Different drivers may share a name.
   Do not merge people based only on spelling, nationality, or similarity.
+- For a close name mismatch, explicitly compare the recorded vehicle/model,
+  race number, club/team and class with the candidate's evidenced entries.
+  Report which details agree or differ before asking for an identity decision.
+  A matching model supports reconciliation; it proves neither person identity
+  by itself nor use of the same physical chassis.
 - Assign immutable, unique `archive_key` values to new drivers, clubs/teams,
   vehicles, tracks, classes and rounds. Existing legacy records may lack keys;
   adopt them only with an explicit, unambiguous match.
@@ -63,10 +68,16 @@ Follow `docs/curating-events.md` in full when preparing or processing an event.
   speculative seed lists are retired. Keep the available scoring configuration,
   but leave a season's scoring system null until its rules are established.
   Unknown scoring means unavailable points, never assumed zero points.
-- Season standings sum finalized class classification points and apply season
-  drop rules. Do not recompute awarded points from individual runs, double-count
-  category tables, or apply class-size reductions to published points again.
-  A missing official points value is unknown, not an actual zero score.
+- Season standings prefer published finalized class classification points.
+  When points are absent and the season's rules are confirmed, derive them from
+  the finalized class position, never from an individual run. Mark totals that
+  include calculated points; do not persist them as published awarded points.
+  Apply the configured class-size reduction (counting classified finishers) and
+  foreign-host exception only to calculated points, then season drop rules to
+  the combined total. Do not double-count category tables or reduce published
+  points again. Unknown rules, missing positions or unresolved required scoring
+  context mean unavailable points, not an assumed zero. DNF/DNS/DSQ score zero
+  under the retained scoring system; keep DSQ drop eligibility separate.
 
 ## Sources and migrations
 

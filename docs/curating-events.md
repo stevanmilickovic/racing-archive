@@ -49,6 +49,11 @@ For each source row, record its session, page/table/row, source spelling, propos
 canonical archive key, and the evidence for matching. Cover drivers, clubs/teams,
 car descriptions, tracks, classes, event identity and shared championship seasons.
 Also compare timings, positions, race numbers, statuses and document revisions.
+For close driver-name mismatches, explicitly report whether the recorded
+vehicle/model agrees with the proposed existing driver's evidenced entry, along
+with race number, club/team and class. Keep that comparison in the review and
+record the programmer's identity decision; matching models alone do not prove
+the same person or physical chassis.
 Do not treat a final combined classification as another timed run, or infer a
 missing run from an aggregate. Repeated overall/class tables are not extra results.
 Keep raw session results distinct from official classifications and awarded points.
@@ -59,6 +64,13 @@ a known scoring system and a points schedule. Clubs and classes are created only
 after source review; fresh installations do not retain the old speculative seeds.
 Use official classifications for official points when supplied; do not silently
 replace them with the dashboard's existing calculated standings.
+When awarded points are absent, preserve SQL NULL in the archive. With confirmed
+season rules, the dashboard derives points from finalized class positions (not
+individual runs), applying the configured reduction based on classified finishers
+and foreign-host exception. It marks totals containing calculated points and
+applies season drop rules afterwards. Do not invent published points in a data
+migration merely to make a season total available. Missing required positions or
+scoring context still leave the affected total unavailable.
 
 List new identities, uncertain matches, contradictory documents and missing facts
 in `review.md`. Show all proposed new drivers, cars and teams to the programmer.

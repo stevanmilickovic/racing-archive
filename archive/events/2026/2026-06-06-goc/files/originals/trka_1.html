@@ -1,0 +1,3118 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050607">
+<title>Nagrada Grada Kraljeva — Goč 2026 — GAGA Timing</title>
+<meta name="description" content="Brdska trka — Goč 2026">
+<meta property="og:title" content="Nagrada Grada Kraljeva — Goč 2026 — GAGA Timing">
+<meta property="og:description" content="Brdska trka — Goč 2026">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://timing.gaga.co.rs/uploads/cover_10_1780586198.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>/* ═══════════════════════════════════════════════════
+   GAGA TIMING — base.css  (redesign v2)
+   Mobile-first · Inter font · Dark theme
+═══════════════════════════════════════════════════ */
+
+/* ─── RESET ─────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:93.75%;scroll-behavior:smooth;-webkit-tap-highlight-color:transparent;}
+body{
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:#050607;
+  color:#F4F6F8;
+  line-height:1.5;
+  min-height:100vh;
+  /* overflow-x:hidden lomi position:fixed na iOS (body postaje scroll-kontejner).
+     'clip' kliruje horizontalni overflow BEZ scroll-kontejnera → bottom-nav ostaje zalepljen. */
+  overflow-x:hidden;   /* fallback za stare browsere */
+  overflow-x:clip;
+  /* Mobile: prostor za bottom nav (≤768px). Desktop: bez. */
+  padding-bottom:72px;
+}
+@media(min-width:768px){
+  body{ padding-bottom:0; }
+}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;}
+img{max-width:100%;display:block;}
+
+/* ─── FOCUS (tastatura) — WCAG 2.4.7 ──────────────── */
+/* Beli ring je vidljiv i na tamnoj pozadini i na pink/zelenim elementima */
+:focus-visible{
+  outline:2px solid #fff;
+  outline-offset:2px;
+  border-radius:4px;
+}
+/* Bez outline-a na miš/touch klik (samo tastatura ga vidi) */
+:focus:not(:focus-visible){outline:none;}
+
+/* ─── SKIP LINK — WCAG 2.4.1 (preskoči navigaciju) ──── */
+.skip-link{
+  position:fixed;top:8px;left:8px;z-index:1000;
+  background:var(--accent-pink);color:#fff;
+  padding:10px 16px;border-radius:8px;
+  font-size:0.9333rem;font-weight:700;
+  transform:translateY(-200%);
+  transition:transform .15s;
+}
+.skip-link:focus{transform:translateY(0);}
+
+/* ─── DESIGN TOKENS ───────────────────────────────────── */
+:root{
+  /* New palette */
+  --bg-main:        #050607;
+  --bg-elevated:    #0D1017;
+  --bg-card:        #181D26;
+  --bg-card-soft:   #1E2432;
+  --border-soft:    rgba(255,255,255,0.11);
+  --border-strong:  rgba(255,255,255,0.20);
+  --text-main:      #F4F6F8;
+  --text-muted:     #A4ABB6;
+  --text-soft:      #8A93A0;
+  --accent-pink:    #FF1493;
+  --accent-green:   #00C853;
+  --accent-blue:    #1E90FF;
+  --status-live:    #00C853;
+  --status-warning: #FFB020;
+  --status-danger:  #FF3B5C;
+  --reg-cta-1:      #0A7D33;  /* CTA online prijave — duboka akciona zelena (gradient) */
+  --reg-cta-2:      #0B8F3C;
+  --radius-card:    18px;
+  --radius-btn:     14px;
+  --radius-sm:      10px;
+
+  /* Backward-compat aliases (admin pages + old code) */
+  --accent:   #FF1493;
+  --accent2:  #ff5587;
+  --live:     #00C853;
+  --bg:       #050607;
+  --bg2:      #0D1017;
+  --bg3:      #181D26;
+  --border:   rgba(255,255,255,0.11);
+  --text:     #F4F6F8;
+  --muted:    #8A93A0;
+  /* ── BOJE DISCIPLINA — JEDINI IZVOR ISTINE ──────────────────────
+     Svaka disciplina ima tačno jednu boju. Ko god prikazuje disciplinu
+     (session-chip, TV pill, disc-badge, Desktop) mora čitati odavde.
+     Preslikano na još dva mesta koja ne mogu da čitaju CSS:
+       · assets/css/tv.css        — fallback hex u var(--*-color, …)
+       · api/disciplines.php      — $color_map (Desktop dobija color_hex)
+     Menjaš boju ovde → obavezno ažuriraj i ta dva mesta. */
+  --bt-color: #e88833;   /* Brdske trke   — narandžasta */
+  --as-color: #3388ff;   /* Auto slalom   — plava */
+  --kt-color: #aa44ff;   /* Kružne trke   — ljubičasta */
+  --ak-color: #00a39b;   /* Auto-kros (Doc 57) — teal, razlikuje se i od live-zelene */
+
+  /* (#228) Spacing skala — koren „magičnih px" (uvodi se postepeno, usput; bez vizuelne promene) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  /* (#228) Elevation / senke */
+  --shadow-1: 0 1px 3px rgba(0,0,0,.35);
+  --shadow-2: 0 4px 14px rgba(0,0,0,.40);
+  --shadow-3: 0 12px 32px rgba(0,0,0,.50);
+}
+
+/* ─── LAYOUT ──────────────────────────────────────── */
+.container{max-width:1100px;margin:0 auto;padding:20px 16px 100px;}
+@media(min-width:768px){.container{padding:24px 24px 40px;}}
+@media(min-width:1024px){.container{padding:32px 24px;}}
+
+/* ─── TYPOGRAPHY ──────────────────────────────────── */
+.mono{font-family:'Roboto Mono','SF Mono','Consolas',monospace;}
+
+/* ─── PULSE ANIMATION ─────────────────────────────── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes flash-row{0%{background:rgba(0,200,83,.15)}100%{background:transparent}}
+
+/* ─── REDUCED MOTION — WCAG 2.3.3 ─────────────────── */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   MOBILE HEADER (homepage)
+════════════════════════════════════════════════════ */
+.mobile-header{
+  background:var(--bg-elevated);
+  border-bottom:1px solid var(--border-soft);
+  padding:0 20px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.m-logo{font-size:1.0667rem;font-weight:900;letter-spacing:2px;color:#fff;line-height:1;}
+.m-logo .dot{color:var(--accent-pink);}
+.m-logo .sub{font-size:0.6rem;font-weight:600;color:var(--text-soft);display:block;letter-spacing:1px;margin-top:-1px;}
+.header-icon-btn{
+  width:40px;height:40px;background:var(--bg-card);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:4px;
+}
+.header-icon-btn span{display:block;width:16px;height:2px;background:var(--text-muted);border-radius:1px;}
+
+/* EVENT PAGE HEADER (back button style) */
+.event-header{
+  background:var(--bg-elevated);
+  border-bottom:1px solid var(--border-soft);
+  padding:0 16px;height:52px;
+  display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;
+}
+.back-btn{
+  width:40px;height:40px;background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1.3333rem;color:var(--text-muted);flex-shrink:0;
+}
+.event-header-title{flex:1;min-width:0;}
+.event-header-name{
+  font-size:0.9333rem;font-weight:700;color:#fff;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.event-header-status{
+  display:flex;align-items:center;gap:4px;
+  font-size:0.6667rem;font-weight:700;color:var(--accent-green);
+  letter-spacing:.5px;
+}
+
+/* DESKTOP TOP NAV */
+.desktop-header{
+  background:var(--bg-elevated);border-bottom:1px solid var(--border-soft);
+  height:60px;display:flex;align-items:center;padding:0 32px;gap:20px;
+  position:sticky;top:0;z-index:100;
+}
+.desktop-logo{font-size:1.2rem;font-weight:900;letter-spacing:2px;color:#fff;}
+.desktop-logo .dot{color:var(--accent-pink);}
+.desktop-nav{display:flex;gap:2px;margin-left:24px;}
+.desktop-nav a{
+  padding:7px 14px;border-radius:8px;font-size:0.8667rem;font-weight:600;
+  color:var(--text-soft);transition:all .15s;
+}
+.desktop-nav a:hover,.desktop-nav a.active{background:var(--bg-card);color:#fff;}
+.desktop-live-pill{
+  margin-left:auto;display:flex;align-items:center;gap:6px;
+  background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);
+  border-radius:100px;padding:6px 14px;font-size:0.8rem;font-weight:700;color:var(--accent-green);
+}
+
+/* ════════════════════════════════════════════════════
+   LIVE DOT
+════════════════════════════════════════════════════ */
+.live-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--accent-green);flex-shrink:0;
+  animation:pulse 1.4s infinite;
+}
+.live-dot-pink{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--accent-pink);flex-shrink:0;
+  animation:pulse 1.4s infinite;
+}
+
+/* ════════════════════════════════════════════════════
+   HOMEPAGE SECTIONS
+════════════════════════════════════════════════════ */
+.hero-section{padding:24px 20px 0;}
+.hero-welcome{font-size:0.8667rem;color:var(--text-muted);font-weight:500;margin-bottom:4px;}
+.hero-title{font-size:1.7333rem;font-weight:900;color:#fff;letter-spacing:-.5px;line-height:1.2;margin-bottom:6px;}
+.hero-sub{font-size:0.8667rem;color:var(--text-soft);line-height:1.5;margin-bottom:20px;}
+
+/* Main LIVE button */
+.btn-live-main{
+  display:flex;align-items:center;gap:14px;
+  background:linear-gradient(135deg,var(--accent-pink),#c0007a);
+  border-radius:16px;padding:16px 20px;width:100%;text-align:left;
+  box-shadow:0 8px 32px rgba(255,20,147,.25);
+  transition:transform .15s,box-shadow .15s;margin-bottom:24px;
+}
+.btn-live-main:active{transform:scale(.98);}
+.btn-live-main-icon{
+  width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;font-size:1.4667rem;flex-shrink:0;
+}
+.btn-live-main-label{font-size:1.0667rem;font-weight:800;color:#fff;letter-spacing:.5px;display:block;}
+.btn-live-main-sub{font-size:0.8rem;color:rgba(255,255,255,.7);font-weight:500;display:block;}
+.btn-live-main-arrow{margin-left:auto;font-size:1.4667rem;color:rgba(255,255,255,.4);}
+
+/* Disabled state (no live session) */
+.btn-live-main.no-live{
+  background:var(--bg-card);box-shadow:none;border:1px solid var(--border-soft);
+}
+.btn-live-main.no-live .btn-live-main-label{color:var(--text-muted);}
+.btn-live-main.no-live .btn-live-main-sub{color:var(--text-soft);}
+
+/* Section header row */
+.section-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;padding:0 20px;
+}
+.section-title-m{font-size:0.8667rem;font-weight:700;color:var(--text-main);}
+.section-link{font-size:0.8rem;color:var(--accent-pink);font-weight:600;}
+
+/* ─── EVENT CARDS ─────────────────────────────── */
+.padded{padding:0 20px;}
+
+/* Big event card */
+.event-card-big{
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:var(--radius-card);overflow:hidden;margin-bottom:16px;
+}
+.event-card-big-cover{
+  height:140px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#0d2040,#1a0830,#0a1a10);
+  display:flex;align-items:center;justify-content:center;
+}
+.event-card-big-cover img{
+  width:100%;height:100%;object-fit:cover;position:absolute;inset:0;
+}
+.event-card-big-cover-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,var(--bg-card) 0%,rgba(17,20,24,.4) 60%,transparent 100%);
+}
+.event-card-big-placeholder{position:relative;z-index:1;font-size:3.2rem;opacity:.2;}
+.event-card-big-body{padding:14px 16px 16px;}
+.event-card-big-name{font-size:1.1333rem;font-weight:800;color:#fff;margin-bottom:4px;line-height:1.3;}
+.event-card-big-meta{
+  font-size:0.8rem;color:var(--text-soft);margin-bottom:14px;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.event-card-big-meta-sep{color:var(--border-strong);}
+
+/* Small event cards (2 col grid) */
+.events-sm-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.event-card-sm{
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:var(--radius-sm);padding:12px;
+  transition:border-color .15s;
+}
+.event-card-sm:hover{border-color:rgba(255,255,255,.15);}
+.event-card-sm-name{font-size:0.8rem;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.4;}
+.event-card-sm-meta{font-size:0.7333rem;color:var(--text-soft);}
+
+/* Buttons inside cards */
+.btn-open-event{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(255,20,147,.1);border:1px solid rgba(255,20,147,.25);
+  color:var(--accent-pink);border-radius:12px;padding:11px;
+  font-size:0.8667rem;font-weight:700;width:100%;transition:background .15s;
+}
+.btn-open-event:hover{background:rgba(255,20,147,.18);}
+
+/* ─── BADGES ──────────────────────────────────── */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  border-radius:7px;padding:4px 9px;font-size:0.6667rem;font-weight:800;letter-spacing:.5px;
+}
+.badge-live{background:rgba(0,200,83,.12);color:var(--accent-green);border:1px solid rgba(0,200,83,.25);}
+.badge-upcoming{background:rgba(30,144,255,.1);color:var(--accent-blue);border:1px solid rgba(30,144,255,.2);}
+.badge-finished{background:rgba(111,119,132,.1);color:var(--text-soft);border:1px solid var(--border-soft);}
+.badge-new{background:rgba(255,20,147,.12);color:var(--accent-pink);}
+
+/* Old compat */
+.badge-live-old{color:var(--accent-green);font-size:0.8rem;font-weight:700;}
+
+/* ─── NOTIFICATION PREVIEW (homepage) ─────────── */
+.notif-preview-list{display:flex;flex-direction:column;gap:8px;}
+.notif-preview-item{
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:var(--radius-sm);padding:12px 14px;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.notif-preview-icon{
+  width:36px;height:36px;background:rgba(255,20,147,.08);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:1.0667rem;flex-shrink:0;
+}
+.notif-preview-type{font-size:0.6667rem;color:var(--text-soft);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.notif-preview-title{font-size:0.8667rem;font-weight:600;color:#fff;margin:2px 0;}
+.notif-preview-date{font-size:0.7333rem;color:var(--text-soft);}
+
+/* ─── BOTTOM NAVIGATION ───────────────────────── */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--bg-elevated);
+  border-top:1px solid var(--border-soft);
+  display:flex;z-index:200;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.bn-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:10px 4px 8px;gap:3px;
+  font-size:0.6667rem;font-weight:600;color:var(--text-soft);
+  transition:color .15s;
+}
+.bn-item.active{color:var(--accent-pink);}
+.bn-icon{font-size:1.3333rem;line-height:1;}
+@media(min-width:768px){.bottom-nav{display:none;}}
+
+/* ════════════════════════════════════════════════════
+   EVENT PAGE
+════════════════════════════════════════════════════ */
+
+/* Cover strip */
+.event-cover-strip{
+  height:110px;
+  background:linear-gradient(135deg,#0d2040 0%,#1a0830 50%,#0a1a10 100%);
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+/* Cover: cela slika (contain) + zamućena kopija iza (popuna) — bilo koja slika radi, nikad ne seče */
+.event-cover-strip .ecs-blur{
+  position:absolute;inset:0;width:100%;height:100%;
+  background-size:cover;background-position:center;
+  filter:blur(20px);transform:scale(1.12);z-index:1;
+}
+.event-cover-strip img.ecs-main{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:3;
+}
+.event-cover-strip-overlay{
+  position:absolute;inset:0;z-index:2;
+  background:linear-gradient(to bottom,rgba(11,13,16,.3),rgba(11,13,16,.7));
+}
+/* Placeholder iza slike (z-index:0); ostaje ako slika padne (onerror→remove) */
+.event-cover-strip-placeholder{position:absolute;inset:0;z-index:0;display:flex;align-items:center;justify-content:center;font-size:3.4rem;opacity:.25;}
+@media(min-width:768px){.event-cover-strip{height:180px;}}
+
+/* Event info card (below cover) */
+.event-info-card{
+  position:relative;
+  background:var(--bg-elevated);border-bottom:1px solid var(--border-soft);
+  padding:14px 20px 0;
+}
+.event-info-name{font-size:1.3333rem;font-weight:900;color:#fff;line-height:1.25;margin-bottom:4px;}
+.event-info-meta{font-size:0.8rem;color:var(--text-soft);display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-bottom:14px;}
+.event-info-sep{color:var(--border-strong);}
+@media(min-width:768px){.event-info-name{font-size:1.7333rem;}}
+
+/* ─── Share ikonica (Deljenje hub) — gornji desni ugao info-card ─── */
+.event-share-ico{
+  position:absolute;top:12px;right:16px;z-index:2;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:50%;
+  color:var(--text-soft);background:rgba(255,255,255,.06);
+  border:1px solid var(--border-soft);text-decoration:none;
+  transition:color .15s,background .15s,border-color .15s,transform .1s;
+}
+.event-share-ico:hover{color:#ffd76a;background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);}
+.event-share-ico:active{transform:scale(.94);}
+.event-share-ico svg{width:18px;height:18px;}
+@media(min-width:768px){.event-share-ico{top:18px;right:32px;}}
+/* Pravilnik dugme — pored deljenja (gore-desno) */
+.event-prav-ico{
+  position:absolute;top:12px;right:62px;z-index:2;
+  display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 13px;
+  border-radius:19px;color:var(--text-soft);background:rgba(255,255,255,.06);
+  border:1px solid var(--border-soft);text-decoration:none;
+  font-size:13px;font-weight:700;white-space:nowrap;
+  transition:color .15s,background .15s,border-color .15s,transform .1s;
+}
+.event-prav-ico:hover{color:#ffd76a;background:rgba(255,215,0,.12);border-color:rgba(255,215,0,.4);}
+.event-prav-ico:active{transform:scale(.96);}
+.event-prav-ico svg{width:16px;height:16px;}
+@media(min-width:768px){.event-prav-ico{top:18px;right:78px;}}
+
+/* ─── Online prijave CTA (komponenta) ─────────────
+   .reg-cta-wrap: full-bleed na mobilnom, centrirano (poravnato sa info-card) na desktopu.
+   Zelena iz --reg-cta-1/2 tokena (ne hardkod). */
+.reg-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin:14px 0;padding:14px 18px;border-radius:12px;
+  background:linear-gradient(90deg,var(--reg-cta-1),var(--reg-cta-2));
+  color:#fff;text-decoration:none;box-shadow:0 2px 12px rgba(11,143,60,.35);
+}
+.reg-cta-txt{font-weight:700;font-size:15px;}
+.reg-cta-deadline{font-weight:400;opacity:.9;}
+.reg-cta-btn{background:#fff;color:var(--reg-cta-1);font-weight:800;padding:9px 20px;border-radius:8px;white-space:nowrap;}
+.reg-closed{margin:14px 0;padding:10px 16px;border-radius:10px;background:#2a2d3a;color:#9aa3b2;font-size:13px;}
+@media(min-width:768px){
+  .reg-cta-wrap{max-width:1400px;margin:0 auto;padding:0 32px;}
+}
+
+/* 3 main tabs */
+.event-tabs{
+  display:flex;background:var(--bg-elevated);
+  border-bottom:1px solid var(--border-soft);
+  position:sticky;top:52px;z-index:90;
+}
+.ev-tab{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:13px 4px;font-size:0.8667rem;font-weight:700;
+  color:var(--text-soft);letter-spacing:.3px;
+  border:none;background:none;
+  border-bottom:2px solid transparent;
+  transition:all .15s;position:relative;
+}
+.ev-tab:hover{color:var(--text-main);}
+.ev-tab.active{color:var(--accent-pink);border-bottom-color:var(--accent-pink);}
+.ev-tab-notif{
+  position:absolute;top:8px;right:calc(50% - 22px);
+  background:var(--accent-pink);color:#fff;
+  font-size:0.6667rem;font-weight:800;border-radius:6px;padding:1px 5px;
+}
+
+/* Tab content */
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* Live status bar */
+.live-status-bar{
+  background:rgba(0,200,83,.05);border-bottom:1px solid rgba(0,200,83,.1);
+  padding:10px 20px;display:flex;align-items:center;gap:8px;
+}
+.live-status-label{font-size:0.8rem;font-weight:700;color:var(--accent-green);}
+.live-status-session{font-size:0.8rem;color:var(--text-muted);margin-left:4px;}
+.live-status-refresh{margin-left:auto;font-size:0.7333rem;color:var(--text-soft);}
+
+/* Session chips (horizontal scroll) */
+.session-chips{
+  display:flex;gap:6px;padding:12px 20px;
+  overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--border-soft);
+}
+.session-chips::-webkit-scrollbar{display:none;}
+.session-chip{
+  flex-shrink:0;padding:7px 14px;border-radius:100px;
+  font-size:0.8rem;font-weight:600;border:1px solid var(--border-soft);
+  color:var(--text-soft);background:var(--bg-card);white-space:nowrap;
+  transition:all .15s;text-decoration:none;
+}
+.session-chip:hover{border-color:rgba(255,255,255,.15);color:var(--text-main);}
+.session-chip.selected{
+  background:var(--accent-pink);color:#fff;border-color:var(--accent-pink);
+  box-shadow:0 4px 12px rgba(255,20,147,.25);
+}
+.session-chip.is-live{
+  border-color:rgba(0,200,83,.35);color:var(--accent-green);background:rgba(0,200,83,.06);
+}
+/* Discipline label pill in session chips (multi-discipline events) */
+.disc-label{
+  flex-shrink:0;padding:4px 10px;border-radius:100px;
+  font-size:0.6667rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  white-space:nowrap;align-self:center;
+}
+.disc-label-bt{background:rgba(255,20,147,.12);color:var(--accent-pink);border:1px solid rgba(255,20,147,.28);}
+.disc-label-as{background:rgba(30,144,255,.12);color:#60a5fa;border:1px solid rgba(30,144,255,.28);}
+.disc-label-sl{background:rgba(255,180,0,.10);color:#f0c060;border:1px solid rgba(255,180,0,.25);}
+.disc-label-def{background:rgba(255,255,255,.06);color:var(--text-soft);border:1px solid var(--border-soft);}
+/* Vertical separator between discipline groups */
+.disc-separator{
+  flex-shrink:0;align-self:stretch;width:1px;
+  background:var(--border-soft);margin:8px 6px;
+}
+
+/* ─── ON COURSE ─────────────────────────────── */
+.on-course-wrap{margin:12px 16px;}
+.on-course-card{
+  background:var(--bg-card);border:1px solid rgba(0,200,83,.12);
+  border-radius:var(--radius-sm);overflow:hidden;
+}
+.on-course-head{
+  padding:9px 14px;border-bottom:1px solid rgba(0,200,83,.08);
+  display:flex;align-items:center;gap:6px;
+  font-size:0.6667rem;font-weight:800;color:var(--accent-green);letter-spacing:1.5px;text-transform:uppercase;
+}
+.oc-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-bottom:1px solid var(--border-soft);
+}
+.oc-row:last-child{border-bottom:none;}
+.oc-bib{
+  width:36px;height:36px;background:rgba(255,20,147,.1);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9333rem;font-weight:800;color:var(--accent-pink);flex-shrink:0;
+}
+.oc-info{flex:1;min-width:0;}
+.oc-name{font-size:0.8667rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.oc-meta{font-size:0.7333rem;color:var(--text-soft);}
+.oc-splits{margin-top:4px;display:none;flex-wrap:wrap;gap:6px 12px;}
+.oc-split-item{font-size:0.7333rem;line-height:1.4;display:inline-flex;align-items:baseline;gap:4px;}
+
+/* Gap-ovi (lider, klasa) — odvojeni pill-ovi sa tabular-nums da brojevi ne skacu */
+.oc-gaps{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;justify-content:flex-end;}
+.oc-gap-pill{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;font-size:0.8667rem;font-weight:600;}
+.oc-gap-lbl{font-size:0.6667rem;color:var(--text-muted);text-transform:lowercase;letter-spacing:.3px;}
+.oc-gap-val{font-variant-numeric:tabular-nums;font-family:'Roboto Mono',monospace;min-width:48px;text-align:right;}
+@media(max-width:640px){
+  .oc-gaps{justify-content:flex-end;}
+  .oc-gap-pill{font-size:0.7333rem;}
+  .oc-gap-val{min-width:42px;font-size:0.7333rem;}
+}
+.oc-timer{
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:1.0667rem;font-weight:700;color:var(--status-warning);
+  white-space:nowrap;
+}
+/* "U cilju…" — kad elapsed pređe očekivano, ne prikazuje se rastući brojač */
+.oc-timer.oc-incilju{ color:var(--accent-green, var(--accent-green)); animation:oc-pulse 1.1s ease-in-out infinite; }
+.on-course-row.oc-finishing{ opacity:.92; }
+@keyframes oc-pulse{ 0%,100%{opacity:1;} 50%{opacity:.5;} }
+
+/* ─── RESULTS TABLE ─────────────────────────── */
+.results-wrap{padding:0 16px 20px;}
+.results-table{width:100%;border-collapse:collapse;font-size:0.8667rem;}
+.results-table th{
+  text-align:left;padding:10px 0;color:var(--text-soft);
+  font-size:0.6667rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;
+  border-bottom:1px solid var(--border-soft);
+}
+.results-table th:last-child,.results-table td:last-child{text-align:right;}
+.results-table th.hide-mobile,.results-table td.hide-mobile{display:none;}
+@media(min-width:640px){
+  .results-table th.hide-mobile,.results-table td.hide-mobile{display:table-cell;}
+}
+
+/* Startna lista — fixed table-layout sa kolonama u ravni */
+.sl-table th.hide-mobile, .sl-table td.hide-mobile { display: none; }
+.sl-table col.sl-col-veh,
+.sl-table col.sl-col-cls,
+.sl-table col.sl-col-team,
+.sl-table col.sl-col-nat { display: none; }
+@media(min-width:640px){
+  .sl-table th.hide-mobile, .sl-table td.hide-mobile { display: table-cell; }
+  .sl-table col.sl-col-veh  { display: table-column; width: 22%; }
+  .sl-table col.sl-col-cls  { display: table-column; width: 70px; }
+  .sl-table col.sl-col-team { display: table-column; width: 22%; }
+  .sl-table col.sl-col-nat  { display: table-column; width: 60px; }
+}
+.sl-stab:hover { background:#1f1f2a !important; color:#fff !important; }
+.results-table td{padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+/* Gušći redovi na desktopu — manje skrolovanja za 100+ vozača */
+@media(min-width:900px){ .results-table td{padding:7px 0;} }
+.results-table tr:hover td{background:rgba(255,255,255,.02);}
+
+/* Position column */
+.res-pos{font-weight:800;font-size:0.9333rem;width:24px;padding-right:6px;}
+.res-pos.p1{color:#FFD700;}
+.res-pos.p2{color:#C0C0C0;}
+.res-pos.p3{color:#CD7F32;}
+
+/* Name column */
+.res-name{font-size:0.8667rem;font-weight:700;color:#fff;}
+.res-club{font-size:0.7333rem;color:var(--text-soft);}
+/* Vozilo inline — vidljivo SAMO na mobile (na desktop postoji posebna 'Vozilo' kolona) */
+.res-vehicle-inline{display:block;font-size:0.7333rem;color:var(--text-muted,#888);margin-top:1px;font-style:italic;}
+@media(min-width:640px){.res-vehicle-inline{display:none;}}
+
+/* Prosečna brzina — mala oznaka ispod gap-a u res-time-cell */
+.res-speed-inline{font-size:0.6667rem;color:var(--text-muted,#888);font-family:'Roboto Mono',monospace;letter-spacing:.2px;}
+/* Krugovi u redu rezultata (auto-kros) — na mestu gde za ostale discipline stoji
+   prosecna brzina. Najbrzi krug je roze, isto kao u KT widgetu. */
+.res-laps-inline{font-size:0.6667rem;color:var(--text-muted,#888);font-family:'Roboto Mono',monospace;letter-spacing:.2px;}
+.res-lap-item.is-best{color:var(--accent-pink);font-weight:700;}
+
+/* ─── PLASMAN tab (SAKSS bodovi) ──────────────────── */
+.pts-chip-bar{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border-soft,#2a2d3a);align-items:center;}
+.pts-chip{padding:7px 14px;border-radius:18px;font-size:0.8333rem;font-weight:600;background:#161821;color:var(--text-soft,#9ca3af);text-decoration:none;border:1px solid var(--border-soft,#2a2d3a);white-space:nowrap;}
+.pts-chip:hover{background:#1c1f2a;color:#fff;}
+.pts-chip.active{background:var(--accent-pink,var(--accent-pink));color:#fff;border-color:var(--accent-pink,var(--accent-pink));}
+.pts-chip.active-ns{background:var(--accent-blue,var(--accent-blue));border-color:var(--accent-blue,var(--accent-blue));}
+.pts-chip.disabled{opacity:.35;pointer-events:none;}
+.pts-chip-sep{width:1px;background:var(--border-soft,#2a2d3a);height:24px;margin:0 4px;}
+.pts-table{width:100%;border-collapse:collapse;font-size:0.8667rem;background:#0b0c10;}
+.pts-table th{text-align:left;padding:9px 10px;background:#161821;color:var(--text-soft,#9ca3af);font-weight:600;font-size:0.7rem;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border-soft,#2a2d3a);}
+.pts-table td{padding:8px 10px;border-bottom:1px solid #1f2230;}
+.pts-table .num{text-align:right;font-family:'Roboto Mono',monospace;}
+.pts-table .pts-val{font-weight:700;color:#FFD700;}
+.pts-pos{font-weight:800;width:36px;}
+.pts-pos.p1{color:#FFD700;}
+.pts-pos.p2{color:#C0C0C0;}
+.pts-pos.p3{color:#CD7F32;}
+.pts-team{font-size:0.7333rem;color:var(--text-soft,#9ca3af);}
+.pts-veh{font-size:0.7333rem;color:var(--text-muted,#888);font-style:italic;display:block;margin-top:1px;}
+.pts-class-badge{display:inline-block;padding:1px 6px;border-radius:4px;background:rgba(30,144,255,.12);color:var(--accent-blue,var(--accent-blue));font-size:0.6667rem;font-weight:700;}
+.pts-ref{display:inline-block;padding:1px 5px;background:rgba(30,144,255,.12);color:var(--accent-blue,var(--accent-blue));font-size:0.6667rem;font-weight:700;border-radius:3px;margin-left:4px;}
+.pts-section{background:#161821;padding:9px 12px;margin:16px 0 0;font-size:0.8667rem;font-weight:700;color:#fff;border:1px solid var(--border-soft,#2a2d3a);border-radius:6px 6px 0 0;border-bottom:none;}
+.pts-section-meta{font-weight:400;color:var(--text-soft,#9ca3af);font-size:0.7333rem;margin-left:6px;}
+.pts-section.full{color:#86efac;}
+.pts-section.half{color:#fbbf24;}
+.pts-section.ref{color:var(--accent-blue,var(--accent-blue));}
+.pts-section.none{color:#666;}
+
+/* Class badge (standalone column on desktop, hidden on mobile) */
+.col-class{display:none;}
+@media(min-width:640px){.col-class{display:table-cell;}}
+
+/* Class badge inline (shown in name cell on mobile, hidden on desktop) */
+.res-class-inline{
+  display:inline-block;margin-top:3px;
+  padding:2px 6px;border-radius:5px;
+  font-size:0.6667rem;font-weight:700;color:var(--accent-blue);
+  background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.18);
+  white-space:nowrap;
+}
+@media(min-width:640px){.res-class-inline{display:none;}}
+
+/* Standalone class badge (in col-class) */
+.res-class{
+  display:inline-block;padding:3px 7px;border-radius:6px;
+  font-size:0.7333rem;font-weight:700;color:var(--accent-blue);
+  background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.18);
+  white-space:nowrap;
+}
+
+/* Time+gap cell */
+.res-time-cell{text-align:right;white-space:nowrap;min-width:80px;}
+.res-time{
+  display:block;
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:0.8667rem;font-weight:700;color:#fff;white-space:nowrap;
+}
+.res-gap{
+  display:block;
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:0.7333rem;color:var(--text-muted);white-space:nowrap;
+  margin-top:1px;
+}
+/* (Faza 2B) Drugi red: razlika od takmičara ispred — piše ga assets/js/gap-ahead.js */
+.res-gap-ahead{
+  display:block;
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:0.6667rem;color:var(--text-soft);white-space:nowrap;
+}
+
+/* Live flash */
+.new-passing-flash{animation:flash-row .8s ease-out;}
+
+/* (Doc 82 Faza 4F, §15.11) Kokpit-verifikacija — "taj red je u listi označen".
+   Reuse postojeći flash-row keyframe, samo ponovljen da preživi scrollIntoView animaciju. */
+.rd-verify-highlight{animation:flash-row .8s ease-out 3;}
+
+/* Old results table compat */
+.results-table .pos{font-weight:700;color:#fff;width:36px;}
+.results-table .bib{
+  width:44px;background:var(--bg-card);border-radius:4px;
+  text-align:center;font-weight:700;color:var(--text-soft);
+}
+.results-table .time{font-family:'SF Mono','Consolas',monospace;color:#fff;}
+.results-table .gap{font-family:'SF Mono','Consolas',monospace;color:var(--text-soft);font-size:0.8rem;}
+.results-table .name{font-weight:600;}
+.results-table .class-badge{
+  display:inline-block;padding:2px 7px;border-radius:6px;
+  font-size:0.7333rem;background:rgba(30,144,255,.1);color:var(--accent-blue);
+  border:1px solid rgba(30,144,255,.18);
+}
+.pos-1{color:#FFD700 !important;}
+.pos-2{color:#C0C0C0 !important;}
+.pos-3{color:#CD7F32 !important;}
+.flag{font-size:1.0667rem;line-height:1;}
+
+/* Class filter chips */
+.class-filter{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 16px;}
+.class-chip{
+  padding:5px 14px;border-radius:100px;border:1px solid var(--border-soft);
+  font-size:0.8rem;font-weight:600;color:var(--text-soft);background:var(--bg-card);
+}
+.class-chip.active{
+  background:var(--accent-pink);color:#fff;border-color:var(--accent-pink);
+}
+/* (T1.16) Brdo: noseće klase i njihove grupe u dva reda */
+.class-chip.active-parent{border-color:var(--accent-pink);color:var(--accent-pink);}
+.class-subrow{flex-basis:100%;flex-wrap:wrap;gap:6px;padding-left:12px;border-left:2px solid var(--border-soft);}
+.class-chip--grp{font-size:0.7467rem;padding:4px 12px;}
+.res-class-grp{font-size:0.8em;font-weight:500;color:var(--text-soft);}
+
+/* ─── RESULTS LIST (tab) ───────────────────── */
+.results-list-section{padding:12px 16px;}
+.rlist-group-label{
+  font-size:0.6667rem;font-weight:700;color:var(--text-soft);letter-spacing:1.5px;
+  text-transform:uppercase;margin:16px 0 8px;
+}
+.rlist-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:var(--radius-sm);padding:14px;margin-bottom:6px;
+  transition:border-color .15s;text-decoration:none;
+}
+.rlist-item:hover{border-color:rgba(255,255,255,.12);}
+.rlist-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;
+}
+.icon-bg-pink{background:rgba(255,20,147,.1);}
+.icon-bg-blue{background:rgba(30,144,255,.1);}
+.icon-bg-amber{background:rgba(255,176,32,.1);}
+.icon-bg-muted{background:rgba(111,119,132,.1);}
+.rlist-info{flex:1;min-width:0;}
+.rlist-name{font-size:0.9333rem;font-weight:700;color:#fff;}
+.rlist-meta{font-size:0.7333rem;color:var(--text-soft);margin-top:2px;}
+.rlist-badge{
+  display:inline-block;margin-top:5px;
+  font-size:0.6667rem;font-weight:800;padding:3px 8px;border-radius:6px;
+}
+.rlist-arrow{color:var(--text-soft);font-size:1.0667rem;flex-shrink:0;}
+
+/* ─── DOCUMENTS / OBAVJEŠTENJA ─────────────── */
+.doc-filter{
+  display:flex;gap:6px;padding:12px 16px;
+  overflow-x:auto;scrollbar-width:none;
+  border-bottom:1px solid var(--border-soft);
+}
+.doc-filter::-webkit-scrollbar{display:none;}
+.doc-filter-chip{
+  flex-shrink:0;padding:6px 12px;border-radius:100px;
+  font-size:0.7333rem;font-weight:600;border:1px solid var(--border-soft);
+  color:var(--text-soft);background:var(--bg-card);white-space:nowrap;
+}
+.doc-filter-chip.active{
+  background:rgba(255,20,147,.1);color:var(--accent-pink);border-color:rgba(255,20,147,.25);
+}
+.doc-list-section{padding:12px 16px;}
+.doc-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;
+}
+.doc-type-badge{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7333rem;font-weight:800;letter-spacing:.5px;
+}
+/* (18.09.2026) U kockici je ikonica vrste dokumenta, ne tekst „PDF/LINK" — includes/doc_icons.php */
+.doc-type-badge svg{width:22px;height:22px;display:block;}
+.doc-type-badge.doc-ico-md{width:36px;height:36px;border-radius:8px;}
+.doc-type-badge.doc-ico-md svg{width:19px;height:19px;}
+.doc-type-badge.doc-ico-sm{width:28px;height:28px;border-radius:7px;}
+.doc-type-badge.doc-ico-sm svg{width:15px;height:15px;}
+.doc-pdf{background:rgba(255,59,92,.12);color:#FF3B5C;}
+.doc-xls{background:rgba(0,200,83,.08);color:var(--accent-green);}
+.doc-doc{background:rgba(30,144,255,.1);color:var(--accent-blue);}
+.doc-img{background:rgba(255,176,32,.1);color:var(--status-warning);}
+.doc-info{flex:1;min-width:0;}
+.doc-name{font-size:0.8667rem;font-weight:700;color:#fff;margin-bottom:3px;}
+.doc-meta{font-size:0.7333rem;color:var(--text-soft);}
+.doc-download{
+  width:40px;height:40px;background:var(--bg-card-soft);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:var(--text-soft);flex-shrink:0;
+  text-decoration:none;transition:color .15s;
+}
+.doc-download:hover{color:var(--accent-pink);}
+
+/* Old notifications compat */
+.notif-list{display:flex;flex-direction:column;gap:10px;}
+.notif-card{
+  background:var(--bg-card);border:1px solid var(--border-soft);border-radius:var(--radius-sm);
+  padding:16px;display:flex;align-items:flex-start;gap:14px;
+}
+.notif-icon{font-size:1.4667rem;flex-shrink:0;}
+.notif-type{font-size:0.6667rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-soft);margin-bottom:4px;}
+.notif-title{font-size:0.9333rem;font-weight:600;color:#fff;}
+.notif-date{font-size:0.7333rem;color:var(--text-soft);margin-top:4px;}
+.notif-pdf{
+  display:inline-block;margin-top:8px;padding:5px 12px;
+  background:var(--bg-card-soft);border:1px solid var(--border-soft);
+  border-radius:6px;font-size:0.8rem;color:var(--text-muted);
+}
+.notif-pdf:hover{color:#fff;}
+
+/* ════════════════════════════════════════════════════
+   STARTLIST
+════════════════════════════════════════════════════ */
+.startlist-table{width:100%;border-collapse:collapse;font-size:0.8667rem;}
+.startlist-table th{
+  text-align:left;padding:10px 12px;font-size:0.6667rem;
+  text-transform:uppercase;letter-spacing:1.5px;color:var(--text-soft);
+  border-bottom:1px solid var(--border-soft);
+}
+.startlist-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);}
+.startlist-table tr:hover td{background:rgba(255,255,255,.02);}
+.champ-ns{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  background:rgba(30,144,255,.1);color:var(--accent-blue);font-size:0.6667rem;font-weight:700;
+}
+.champ-os{
+  display:inline-block;padding:1px 5px;border-radius:3px;
+  background:rgba(0,200,83,.1);color:var(--accent-green);font-size:0.6667rem;font-weight:700;
+}
+
+/* ════════════════════════════════════════════════════
+   DESKTOP LAYOUT — event page
+════════════════════════════════════════════════════ */
+@media(min-width:768px){
+  .event-cover-strip{height:180px;}
+  .event-tabs{top:60px;}
+
+  .dt-body{
+    max-width:1200px;margin:0 auto;
+    padding:24px;display:grid;
+    grid-template-columns:1fr 340px;gap:24px;align-items:start;
+  }
+  .dt-sidebar{position:sticky;top:calc(60px + 46px + 14px);}
+  .dt-sidebar-card{
+    background:var(--bg-card);border:1px solid var(--border-soft);
+    border-radius:var(--radius-card);padding:18px;margin-bottom:12px;
+  }
+  .dt-sidebar-title{
+    font-size:0.6667rem;font-weight:700;color:var(--text-soft);
+    letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;
+  }
+}
+@media(max-width:767px){
+  .dt-body{display:block;}
+  .dt-sidebar{display:none;}
+}
+
+/* ════════════════════════════════════════════════════
+   LOADING SPINNER
+════════════════════════════════════════════════════ */
+.spinner{
+  width:32px;height:32px;border:3px solid var(--border-soft);
+  border-top-color:var(--accent-pink);border-radius:50%;
+  animation:spin .8s linear infinite;margin:40px auto;
+}
+
+/* ════════════════════════════════════════════════════
+   HOMEPAGE — DESKTOP GRID
+════════════════════════════════════════════════════ */
+
+/* Desktop "Uživo sada" header bar */
+.dt-hero-bar{
+  display:none; /* mobile: hidden */
+  background:var(--bg-elevated);
+  border-bottom:1px solid var(--border-soft);
+  padding:16px 32px;
+  align-items:center;gap:16px;
+}
+.dt-hero-left{display:flex;align-items:center;gap:10px;}
+.dt-hero-title{
+  font-size:1.4667rem;font-weight:900;color:#fff;letter-spacing:-.5px;
+  display:flex;align-items:center;gap:8px;
+}
+.dt-hero-sub{font-size:0.9333rem;color:var(--text-soft);font-weight:400;}
+.dt-hero-center{margin-left:auto;text-align:center;}
+.dt-clock{
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:1.4667rem;font-weight:700;color:#fff;letter-spacing:2px;
+}
+.dt-clock-label{font-size:0.6667rem;color:var(--text-soft);letter-spacing:1px;text-transform:uppercase;}
+.dt-hero-btn{
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:10px;padding:10px 18px;
+  font-size:0.8667rem;font-weight:700;color:#fff;white-space:nowrap;
+  transition:border-color .15s;margin-left:16px;
+}
+.dt-hero-btn:hover{border-color:rgba(255,255,255,.2);}
+
+/* 3-column grid */
+.home-grid{
+  display:block; /* mobile: single column */
+}
+.home-col-results,.home-col-sidebar{display:none;} /* mobile: hidden */
+
+/* Event card in grid col 1 */
+.hg-event-card{
+  display:block;background:var(--bg-card);
+  border:1px solid var(--border-soft);border-radius:var(--radius-card);
+  overflow:hidden;transition:border-color .15s;
+  margin:16px 20px 0;
+}
+@media(min-width:768px){.hg-event-card{margin:0;}}
+.hg-event-card:hover{border-color:rgba(255,255,255,.14);}
+.hg-cover{
+  height:180px;background-size:cover;background-position:center;
+  background-color:var(--bg-elevated);position:relative;
+}
+.hg-cover-placeholder{display:flex;align-items:center;justify-content:center;}
+.hg-cover-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.7));
+}
+.hg-cover-badge{position:absolute;top:12px;left:12px;z-index:1;}
+.hg-event-body{padding:16px;}
+.hg-event-disc{
+  font-size:0.6667rem;font-weight:700;color:var(--accent-green);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;
+}
+.hg-event-name{font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:8px;line-height:1.25;}
+.hg-event-meta{
+  display:flex;flex-direction:column;gap:4px;
+  font-size:0.8rem;color:var(--text-soft);margin-bottom:12px;
+}
+@media(min-width:768px){.hg-event-meta{flex-direction:row;gap:12px;}}
+.hg-live-status{
+  display:flex;align-items:center;gap:6px;
+  font-size:0.8rem;font-weight:700;color:var(--accent-green);
+  margin-bottom:12px;
+}
+.hg-event-btn{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--accent-pink),#c0007a);
+  color:#fff;font-size:0.8667rem;font-weight:700;
+  padding:10px 18px;border-radius:10px;
+}
+
+/* Others list */
+.hg-others-list{margin-top:8px;padding:0 20px 16px;}
+@media(min-width:768px){.hg-others-list{padding:0;margin-top:10px;}}
+.hg-other-item{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:10px 0;border-bottom:1px solid var(--border-soft);
+}
+.hg-other-item:last-child{border-bottom:none;}
+.hg-other-name{font-size:0.8667rem;font-weight:600;color:#fff;flex:1;}
+.hg-other-date{font-size:0.7333rem;color:var(--text-soft);}
+
+/* Home grid cards (cols 2 & 3) */
+.hg-card{
+  background:var(--bg-card);border:1px solid var(--border-soft);
+  border-radius:var(--radius-card);overflow:hidden;height:100%;
+  display:flex;flex-direction:column;
+}
+.hg-card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--border-soft);
+  flex-shrink:0;
+}
+.hg-card-title{font-size:0.8667rem;font-weight:700;color:#fff;}
+.hg-card-count{
+  background:var(--accent-pink);color:#fff;
+  font-size:0.6667rem;font-weight:800;border-radius:100px;padding:2px 8px;
+}
+.hg-card-footer-link{
+  display:block;text-align:center;
+  padding:12px;border-top:1px solid var(--border-soft);
+  font-size:0.8rem;font-weight:700;color:var(--accent-pink);
+  margin-top:auto;
+}
+.hg-card-footer-link:hover{background:rgba(255,20,147,.05);}
+
+/* Mini results table */
+.hg-results-table{width:100%;border-collapse:collapse;font-size:0.8rem;flex:1;}
+.hg-results-table th{
+  padding:8px 10px;border-bottom:1px solid var(--border-soft);
+  font-size:0.6667rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-soft);text-align:left;
+}
+.hg-results-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04);}
+.hgr-pos{font-weight:800;font-size:0.8667rem;width:28px;}
+.hgr-pos.p1{color:#FFD700;} .hgr-pos.p2{color:#C0C0C0;} .hgr-pos.p3{color:#CD7F32;}
+.hgr-bib{font-weight:700;color:var(--text-muted);width:30px;}
+.hgr-name{font-weight:600;color:#fff;}
+.hgr-class{
+  font-size:0.6667rem;font-weight:700;color:var(--accent-blue);
+  background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.18);
+  border-radius:4px;padding:1px 5px;white-space:nowrap;
+}
+.hgr-time{
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:0.8rem;text-align:right;color:var(--text-muted);
+}
+.hgr-time-best{color:var(--accent-pink);font-weight:700;}
+
+/* Docs in sidebar */
+.hg-doc-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+}
+.hg-doc-item:last-of-type{border-bottom:none;}
+.hg-doc-icon{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:0.9333rem;
+}
+.hg-doc-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.hg-doc-name{font-size:0.8rem;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hg-doc-meta{font-size:0.6667rem;color:var(--text-soft);}
+.hg-doc-type{
+  font-size:0.6667rem;font-weight:800;border-radius:4px;padding:2px 5px;
+  flex-shrink:0;letter-spacing:.5px;
+}
+.hg-new-badge{
+  display:inline-block;background:var(--accent-pink);color:#fff;
+  font-size:0.6667rem;font-weight:800;border-radius:3px;padding:1px 4px;
+  margin-left:4px;vertical-align:middle;letter-spacing:.3px;
+}
+.hg-card-empty{background:rgba(255,255,255,.02);}
+
+/* Events horizontal scroll */
+.home-events-section{
+  padding:24px 20px;margin-top:8px;
+  border-top:1px solid var(--border-soft);
+}
+.home-events-head{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;
+}
+.home-events-title{font-size:1.0667rem;font-weight:700;color:#fff;}
+.home-events-link{font-size:0.8rem;font-weight:700;color:var(--accent-pink);}
+.home-events-scroll{
+  display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;
+}
+.home-events-scroll::-webkit-scrollbar{display:none;}
+.hes-card{
+  flex-shrink:0;width:180px;background:var(--bg-card);
+  border:1px solid var(--border-soft);border-radius:var(--radius-sm);
+  overflow:hidden;transition:border-color .15s;
+}
+.hes-card:hover{border-color:rgba(255,255,255,.14);}
+.hes-cover{
+  height:100px;background-size:cover;background-position:center;
+  background-color:var(--bg-elevated);position:relative;
+}
+.hes-cover-empty{background:linear-gradient(135deg,#0f1318,#1a2030);
+  display:flex;align-items:center;justify-content:center;font-size:1.8667rem;}
+.hes-status{position:absolute;top:8px;left:8px;}
+.hes-body{padding:10px;}
+.hes-name{font-size:0.8rem;font-weight:700;color:#fff;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hes-disc{font-size:0.6667rem;color:var(--accent-green);font-weight:600;margin-bottom:2px;}
+.hes-date{font-size:0.6667rem;color:var(--text-soft);margin-bottom:8px;}
+.hes-btn{
+  display:block;text-align:center;font-size:0.7333rem;font-weight:700;
+  color:var(--accent-pink);background:rgba(255,20,147,.08);
+  border-radius:6px;padding:5px;
+}
+.hes-btn-muted{color:var(--text-soft);background:rgba(255,255,255,.04);}
+
+/* Mobile notifs section */
+.mobile-notifs-section{padding:20px 0;}
+
+/* Desktop grid activation */
+@media(min-width:900px){
+  .dt-hero-bar{display:flex;}
+  .hero-section{display:none;} /* Hide mobile hero on desktop */
+  .home-grid{
+    display:grid;
+    grid-template-columns:1fr 1.2fr 0.9fr;
+    gap:20px;
+    max-width:1400px;margin:0 auto;padding:24px 32px 0;
+    align-items:start;
+  }
+  .home-col-results,.home-col-sidebar{display:block;}
+  .hg-event-card{margin:0;}
+  .hg-others-list{padding:0;}
+  .home-events-section{max-width:1400px;margin:0 auto;padding:20px 32px 24px;}
+  .mobile-notifs-section{display:none;}
+}
+@media(min-width:768px) and (max-width:899px){
+  .dt-hero-bar{display:flex;}
+  .hero-section{display:none;}
+  .home-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:16px;
+    padding:20px 24px 0;
+  }
+  .home-col-results{display:block;}
+  .home-col-sidebar{display:none;}
+  .hg-event-card{margin:0;}
+  .mobile-notifs-section{display:none;}
+}
+
+/* ════════════════════════════════════════════════════
+   EVENT PAGE — DESKTOP 2-COLUMN + STATS CARDS
+════════════════════════════════════════════════════ */
+
+/* Event header — desktop: integrate cover image */
+@media(min-width:900px){
+  /* Hide separate cover strip on desktop */
+  .event-cover-strip.dt-hide{display:none;}
+  .event-info-card{max-width:1400px;margin:0 auto;padding:20px 32px 0;}
+  .event-tabs{max-width:1400px;margin:0 auto;}
+
+  /* Stats cards row */
+  .dt-stats-row{
+    display:flex;gap:12px;
+    max-width:1400px;margin:0 auto;padding:16px 32px 0;
+  }
+  .dt-stat-card{
+    flex:1;background:var(--bg-card);border:1px solid var(--border-soft);
+    border-radius:var(--radius-sm);padding:14px 16px;
+  }
+  .dt-stat-label{font-size:0.6667rem;font-weight:700;color:var(--text-soft);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+  .dt-stat-value{font-size:1rem;font-weight:800;color:#fff;}
+  .dt-stat-sub{font-size:0.7333rem;color:var(--text-soft);margin-top:2px;}
+  .dt-stat-value.val-pink{color:var(--accent-pink);}
+  .dt-stat-value.val-green{color:var(--accent-green);}
+
+  /* 2-column layout for tabs content */
+  .dt-tab-body{
+    max-width:1400px;margin:0 auto;
+    display:grid;grid-template-columns:1fr 320px;gap:20px;
+    padding:20px 32px 40px;align-items:start;
+  }
+  .dt-main-col{min-width:0;}
+  .dt-sidebar-col{
+    position:sticky;top:calc(56px + 52px + 46px + 10px);
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .dt-sidebar-card{
+    background:var(--bg-card);border:1px solid var(--border-soft);
+    border-radius:var(--radius-card);overflow:hidden;
+  }
+  .dt-sidebar-head{
+    padding:12px 14px;border-bottom:1px solid var(--border-soft);
+    font-size:0.8rem;font-weight:700;color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .dt-sidebar-count{
+    background:var(--accent-pink);color:#fff;
+    font-size:0.6667rem;font-weight:800;border-radius:100px;padding:2px 7px;
+  }
+  .dt-sidebar-doc{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+    text-decoration:none;transition:background .1s;
+  }
+  .dt-sidebar-doc:hover{background:rgba(255,255,255,.02);}
+  .dt-sidebar-doc-icon{
+    width:30px;height:30px;border-radius:7px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:0.8667rem;
+  }
+  .dt-sidebar-doc-info{flex:1;min-width:0;}
+  .dt-sidebar-doc-name{font-size:0.8rem;font-weight:600;color:#fff;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dt-sidebar-doc-type{font-size:0.6667rem;font-weight:800;color:var(--text-soft);}
+  .dt-sidebar-footer{
+    padding:10px 14px;text-align:center;
+    font-size:0.7333rem;font-weight:700;color:var(--accent-pink);
+    border-top:1px solid var(--border-soft);
+  }
+  .dt-sidebar-footer:hover{background:rgba(255,20,147,.04);}
+
+  /* Class order in sidebar */
+  /* 2 reda: klasa-badge gore (svoj red), ime + bodovi dole — da dugačak
+     naziv klase (npr. "Klasa 1 do 1150 ccm Yugo 55 Sport - Hibrid") ne gužva red */
+  .dt-class-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    grid-template-areas:"badge badge" "name time";
+    align-items:baseline;gap:4px 8px;
+    padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+    font-size:0.8rem;
+  }
+  .dt-class-row:last-child{border-bottom:none;}
+  .dt-class-badge{
+    grid-area:badge;justify-self:start;max-width:100%;
+    font-size:0.6667rem;font-weight:700;color:var(--accent-blue);
+    background:rgba(30,144,255,.1);border:1px solid rgba(30,144,255,.18);
+    border-radius:4px;padding:2px 7px;text-align:center;
+    white-space:normal;line-height:1.25;
+  }
+  .dt-class-name{grid-area:name;min-width:0;color:#fff;font-weight:600;}
+  /* (T1.16) red grupe ispod noseće klase: uvučen, tiši natpis */
+  .dt-class-row--grp{padding-left:26px;}
+  .dt-class-row--grp .dt-class-badge{font-weight:600;background:transparent;border-color:rgba(255,255,255,.12);color:var(--text-soft);}
+  .dt-class-time{
+    grid-area:time;justify-self:end;white-space:nowrap;
+    font-family:'Roboto Mono','SF Mono',monospace;
+    font-size:0.7333rem;color:var(--accent-pink);font-weight:700;
+  }
+
+  /* Sidebar doc download arrow */
+  .dt-sidebar-doc-name{flex:1;font-size:0.8rem;font-weight:600;color:#fff;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .dt-sidebar-doc-dl{
+    font-size:0.9333rem;color:var(--text-soft);flex-shrink:0;
+    transition:color .15s;
+  }
+  .dt-sidebar-doc:hover .dt-sidebar-doc-dl{color:var(--accent-blue);}
+
+  /* Sidebar notifications */
+  .dt-notif-row{
+    display:flex;align-items:flex-start;gap:8px;
+    padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+  }
+  .dt-notif-row:last-of-type{border-bottom:none;}
+  .dt-notif-icon{font-size:0.9333rem;flex-shrink:0;line-height:1.4;}
+  .dt-notif-title{font-size:0.8rem;font-weight:600;color:#fff;line-height:1.3;}
+  .dt-notif-time{font-size:0.6667rem;color:var(--text-soft);margin-top:2px;}
+
+  /* Download buttons */
+  .dt-download-row{
+    display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px;
+  }
+  .dt-dl-btn{
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    background:var(--bg-card-soft);border:1px solid var(--border-soft);
+    border-radius:8px;padding:9px 8px;
+    font-size:0.8rem;font-weight:700;color:#fff;text-decoration:none;
+    transition:border-color .15s;
+  }
+  .dt-dl-btn:hover{border-color:rgba(255,255,255,.2);}
+  .dt-dl-btn.pdf{color:#FF3B5C;border-color:rgba(255,59,92,.2);}
+  .dt-dl-btn.pdf:hover{border-color:rgba(255,59,92,.4);}
+  .dt-dl-btn.xls{color:var(--accent-green);border-color:rgba(0,200,83,.2);}
+  .dt-dl-btn.xls:hover{border-color:rgba(0,200,83,.4);}
+}
+
+/* Restyle existing on mobile — hide desktop sidebar */
+.dt-stats-row,.dt-tab-body .dt-sidebar-col{display:none;}
+@media(min-width:900px){
+  .dt-stats-row{display:flex;}
+  .dt-tab-body .dt-sidebar-col{display:flex;}
+}
+
+/* ════════════════════════════════════════════════════
+   TOP NAV (universal responsive header)
+════════════════════════════════════════════════════ */
+.top-nav{
+  background:#101828;
+  border-bottom:2px solid rgba(255,255,255,0.10);
+  box-shadow:0 2px 20px rgba(0,0,0,.5);
+  height:60px;
+  position:sticky;top:0;z-index:200;
+}
+/* Thin accent stripe at very top */
+.top-nav::before{
+  content:'';display:block;position:absolute;top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent-pink),#7b00e6,var(--accent-blue));
+}
+.tn-inner{
+  max-width:1280px;margin:0 auto;
+  padding:0 24px;height:100%;
+  display:flex;align-items:center;gap:0;
+}
+/* Logo area */
+.tn-logo{
+  display:flex;align-items:center;flex-shrink:0;
+  padding-right:28px;margin-right:8px;
+  border-right:1px solid rgba(255,255,255,0.10);
+}
+.tn-logo-img{
+  height:36px;width:auto;display:block;
+  filter:brightness(1.3) contrast(1.1) drop-shadow(0 0 6px rgba(255,20,147,0.25));
+}
+/* Nav links */
+.tn-links{
+  display:none;
+  gap:0;margin-left:0;height:100%;align-items:stretch;
+}
+.tn-links a{
+  display:flex;align-items:center;
+  padding:0 16px;
+  font-size:0.8667rem;font-weight:600;letter-spacing:.2px;
+  color:#8A95A3;
+  transition:color .15s;
+  position:relative;white-space:nowrap;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px; /* align to nav bottom border */
+}
+.tn-links a:hover{color:#D4D8DE;}
+.tn-links a.active{
+  color:#fff;
+  border-bottom-color:var(--accent-pink);
+}
+/* Right section */
+.tn-right{margin-left:auto;display:flex;align-items:center;gap:12px;}
+.tn-live-pill{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.28);
+  border-radius:100px;padding:7px 16px;
+  font-size:0.8rem;font-weight:800;color:#00E565;
+  white-space:nowrap;letter-spacing:.5px;
+  box-shadow:0 0 12px rgba(0,200,83,.15);
+}
+.tn-live-pill:hover{background:rgba(0,200,83,.2);}
+
+@media(min-width:768px){
+  .tn-links{display:flex;}
+  .mobile-header{display:none;}
+  .event-header{top:60px;}
+  .event-header-desktop-links{display:flex;gap:2px;margin-left:16px;}
+  .event-header-desktop-links a{
+    padding:6px 12px;border-radius:8px;font-size:0.8rem;font-weight:600;
+    color:var(--text-soft);transition:all .15s;
+  }
+  .event-header-desktop-links a:hover{color:#fff;background:rgba(255,255,255,.06);}
+  .event-page-wrap{padding-top:0;}
+}
+@media(max-width:767px){
+  .event-header-desktop-links{display:none;}
+  .top-nav + .page-body{padding-bottom:80px;}
+  .tn-logo{border-right:none;padding-right:0;}
+  .tn-logo-img{height:32px;}
+  /* MOBILE STICKY FIX (2026-05-25):
+   * Body ima overflow-x:hidden zbog horizontal scroll prevention,
+   * to lomi position:sticky na iOS Safari + stari Android. Koristimo
+   * position:fixed (kao bottom-nav) + body padding-top da kompenzuje.
+   */
+  .top-nav{
+    height:54px;
+    position:fixed;
+    top:0;left:0;right:0;
+    width:100%;
+  }
+  body{padding-top:54px;}
+  /* Ako page sam dodaje padding-top (npr. event-page-wrap), ne dupliciraj */
+  .event-page-wrap{padding-top:0;}
+}
+
+/* Event tabs adjust for top-nav */
+@media(min-width:768px){
+  .event-tabs{top:calc(60px + 52px);}
+}
+
+/* ════════════════════════════════════════════════════
+   LIVE.PHP — additional styles
+════════════════════════════════════════════════════ */
+
+/* Logo text variant */
+.logo-text{font-size:1.0667rem;font-weight:900;letter-spacing:2px;color:#fff;}
+.logo-text span{color:var(--accent-pink);}
+
+/* Small live badge in header */
+.live-badge-sm{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(0,200,83,.1);border:1px solid rgba(0,200,83,.2);
+  border-radius:100px;padding:4px 10px;
+  font-size:0.7333rem;font-weight:800;color:var(--accent-green);letter-spacing:.5px;
+}
+
+/* Page wrapper — like .container but with bottom-nav padding */
+.page-wrap{max-width:1100px;margin:0 auto;padding-bottom:80px;}
+@media(min-width:768px){.page-wrap{padding-bottom:32px;}}
+
+/* Live status time display */
+.live-status-time{margin-left:auto;font-size:0.7333rem;color:var(--text-soft);}
+
+/* Event header info / meta (alias for title/status) */
+.event-header-info{flex:1;min-width:0;}
+.event-header-meta{
+  display:flex;align-items:center;gap:4px;
+  font-size:0.6667rem;font-weight:500;color:var(--text-soft);margin-top:1px;
+}
+
+/* Session chips wrapper (adds horizontal scroll) */
+.session-chips-wrap{overflow:hidden;}
+
+/* Universal chip — works for session chips and class filter */
+.chip{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:5px;
+  padding:7px 14px;border-radius:100px;
+  font-size:0.8rem;font-weight:600;border:1px solid var(--border-soft);
+  color:var(--text-soft);background:var(--bg-card);white-space:nowrap;
+  transition:all .15s;text-decoration:none;cursor:pointer;
+}
+.chip:hover{border-color:rgba(255,255,255,.15);color:var(--text-main);}
+.chip.selected{
+  background:var(--accent-pink);color:#fff;border-color:var(--accent-pink);
+  box-shadow:0 4px 12px rgba(255,20,147,.2);
+}
+.chip.is-live{
+  border-color:rgba(0,200,83,.35);color:var(--accent-green);
+  background:rgba(0,200,83,.06);
+}
+
+/* Chip filter row */
+.chip-filter{
+  display:flex;flex-wrap:wrap;gap:6px;
+  padding:10px 16px 4px;
+  border-bottom:1px solid var(--border-soft);
+  margin-bottom:14px;
+}
+
+/* On-course section */
+.on-course-header{
+  padding:9px 16px;border-bottom:1px solid rgba(0,200,83,.08);
+  display:flex;align-items:center;gap:6px;
+  font-size:0.6667rem;font-weight:800;color:var(--accent-green);
+  letter-spacing:1.5px;text-transform:uppercase;
+  background:rgba(0,200,83,.03);
+}
+.on-course-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:10px 16px;border-bottom:1px solid var(--border-soft);
+}
+.on-course-row:last-child{border-bottom:none;}
+
+/* Table wrapper with horizontal scroll */
+.table-wrap{overflow-x:auto;padding:0 16px 20px;}
+
+/* Status badges in results */
+.status-dnf{color:#ef4444;font-size:0.7333rem;font-weight:700;}
+.status-dns{color:#888;font-size:0.7333rem;font-weight:600;}
+.status-dsq{color:#f59e0b;font-size:0.7333rem;font-weight:600;}
+.status-dnq{color:#a855f7;font-size:0.7333rem;font-weight:700;}
+
+/* Status badge u koloni VREME (zamenjuje vreme za DSQ/DNF/DNS/DNQ).
+   Vizuelno isto kao time-val ali sa bojom statusa — vidi se na prvi pogled. */
+.time-status-badge{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:5px;
+  font-family:'Roboto Mono','SF Mono',monospace;
+  font-size:0.8667rem;
+  font-weight:800;
+  letter-spacing:1px;
+}
+.time-status-badge.status-dnf{ background:#3a1010; color:#ef4444; border:1px solid rgba(239,68,68,.3); }
+.time-status-badge.status-dns{ background:#1a1a1a; color:#888;    border:1px solid rgba(136,136,136,.3); }
+.time-status-badge.status-dsq{ background:#3a2a10; color:#f59e0b; border:1px solid rgba(245,158,11,.3); }
+.time-status-badge.status-dnq{ background:#2a1240; color:#c084fc; border:1px solid rgba(192,132,252,.3); }
+
+/* Time/gap value helpers */
+.time-val{font-family:'Roboto Mono','SF Mono',monospace;color:#fff;}
+.time-muted{color:var(--text-soft);}
+.gap-val{font-family:'Roboto Mono','SF Mono',monospace;color:var(--text-soft);font-size:0.7333rem;}
+
+/* Team name in result row */
+.team-name{font-size:0.7333rem;color:var(--text-soft);}
+
+/* Extra table column classes for live.php */
+.res-bib{width:40px;font-weight:700;color:var(--text-muted);text-align:center;}
+.res-vehicle{font-size:0.8rem;color:var(--text-soft);}
+.res-speed{text-align:right;font-size:0.8rem;color:var(--text-soft);}
+
+/* Empty table state */
+.empty-state{text-align:center;color:var(--text-soft);padding:40px 16px;font-size:0.9333rem;}
+
+/* ════════════════════════════════════════════════════
+   SITE HEADER (legacy / desktop fallback)
+════════════════════════════════════════════════════ */
+.site-header{
+  background:var(--bg-elevated);border-bottom:1px solid var(--border-soft);
+  position:sticky;top:0;z-index:100;
+}
+.header-inner{
+  max-width:1100px;margin:0 auto;padding:0 16px;
+  display:flex;align-items:center;gap:16px;height:52px;
+}
+.site-logo{font-size:1.2rem;font-weight:800;letter-spacing:2px;color:#fff;}
+.site-logo span{color:var(--accent-pink);}
+.live-pill{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,200,83,.08);border:1px solid rgba(0,200,83,.2);
+  border-radius:20px;padding:4px 12px;
+  font-size:0.8rem;font-weight:600;color:var(--accent-green);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px;
+}
+.site-nav{
+  max-width:1100px;margin:0 auto;padding:0 16px 8px;
+  display:flex;flex-wrap:wrap;gap:4px;align-items:flex-start;
+}
+.site-nav>a{
+  padding:6px 12px;border-radius:6px;font-size:0.8667rem;color:var(--text-muted);
+}
+.site-nav>a:hover,.site-nav>a.active{background:var(--bg-card);color:#fff;}
+.nav-toggle{
+  display:none;flex-direction:column;gap:5px;
+  background:none;border:none;cursor:pointer;padding:4px;margin-left:auto;
+}
+.nav-toggle span{display:block;width:22px;height:2px;background:#aaa;border-radius:2px;}
+
+/* ════════════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════════════ */
+.site-footer{
+  border-top:1px solid var(--border-soft);
+  padding:20px 16px;text-align:center;
+  margin-top:48px;
+}
+.footer-inner{
+  font-size:0.8rem;color:var(--text-soft);
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+}
+.footer-inner a:hover{color:#fff;}
+.footer-sep{color:#333;}
+@media(max-width:768px){.site-footer{padding-bottom:80px;}}
+
+/* ════════════════════════════════════════════════════
+   DISCIPLINE BADGES (legacy)
+════════════════════════════════════════════════════ */
+.disc-badge{padding:2px 8px;border-radius:4px;font-size:0.7333rem;font-weight:700;letter-spacing:1px;}
+.disc-bt{background:rgba(232,136,51,.12);color:var(--bt-color);}
+.disc-as{background:rgba(51,136,255,.1);color:var(--as-color);}
+.disc-kt{background:rgba(170,68,255,.1);color:var(--kt-color);}
+.disc-ak{background:rgba(0,163,155,.12);color:var(--ak-color);}
+
+/* ════════════════════════════════════════════════════
+   ADMIN COMPAT — keep existing admin styles working
+════════════════════════════════════════════════════ */
+.section{margin-bottom:40px;}
+.section-title{
+  font-size:1.0667rem;font-weight:700;color:#fff;
+  margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border-soft);
+}
+.event-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;}
+.event-card{
+  background:var(--bg-card);border:1px solid var(--border-soft);border-radius:10px;
+  padding:16px;display:block;transition:border-color .2s;
+}
+.event-card:hover{border-color:var(--accent-pink);}
+.event-card.status-active{border-color:#5a3a00;background:#1a1000;}
+.event-card-name{font-size:0.9333rem;font-weight:600;color:#fff;margin-bottom:4px;}
+.event-card-meta{font-size:0.8rem;color:var(--text-soft);margin-bottom:8px;}
+
+/* ═══════════════════════════════════════════════════
+   FAZA 2 KOMPONENTE
+   .ev-card · .doc-row · .tabs · .chip-filter
+   .champ-switcher · .bib-champ-badge
+═══════════════════════════════════════════════════ */
+
+/* ─── EventCard (komponenta iz includes/components/event-card.php) ─── */
+.ev-card{
+  display:flex; flex-direction:column;
+  background:var(--bg-card); border:1px solid var(--border-soft);
+  border-radius:var(--radius-card); overflow:hidden; text-decoration:none; color:inherit;
+  transition:transform .15s, border-color .15s, box-shadow .15s;
+  position:relative;
+}
+.ev-card:hover{ transform:translateY(-2px); border-color:var(--accent-pink); box-shadow:0 8px 24px rgba(255,20,147,.1); }
+.ev-card-cover{ position:relative; aspect-ratio:16/9; background:linear-gradient(135deg,#1a1f2e,#0d1017); overflow:hidden; }
+.ev-card-cover img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1; }
+/* Placeholder je UVEK prisutan iza slike; ako slika padne (onerror→remove), ostaje vidljiv */
+.ev-card-cover-placeholder{ position:absolute; inset:0; z-index:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#2a1030 0%,#0d1017 55%,#0a1a2e 100%); }
+.ev-card-cover-ph-icon{ font-size:2.6rem; opacity:.22; line-height:1; }
+.ev-card-badge{ position:absolute; top:10px; left:10px; z-index:2; }
+.ev-card-body{ padding:14px 16px 16px; display:flex; flex-direction:column; gap:6px; flex:1; }
+.ev-card-meta{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; font-size:0.7333rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+.ev-card-disc{ color:var(--accent-pink); padding:2px 7px; border:1px solid currentColor; border-radius:4px; font-size:0.6667rem; line-height:1.3; }
+.ev-card-meta .ev-card-disc + .ev-card-disc{ color:var(--accent-blue); }
+.ev-card-meta .ev-card-disc + .ev-card-disc + .ev-card-disc{ color:var(--accent-green); }
+.ev-card-title{ font-size:1.1333rem; font-weight:700; color:var(--text-main); line-height:1.25; }
+.ev-card-info{ display:flex; flex-wrap:wrap; gap:10px; font-size:0.8667rem; color:var(--text-muted); margin-top:auto; padding-top:6px; }
+.ev-card-desc{ font-size:0.8667rem; color:var(--text-soft); margin-top:4px; line-height:1.4; }
+.ev-card-cta{ display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding-top:10px; border-top:1px solid var(--border-soft); font-size:0.8rem; font-weight:700; letter-spacing:1px; color:var(--accent-pink); text-transform:uppercase; }
+.ev-card-arrow{ font-size:1.2rem; transition:transform .2s; }
+.ev-card:hover .ev-card-arrow{ transform:translateX(3px); }
+
+/* Varijante */
+.ev-card-lg .ev-card-title{ font-size:1.4667rem; }
+.ev-card-lg .ev-card-cover{ aspect-ratio:21/9; }
+.ev-card-sm .ev-card-cover{ aspect-ratio:4/3; }
+.ev-card-sm .ev-card-title{ font-size:0.9333rem; }
+.ev-card-sm .ev-card-cta{ font-size:0.6667rem; padding-top:6px; margin-top:6px; }
+.ev-card-sm .ev-card-info{ font-size:0.7333rem; }
+
+/* ─── DocumentRow (komponenta) ──────────────────── */
+.doc-row{
+  display:flex; align-items:flex-start; gap:14px;
+  padding:14px 16px; background:var(--bg-card); border:1px solid var(--border-soft);
+  border-radius:var(--radius-sm); margin-bottom:8px; transition:border-color .15s, transform .15s;
+  text-decoration:none; color:inherit;
+}
+.doc-row:hover{ border-color:var(--accent-pink); transform:translateX(2px); }
+.doc-row-new{ border-left:3px solid var(--accent-pink); }
+.doc-icon{ flex-shrink:0; padding-top:2px; }
+.doc-body{ flex:1; min-width:0; }
+.doc-title{ font-size:1rem; font-weight:600; color:var(--text-main); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.doc-new-pill{ background:var(--accent-pink); color:#fff; font-size:0.6667rem; padding:2px 6px; border-radius:6px; font-weight:700; letter-spacing:1px; }
+.doc-event{ font-size:0.8rem; font-weight:600; color:var(--accent-pink,var(--accent-pink)); margin-top:2px; }
+.doc-meta{ font-size:0.8rem; color:var(--text-soft); margin-top:3px; }
+/* (21.09.2026) Najviše dva reda: izvod se seče u PHP-u, ovo je druga brana za dugačak naslov
+   ili opis koji dođe iz starijeg zapisa. */
+.doc-desc{ font-size:0.8667rem; color:var(--text-muted); margin-top:6px; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.doc-action{ font-size:1.3333rem; color:var(--text-muted); align-self:center; }
+.doc-row:hover .doc-action{ color:var(--accent-pink); }
+
+/* Document badges po file_type / category */
+.doc-badge{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:48px; padding:6px 10px; border-radius:8px;
+  font-size:0.6667rem; font-weight:800; letter-spacing:1px; color:#fff;
+}
+.doc-badge-pdf   { background:#E11D48; }   /* crveno */
+.doc-badge-xls   { background:var(--accent-green); }   /* zeleno */
+.doc-badge-doc   { background:var(--accent-blue); }   /* plavo */
+.doc-badge-img   { background:#A855F7; }   /* ljubičasto */
+.doc-badge-link  { background:#6B7280; }   /* sivo */
+.doc-badge-bilten{ background:var(--accent-blue); }   /* plavo (spec) */
+.doc-badge-kazna { background:var(--status-warning); color:#1a1100; }  /* narandžasto (spec) */
+
+/* Filter chips iznad liste dokumenata */
+.doc-filter-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.doc-filter-chips .chip{
+  padding:7px 14px; border-radius:999px; border:1px solid var(--border-soft);
+  background:var(--bg-elevated); color:var(--text-muted);
+  font-size:0.8rem; font-weight:600; text-transform:uppercase; letter-spacing:.5px;
+  transition:border-color .15s, color .15s, background .15s;
+}
+.doc-filter-chips .chip:hover{ color:var(--text-main); border-color:var(--border-strong); }
+.doc-filter-chips .chip.selected{ background:var(--accent-pink); border-color:var(--accent-pink); color:#fff; }
+
+/* ─── Tabs (ARIA tab pattern) ─────────────────── */
+.tabs{
+  display:flex; gap:0; border-bottom:1px solid var(--border-soft);
+  margin-bottom:20px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+}
+.tabs .tab{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:14px 18px; font-size:0.8667rem; font-weight:700; letter-spacing:1px;
+  color:var(--text-muted); text-transform:uppercase;
+  border-bottom:2px solid transparent; white-space:nowrap;
+  transition:color .15s, border-color .15s;
+}
+.tabs .tab:hover{ color:var(--text-main); }
+.tabs .tab-active{ color:var(--accent-pink); border-bottom-color:var(--accent-pink); }
+.tab-icon{ font-size:1rem; }
+.tab-badge{ background:var(--accent-pink); color:#fff; font-size:0.6667rem; padding:2px 6px; border-radius:8px; font-weight:800; }
+
+/* Sekundarni chip filter (sesije, klase) — base pravilo objedinjeno gore (.chip-filter) */
+.chip-filter .chip{
+  padding:7px 14px; border-radius:999px; border:1px solid var(--border-soft);
+  background:var(--bg-elevated); color:var(--text-muted);
+  font-size:0.8rem; font-weight:600; white-space:nowrap;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:border-color .15s, color .15s, background .15s;
+}
+.chip-filter .chip:hover{ color:var(--text-main); border-color:var(--border-strong); }
+.chip-filter .chip.selected{ background:var(--accent-pink); border-color:var(--accent-pink); color:#fff; }
+.chip-filter .chip.is-live{ border-color:var(--accent-green); color:var(--accent-green); }
+.chip-filter .chip.is-live.selected{ background:var(--accent-green); color:#fff; }
+.chip-filter .chip .live-dot{ width:8px; height:8px; border-radius:50%; background:currentColor; animation:pulse-dot 1.4s infinite; }
+@keyframes pulse-dot{ 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ─── Championship switcher (NS / OS) ─────────────────── */
+.champ-switcher{
+  display:flex; gap:5px; padding:6px 0; margin-bottom:10px;
+  position:sticky; top:0; z-index:30; background:linear-gradient(to bottom, var(--bg-main) 80%, transparent);
+}
+.champ-switcher-single{
+  position:static; padding:8px 12px; background:var(--bg-elevated); border:1px solid var(--border-soft);
+  border-radius:var(--radius-sm); font-size:0.8667rem; color:var(--text-muted); font-weight:600;
+}
+.champ-switcher .champ-chip{
+  flex:0 1 auto !important; max-width:200px !important; padding:4px 10px !important;
+  display:inline-flex !important; align-items:center; gap:5px !important;
+  background:var(--bg-card); border:1px solid var(--border-soft); border-radius:999px;
+  color:var(--text-muted); font-size:0.6667rem !important; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
+  transition:all .15s; line-height:1.3 !important;
+}
+.champ-chip:hover{ color:var(--text-main); border-color:var(--border-strong); }
+/* Championship colors — by short_name (lowercase). Multi-championship support. */
+.champ-chip.selected[data-champ="ops"], .champ-chip.selected[data-champ="os"]{ background:var(--accent-pink); border-color:var(--accent-pink); color:#fff; }
+.champ-chip.selected[data-champ="nss"], .champ-chip.selected[data-champ="ns"]{ background:var(--accent-blue); border-color:var(--accent-blue); color:#fff; }
+.champ-chip.selected[data-champ="cez"]{ background:var(--status-warning); border-color:var(--status-warning); color:#000; }
+.champ-chip.selected[data-champ="sakss"]{ background:#A855F7; border-color:#A855F7; color:#fff; }
+.champ-chip.selected[data-champ="opv"]{ background:var(--accent-green); border-color:var(--accent-green); color:#fff; }
+.champ-chip.selected[data-champ="oprs"]{ background:#FF5050; border-color:#FF5050; color:#fff; }
+.champ-chip.selected[data-champ="scg"]{ background:#0EA5A5; border-color:#0EA5A5; color:#fff; }
+.champ-chip.selected[data-champ="cezhist"]{ background:#8B5E34; border-color:#8B5E34; color:#fff; }
+.champ-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.champ-dot-os{ background:var(--accent-pink); }
+.champ-dot-ns{ background:var(--accent-blue); }
+.champ-count{ margin-left:4px; background:rgba(255,255,255,.18); padding:1px 6px; border-radius:6px; font-size:0.6667rem; font-weight:700; }
+
+/* NS badge u tabeli rezultata */
+.bib-champ-badge{
+  display:inline-block; margin-left:6px;
+  font-size:0.6667rem; font-weight:800; letter-spacing:.5px;
+  padding:2px 5px; border-radius:4px;
+}
+.bib-ns{ background:var(--accent-blue); color:#fff; }
+
+/* ─── Result row (komponenta) ─────────────────── */
+.split-cell{ text-align:right; font-family:'Roboto Mono',monospace; font-size:0.8rem; color:var(--accent-blue); }
+.split-dash{ color:#333; }
+
+/* Status badges u koloni pozicije */
+.pos-cell.status-dnf, .pos-cell.status-dns, .pos-cell.status-dsq, .pos-cell.status-dnq{
+  display:inline-block; padding:3px 8px; border-radius:6px;
+  font-size:0.6667rem; font-weight:800; letter-spacing:1px; background:#3a1010; color:#e44;
+}
+.pos-cell.status-dnq{ background:#2a1240; color:#c084fc; }
+.pos-cell.status-dns{ background:#1a1a1a; color:#888; }
+.pos-cell.status-dsq{ background:#3a2a10; color:#f59e0b; }
+
+/* event.php / live.php — disciplina badge u session chip-u (multi-disc event) */
+.chip-disc-badge{
+  display:inline-block; margin-right:5px;
+  padding:1px 5px; border-radius:4px;
+  font-size:0.6667rem; font-weight:800; letter-spacing:1px;
+  background:rgba(255,255,255,.12); color:inherit; vertical-align:middle;
+}
+/* Boje čitaju --{disc}-color (v. „BOJE DISCIPLINA" na vrhu fajla), ne --accent-*. */
+.session-chip.chip-disc-bt .chip-disc-badge,
+.session-chip.chip-disc-bt:not(.selected):not(.is-live){ border-left:3px solid var(--bt-color); }
+.session-chip.chip-disc-as .chip-disc-badge,
+.session-chip.chip-disc-as:not(.selected):not(.is-live){ border-left:3px solid var(--as-color); }
+.session-chip.chip-disc-kt .chip-disc-badge,
+.session-chip.chip-disc-kt:not(.selected):not(.is-live){ border-left:3px solid var(--kt-color); }
+.session-chip.chip-disc-ak .chip-disc-badge,
+.session-chip.chip-disc-ak:not(.selected):not(.is-live){ border-left:3px solid var(--ak-color); }
+.session-chip.chip-disc-sl:not(.selected):not(.is-live){ border-left:3px solid #A855F7; }
+.session-chip.chip-disc-bt .chip-disc-badge{ background:var(--bt-color); color:#fff; }
+.session-chip.chip-disc-as .chip-disc-badge{ background:var(--as-color); color:#fff; }
+.session-chip.chip-disc-kt .chip-disc-badge{ background:var(--kt-color); color:#fff; }
+.session-chip.chip-disc-ak .chip-disc-badge{ background:var(--ak-color); color:#fff; }
+.session-chip.chip-disc-sl .chip-disc-badge{ background:#A855F7; color:#fff; }
+
+/* event.php — discipline chip-ovi ispod naslova */
+.event-info-disciplines{
+  display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;
+}
+.event-info-disciplines .ev-card-disc{
+  font-size:0.7333rem; padding:3px 9px;
+}
+
+/* ── Favoriti (localStorage) — ⭐ ikona u tabeli rezultata ── */
+.fav-star{
+  background:none; border:none; padding:8px 6px; margin-right:1px;
+  font-size:1.0667rem; color:#444; cursor:pointer; line-height:1;
+  transition:color .15s, transform .15s;
+}
+.fav-star:hover{ color:#FFD700; transform:scale(1.15); }
+tr.is-fav .fav-star{ color:#FFD700; }
+tr.is-fav{ background:rgba(255,215,0,.04); }
+tr.is-fav .res-bib{ color:#FFD700; }
+
+/* Filter chip "Samo favoriti" — sakri kad nema favorita */
+#fav-filter-chip{ display:none; }
+
+/* (#176) Push opt-in dugme */
+.push-optin-wrap{ display:flex; }
+.push-optin-btn{
+  background:rgba(30,144,255,.12); border:1px solid rgba(30,144,255,.35);
+  color:var(--accent-blue,var(--accent-blue)); border-radius:999px;
+  padding:7px 14px; font-size:0.8667rem; font-weight:600; cursor:pointer;
+  line-height:1; transition:background .15s, border-color .15s, transform .1s;
+}
+.push-optin-btn:hover:not(:disabled){ background:rgba(30,144,255,.2); transform:translateY(-1px); }
+.push-optin-btn.is-on{
+  background:rgba(0,200,83,.12); border-color:rgba(0,200,83,.4); color:var(--accent-green,var(--accent-green));
+}
+.push-optin-btn:disabled{ opacity:.55; cursor:not-allowed; }
+#fav-filter-chip.selected{ background:#FFD700; color:#000; border-color:#FFD700; }
+
+/* (#175b) PWA install baner — iznad bottom nav-a na mobile */
+.pwa-install-banner{
+  position:fixed; left:10px; right:10px;
+  bottom:calc(66px + env(safe-area-inset-bottom,0px));
+  z-index:300; display:flex; align-items:center; gap:12px;
+  background:var(--bg-elevated,#16202b); border:1px solid var(--border-soft,#2a3744);
+  border-radius:14px; padding:12px 14px;
+  box-shadow:0 8px 28px rgba(0,0,0,.45);
+  animation:pwa-ib-in .3s ease;
+}
+@keyframes pwa-ib-in{ from{ transform:translateY(16px); opacity:0; } to{ transform:none; opacity:1; } }
+.pwa-ib-icon{ font-size:1.7333rem; line-height:1; flex:0 0 auto; }
+.pwa-ib-body{ flex:1; min-width:0; }
+.pwa-ib-title{ font-size:0.9rem; font-weight:800; color:#fff; margin-bottom:2px; }
+.pwa-ib-text{ font-size:0.8rem; color:var(--text-dim,#8b9bab); line-height:1.35; }
+.pwa-ib-actions{ display:flex; flex-direction:column; gap:6px; flex:0 0 auto; }
+.pwa-ib-install{
+  background:var(--accent-blue,var(--accent-blue)); color:#fff; border:none; border-radius:999px;
+  padding:8px 16px; font-size:0.8667rem; font-weight:700; cursor:pointer; line-height:1;
+}
+.pwa-ib-install:hover{ filter:brightness(1.1); }
+.pwa-ib-dismiss{
+  background:none; border:none; color:var(--text-dim,#8b9bab);
+  font-size:0.8rem; cursor:pointer; padding:4px 8px; line-height:1;
+}
+.pwa-ib-dismiss:hover{ color:#fff; }
+@media(min-width:768px){
+  .pwa-install-banner{ left:auto; right:16px; bottom:16px; max-width:400px; }
+  .pwa-ib-actions{ flex-direction:row; align-items:center; }
+}
+
+/* ── Toast notifikacije (delom i u admin.css) ── */
+#gaga-toast-container{
+  position:fixed; bottom:90px; right:14px; left:14px; z-index:9999;
+  display:flex; flex-direction:column-reverse; gap:8px; pointer-events:none;
+}
+@media(min-width:768px){
+  #gaga-toast-container{ left:auto; bottom:18px; right:18px; max-width:380px; }
+}
+.gaga-toast{
+  display:flex; align-items:center; gap:10px;
+  background:var(--bg-card); border:1px solid var(--border-strong); border-radius:12px;
+  padding:12px 14px; box-shadow:0 6px 24px rgba(0,0,0,.5);
+  color:var(--text-main); font-size:0.9333rem;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .22s, transform .22s;
+  pointer-events:auto;
+}
+.gaga-toast.show{ opacity:1; transform:translateY(0); }
+.gaga-toast-ok{ border-color:#1e4a1e; }
+.gaga-toast-err{ border-color:#4a1e1e; }
+.gaga-toast-icon{ font-size:1.2rem; flex-shrink:0; }
+.gaga-toast-ok .gaga-toast-icon{ color:#4ec44e; }
+.gaga-toast-err .gaga-toast-icon{ color:#FF6F80; }
+.gaga-toast-info .gaga-toast-icon{ color:#60a5fa; }
+.gaga-toast-text{ flex:1; }
+.gaga-toast-close{
+  background:none; border:none; color:var(--text-soft); font-size:1.2rem; cursor:pointer; padding:0 4px;
+}
+
+/* Slalom penal badge — pored vremena */
+.penalty-badge{
+  display:inline-block; padding:2px 6px; margin-left:4px;
+  background:rgba(255,176,32,.15); color:var(--status-warning);
+  border:1px solid rgba(255,176,32,.4); border-radius:5px;
+  font-family:'Roboto Mono',monospace; font-size:0.6667rem; font-weight:700;
+  white-space:nowrap;
+}
+
+/* ─── SCROLL AFFORDANCE — fade na desnoj ivici horizontalnih traka ───
+   Signalizira da ima još sadržaja kad se skroluje (scrollbar je skriven). */
+.session-chips,
+.doc-filter,
+.home-events-scroll{
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 22px),transparent 100%);
+          mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 22px),transparent 100%);
+}
+/* (1B, 15.09.2026) Red etapa na računaru (miš): skrol je skriven, a mišem se red ne pomera — na užem
+   prozoru SI 7 je jedva virio. Uz miš se red PRELAMA; na telefonu (dodir) ostaje skrol prstom. */
+@media (hover:hover) and (pointer:fine){
+  .session-chips{flex-wrap:wrap;overflow-x:visible;-webkit-mask-image:none;mask-image:none;}
+}
+
+/* ============================================================
+   (Doc 82 grupa B, §18.5) Rezultati ispravljeni odlukom SK
+   ============================================================
+   „Na oba mora stajati da su rezultati ispravljeni odlukom od tog datuma, i stara verzija
+   ostaje dostupna. Inače neko sa odštampanim starim rezultatom u ruci i sajtom na telefonu
+   vidi dve različite stvari bez objašnjenja." Zato traka NIJE diskretna — mora da se vidi
+   pre tabele, i mora da vodi na staru verziju. Koristi postojeće base.css tokene. */
+.rv-corrected{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin:12px 0;padding:10px 14px;border-radius:var(--radius-btn,8px);
+  background:var(--bg-card-soft);border:1px solid var(--accent-blue);
+  font-size:.875rem;line-height:1.5;
+}
+.rv-corrected b{color:#fff;}
+.rv-corrected span{color:var(--text-muted);}
+.rv-corrected a{color:var(--accent-blue);text-decoration:underline;}
+.rv-old{margin:12px 0;border:1px solid var(--border-soft);border-radius:var(--radius-btn,8px);overflow:hidden;}
+.rv-old-hd{padding:8px 14px;background:var(--bg-card-soft);color:var(--text-muted);font-size:.8125rem;border-bottom:1px solid var(--border-soft);}
+</style>
+</head>
+<body data-event-slug="goc-2026">
+
+<!-- (#175) PWA: manifest + ikone + service worker registracija -->
+<link rel="manifest" href="/manifest.php">
+<link rel="apple-touch-icon" href="/assets/img/icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script nonce="DQ3-jLEsRKvPLvGDlIDeFw">
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function () {});
+  });
+}
+// Cover slika koja ne ucita -> ukloni (CSP-safe zamena za inline onerror); 'error' ne buble-uje
+document.addEventListener('error', function (e) {
+  var t = e.target;
+  if (t && t.tagName === 'IMG' && t.closest && t.closest('.ev-card-cover, .event-cover-strip')) t.remove();
+}, true);
+</script>
+<script nonce="DQ3-jLEsRKvPLvGDlIDeFw">window.GAGA_VAPID_PUBLIC = "BH6ITurZy7FUkdi3eS6e_FJomvrcJ5JrRa-BI10gLW17fI7uWVEQkXeQ2PZILm5gcJ-x_oNmLbLdQVXqZVQ8nXk";</script>
+<script src="/assets/js/push.js" defer></script>
+<!-- (#175b) PWA install ponuda — baner za neinstalirane -->
+<script src="/assets/js/pwa-install.js" defer></script>
+<a href="#sadrzaj" class="skip-link">Preskoči na sadržaj</a>
+<header class="top-nav">
+  <div class="tn-inner">
+
+    <!-- Logo -->
+    <a href="/" class="tn-logo" aria-label="GAGA Timing početna">
+              <img src="/assets/img/logo.svg" alt="GAGA Chrono Squad" class="tn-logo-img">
+          </a>
+
+    <!-- Desktop nav links -->
+    <nav class="tn-links" aria-label="Glavna navigacija">
+      <a href="/"                  class="">Početna</a>
+      <a href="/events.php"        class="">Takmičenja</a>
+      <a href="/results.php"       class="">Rezultati</a>
+            <a href="/notifications.php" class="">Obaveštenja</a>
+    </nav>
+
+    <!-- Right: LIVE pill -->
+    <div class="tn-right">
+              <a href="/events.php?status=active" class="tn-live-pill" style="opacity:.35;pointer-events:none">
+          <span class="live-dot" style="background:#444;box-shadow:none"></span>LIVE
+        </a>
+          </div>
+
+  </div>
+</header>
+<!-- ─── EVENT HEADER ──────────────────────────── -->
+<header class="event-header">
+  <a href="/" class="back-btn" aria-label="Nazad">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
+  <div class="event-header-title">
+    <div class="event-header-name">Nagrada Grada Kraljeva — Goč 2026</div>
+      </div>
+  <nav class="event-header-desktop-links">
+    <a href="/events.php">Takmičenja</a>
+    <a href="/results.php">Rezultati</a>
+    <a href="/notifications.php">Obaveštenja</a>
+  </nav>
+</header>
+
+<main id="sadrzaj">
+<!-- ─── COVER STRIP ───────────────────────────── -->
+<div class="event-cover-strip">
+  <span class="event-cover-strip-placeholder">🏎️</span>
+        <div class="ecs-blur" style="background-image:url('/uploads/cover_10_1780586198.png')"></div>
+    <img class="ecs-main" src="/uploads/cover_10_1780586198.png" alt="">
+    <div class="event-cover-strip-overlay"></div>
+</div>
+
+<!-- ─── EVENT INFO (below cover, not overlaid) ── -->
+<div class="event-info-card">
+  <a class="event-share-ico" href="/podium-all.php?event=10" target="_blank" rel="noopener" title="Deljenje — podijumi, QR, kartice" aria-label="Deljenje">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+  </a>
+      <a class="event-prav-ico" href="/uploads/doc_10_1780671204_MBAT_CEZ-_Nagrada_Grada_Kraljeva_-_GOC_2026_-_Pravilnik-pp.pdf" target="_blank" rel="noopener" title="Pravilnik takmičenja" aria-label="Pravilnik">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+    <span>Pravilnik</span>
+  </a>
+      <h1 class="event-info-name">Nagrada Grada Kraljeva — Goč 2026</h1>
+  <div class="event-info-meta">
+    06.06.2026. – 07.06.2026.          <span class="event-info-sep">·</span>Goč      </div>
+      <div class="event-info-disciplines">
+              <span class="ev-card-disc">BT · Brdske Trke</span>
+          </div>
+    <!-- (#176) Push opt-in — push.js ubaci dugme ako je podržano -->
+  <div data-push-optin class="push-optin-wrap" style="margin-top:10px"></div>
+</div>
+
+
+<!-- ─── 5 TABA ────────────────────────────────── -->
+<div class="event-tabs" id="ev-tabs">
+    <button class="ev-tab " data-tab="startlist">STARTNA LISTA</button>
+  <button class="ev-tab active" data-tab="results">REZULTATI</button>
+    <button class="ev-tab " data-tab="docs">
+    OBAVEŠTENJA
+      </button>
+</div>
+
+<!-- ── DESKTOP: Stats cards row ───────────────── -->
+<div class="dt-stats-row">
+  <!-- TOP 3 -->
+  <div class="dt-stat-card">
+    <div class="dt-stat-label">🏆 TOP 3</div>
+    <div id="dt-top3">
+        <div style="display:flex;gap:6px;align-items:baseline;margin-top:4px">
+      <span style="font-size:0.7333rem;color:#FFD700;font-weight:700">1.</span>
+      <span style="font-size:0.8rem;font-weight:600;color:#fff">VUJOVIĆ Baćko</span>
+      <span style="font-family:monospace;font-size:0.7333rem;color:var(--text-soft);margin-left:auto">1:32.956</span>
+    </div>
+        <div style="display:flex;gap:6px;align-items:baseline;margin-top:4px">
+      <span style="font-size:0.7333rem;color:#C0C0C0;font-weight:700">2.</span>
+      <span style="font-size:0.8rem;font-weight:600;color:#fff">ĆOROVIĆ Aldin</span>
+      <span style="font-family:monospace;font-size:0.7333rem;color:var(--text-soft);margin-left:auto">1:37.221</span>
+    </div>
+        <div style="display:flex;gap:6px;align-items:baseline;margin-top:4px">
+      <span style="font-size:0.7333rem;color:#CD7F32;font-weight:700">3.</span>
+      <span style="font-size:0.8rem;font-weight:600;color:#fff">PERUNOVIĆ Jovan</span>
+      <span style="font-family:monospace;font-size:0.7333rem;color:var(--text-soft);margin-left:auto">1:39.622</span>
+    </div>
+        </div>
+  </div>
+  <!-- Najbolje vreme (KT: najbrži krug) -->
+  <div class="dt-stat-card">
+    <div class="dt-stat-label">⏱ Najbolje vreme</div>
+    <div class="dt-stat-value val-pink" id="dt-best-time" style="font-family:monospace">1:32.956</div>
+    <div class="dt-stat-sub" id="dt-best-name">VUJOVIĆ Baćko · Klasa 5 Open</div>
+  </div>
+  <!-- Broj takmičara -->
+  <div class="dt-stat-card">
+    <div class="dt-stat-label">👥 Takmičari</div>
+    <div class="dt-stat-value" id="dt-count">45</div>
+    <div class="dt-stat-sub">Startovalo</div>
+  </div>
+  <!-- Sinhronizacija -->
+  </div>
+
+<!-- ══════════════════════════════════════════════
+     TAB: LIVE
+══════════════════════════════════════════════ -->
+<div class="tab-content " id="tab-live">
+<div class="dt-tab-body">
+<div class="dt-main-col">
+
+      <!-- Empty state — nema aktivne sesije -->
+    <div class="empty-state" style="padding:60px 20px;text-align:center">
+      <div style="font-size:4rem;margin-bottom:18px">😴</div>
+      <div style="font-size:1.3333rem;font-weight:800;color:#fff;margin-bottom:8px">Nema aktivnog merenja</div>
+      <div style="color:var(--text-soft);font-size:0.9333rem;margin-bottom:24px;max-width:380px;margin-left:auto;margin-right:auto">
+        Live tab pokazuje samo trenutno aktivnu sesiju. Za prethodne i predstojeće rezultate idi na <strong>Rezultati</strong> tab.
+      </div>
+      <a href="/event.php?slug=goc-2026&tab=results" class="btn btn-primary" style="display:inline-block;background:var(--accent-pink);color:#fff;padding:12px 28px;border-radius:var(--radius-btn);font-weight:700;text-decoration:none">
+        📋 Pogledaj rezultate →
+      </a>
+    </div>
+  
+</div><!-- /dt-main-col -->
+
+<!-- ── Desktop sidebar ── -->
+<aside class="dt-sidebar-col">
+  
+<!-- Klasement po klasama -->
+<div class="dt-sidebar-card">
+  <div class="dt-sidebar-head">📊 Vodeći po klasama</div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 5 Open</span>
+    <span class="dt-class-name">VUJOVIĆ Baćko</span>
+    <span class="dt-class-time">1:32.956</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm 2000 E1</span>
+    <span class="dt-class-name">BULATOVIĆ Dejan</span>
+    <span class="dt-class-time">1:39.695</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm Grupa N</span>
+    <span class="dt-class-name">JANKOVIĆ Marko</span>
+    <span class="dt-class-time">1:43.566</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 3 od 1401 do 1600 ccm 1600 E1</span>
+    <span class="dt-class-name">VUJAČIĆ Mirko</span>
+    <span class="dt-class-time">1:44.523</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm Grupa A</span>
+    <span class="dt-class-name">MASONIČIĆ Radovan</span>
+    <span class="dt-class-time">1:48.272</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 2  do 1400 ccm</span>
+    <span class="dt-class-name">ADŽIĆ Marko</span>
+    <span class="dt-class-time">1:49.935</span>
+  </div>
+  </div>
+
+<!-- Dokumenti / Preuzimanja -->
+<div class="dt-sidebar-card">
+  <div class="dt-sidebar-head">📁 Dokumenti</div>
+    <a href="/uploads/doc_10_1780671250_BAT_Nagrada_Grada_Kraljeva_-_Goc_2026_-_Bilten_br__1.pdf" target="_blank" class="dt-sidebar-doc">
+    <span class="doc-type-badge doc-img doc-ico-sm" role="img" aria-label="Bilten" title="Bilten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>    <span class="dt-sidebar-doc-name">Bilten br.1 - Nagrada Grada Kraljeva - Goč 2026</span>
+    <span class="dt-sidebar-doc-dl">↓</span>
+  </a>
+    <a href="/uploads/doc_10_1780671204_MBAT_CEZ-_Nagrada_Grada_Kraljeva_-_GOC_2026_-_Pravilnik-pp.pdf" target="_blank" class="dt-sidebar-doc">
+    <span class="doc-type-badge doc-doc doc-ico-sm" role="img" aria-label="Pravilnik" title="Pravilnik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>    <span class="dt-sidebar-doc-name">Pravilnik - Nagrada Grada Kraljeva - Goč 2026</span>
+    <span class="dt-sidebar-doc-dl">↓</span>
+  </a>
+  </div>
+
+
+</aside>
+
+</div><!-- /dt-tab-body -->
+</div><!-- /tab-live -->
+
+
+<!-- ══════════════════════════════════════════════
+     TAB: STARTNA LISTA (prijavljeni vozaci)
+══════════════════════════════════════════════ -->
+<div class="tab-content " id="tab-startlist">
+<div class="dt-tab-body">
+<div class="dt-main-col" style="grid-column:1/-1">
+
+      <div class="empty-state" style="padding:50px 20px;text-align:center">
+      <div style="font-size:3.2rem;margin-bottom:14px">📋</div>
+      <div style="font-size:1.0667rem;font-weight:700;color:#fff;margin-bottom:6px">Startna lista još nije objavljena</div>
+      <div style="color:#9ca3af;font-size:0.8667rem">Biće objavljena pre početka takmičenja.</div>
+    </div>
+  
+</div><!-- /dt-main-col -->
+</div><!-- /dt-tab-body -->
+</div><!-- /tab-startlist -->
+
+
+<!-- ══════════════════════════════════════════════
+     TAB: REZULTATI (lista sesija)
+══════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-results">
+<div class="dt-tab-body">
+<div class="dt-main-col">
+
+  <!-- Anchor za scroll target -->
+  <div id="tab-anchor" style="scroll-margin-top:12px"></div>
+
+  <!-- Staza (GPX oblik + mapa) — renderuje se samo ako event ima stazu -->
+  
+  <!-- Session chips (link na results tab, ne live) -->
+    <div class="session-chips" id="res-session-chips">
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=74#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Plaćeni trening I">
+                  Plaćeni trening I              <span style="font-size:0.6rem;opacity:.6;margin-left:2px">✓</span>
+          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=75#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Plaćeni trening II">
+                  Plaćeni trening II              <span style="font-size:0.6rem;opacity:.6;margin-left:2px">✓</span>
+          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=76#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Trening 1">
+                  Trening 1              <span style="font-size:0.6rem;opacity:.6;margin-left:2px">✓</span>
+          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=77#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Trening 2">
+                  Trening 2              <span style="font-size:0.6rem;opacity:.6;margin-left:2px">✓</span>
+          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=78#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Warm-up">
+                  Warm-up          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=79#tab-anchor" class="session-chip chip-disc-bt selected"
+       title="Brdske Trke — Trka 1">
+                  Trka 1              <span style="font-size:0.6rem;opacity:.6;margin-left:2px">✓</span>
+          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=80#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Trka 2">
+                  Trka 2              <span style="font-size:0.6rem;opacity:.6;margin-left:2px">✓</span>
+          </a>
+        <a href="/event.php?slug=goc-2026&tab=results&session_id=73#tab-anchor" class="session-chip chip-disc-bt"
+       title="Brdske Trke — Generalni plasman">
+                  Generalni plasman          </a>
+      </div>
+  
+  <!-- Naslov sesije -->
+    <div style="display:flex;align-items:center;gap:8px;margin:12px 0 8px;">
+    <span style="font-size:1.0667rem;font-weight:800;color:#fff">Trka 1</span>
+          <span class="badge badge-finished">ZAVRŠENO</span>
+      </div>
+  
+  
+      <div class="champ-switcher" role="tablist" aria-label="Šampionat">
+            <a href="/event.php?slug=goc-2026&amp;tab=results&amp;session_id=79&amp;champ=nss"
+         class="champ-chip"
+         data-champ="nss"
+         role="tab"
+         aria-selected="false"
+         title="Nacionalni Šampionat Srbije">
+        <span class="champ-dot champ-dot-nss"></span>
+        NSS        <span class="champ-count">62</span>      </a>
+            <a href="/event.php?slug=goc-2026&amp;tab=results&amp;session_id=79&amp;champ=ops"
+         class="champ-chip"
+         data-champ="ops"
+         role="tab"
+         aria-selected="false"
+         title="Otvoreni Šampionat Srbije">
+        <span class="champ-dot champ-dot-ops"></span>
+        OPS        <span class="champ-count">114</span>      </a>
+            <a href="/event.php?slug=goc-2026&amp;tab=results&amp;session_id=79&amp;champ=cez"
+         class="champ-chip"
+         data-champ="cez"
+         role="tab"
+         aria-selected="false"
+         title="Central European Zone">
+        <span class="champ-dot champ-dot-cez"></span>
+        CEZ        <span class="champ-count">4</span>      </a>
+            <a href="/event.php?slug=goc-2026&amp;tab=results&amp;session_id=79&amp;champ=oprs"
+         class="champ-chip"
+         data-champ="oprs"
+         role="tab"
+         aria-selected="false"
+         title="Otvoreno prvenstvo Republike Srpske">
+        <span class="champ-dot champ-dot-oprs"></span>
+        OPRS        <span class="champ-count">7</span>      </a>
+            <a href="/event.php?slug=goc-2026&amp;tab=results&amp;session_id=79&amp;champ=scg"
+         class="champ-chip selected"
+         data-champ="scg"
+         role="tab"
+         aria-selected="true"
+         title="Šampionat Crne Gore">
+        <span class="champ-dot champ-dot-scg"></span>
+        SCG        <span class="champ-count">46</span>      </a>
+          </div>
+    
+  <!-- Class filter (ne za KT — widget ima svoje tabove) -->
+      <div class="class-filter" id="res-class-filter">
+    <button class="class-chip active" data-class="all">Svi</button>
+            <button class="class-chip" data-class="A 1150">A 1150</button>
+            <button class="class-chip" data-class="A 1400">A 1400</button>
+            <button class="class-chip" data-class="A 1600">A 1600</button>
+            <button class="class-chip" data-class="A 2000">A 2000</button>
+            <button class="class-chip" data-class="E2 SH">E2 SH</button>
+            <button class="class-chip" data-class="H 1000">H 1000</button>
+            <button class="class-chip" data-class="H 1400">H 1400</button>
+            <button class="class-chip" data-class="H 1600">H 1600</button>
+            <button class="class-chip" data-class="H 2000">H 2000</button>
+            <button class="class-chip" data-class="H 2000+">H 2000+</button>
+            <button class="class-chip" data-class="Moto 1200">Moto 1200</button>
+            <button class="class-chip" data-class="N 1150">N 1150</button>
+            <button class="class-chip" data-class="N 1400">N 1400</button>
+            <button class="class-chip" data-class="N 1600">N 1600</button>
+            <button class="class-chip" data-class="N 2000">N 2000</button>
+      </div>
+  
+      <div class="demo-filter" id="res-demo-filter" style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+    <button class="class-chip active" data-demo="all">Svi vozači</button>
+          <button class="class-chip" data-demo="female">
+        👩 Dame <span style="opacity:.7;font-size:0.7333rem">(2)</span>
+      </button>
+              <button class="class-chip" data-demo="junior">
+        👶 Juniori <span style="opacity:.7;font-size:0.7333rem">(1)</span>
+      </button>
+      </div>
+  
+  
+  
+    <!-- Results table -->
+  <div style="overflow-x:auto;">
+    <table class="results-table" id="res-results-table">
+      <thead>
+        <tr>
+          <th style="width:24px">#</th>
+          <th class="hide-mobile" style="width:44px">Br.</th>
+          <th>Vozač</th>
+          <th class="col-class" style="width:70px">Klasa</th>
+          <th class="hide-mobile">Vozilo</th>
+                              <th style="text-align:right;min-width:80px" title="Zaostatak od prvog; ↑ od takmičara ispred">Vreme / Zaostatak</th>
+        </tr>
+      </thead>
+      <tbody id="res-results-tbody">
+                          <tr data-class="Klasa 5 Open" data-time="1:32.956" data-gap="" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="E2 SH" data-cls-oprs="f/moto" data-cls-cez="" data-dclass="E2 SH">
+           <td class="res-pos p1"><span class="pos-cell">1</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">14</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=281"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">VUJOVIĆ Baćko</a><br><span class="res-club">AMSK GORŠTAK</span><br><span class="res-class-inline">E2 SH</span><span class="res-vehicle-inline">NORMA M20</span></td>
+           <td class="col-class"><span class="res-class">E2 SH</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">NORMA M20</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:32.956</span><br><span class="res-speed-inline">115.43 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 5 Open" data-time="1:37.221" data-gap="+4.265" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="E2 SH" data-cls-oprs="f/moto" data-cls-cez="" data-dclass="E2 SH">
+           <td class="res-pos p2"><span class="pos-cell">2</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">21</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=282"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ĆOROVIĆ Aldin</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">E2 SH</span><span class="res-vehicle-inline">GLOBAL GT LIGHTS</span></td>
+           <td class="col-class"><span class="res-class">E2 SH</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">GLOBAL GT LIGHTS</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:37.221</span><span class="res-gap">+4.265</span><br><span class="res-speed-inline">109.48 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 5 Open" data-time="1:39.622" data-gap="+6.666" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="E2 SH" data-cls-oprs="f/moto" data-cls-cez="" data-dclass="E2 SH">
+           <td class="res-pos p3"><span class="pos-cell">3</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">36</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=362"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">PERUNOVIĆ Jovan</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">E2 SH</span><span class="res-vehicle-inline">Fiat 750</span></td>
+           <td class="col-class"><span class="res-class">E2 SH</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Fiat 750</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:39.622</span><span class="res-gap">+6.666</span><br><span class="res-speed-inline">107.27 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm 2000 E1" data-time="1:39.695" data-gap="+6.739" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="H 2000" data-cls-oprs="K3" data-cls-cez="" data-dclass="H 2000">
+           <td class="res-pos "><span class="pos-cell">4</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">12</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=320"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">BULATOVIĆ Dejan</a><br><span class="res-club">AMSK KOTOR</span><br><span class="res-class-inline">H 2000</span><span class="res-vehicle-inline">Peugeot 306</span></td>
+           <td class="col-class"><span class="res-class">H 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 306</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:39.695</span><span class="res-gap">+6.739</span><br><span class="res-speed-inline">107.27 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 5 Open" data-time="1:42.806" data-gap="+9.850" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="H 2000+" data-cls-oprs="K4" data-cls-cez="" data-dclass="H 2000+">
+           <td class="res-pos "><span class="pos-cell">5</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">16</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=295"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">VUČKOVIĆ Goran</a><br><span class="res-club">AMSK KOTOR</span><br><span class="res-class-inline">H 2000+</span><span class="res-vehicle-inline">VolksWagen Golf 5</span></td>
+           <td class="col-class"><span class="res-class">H 2000+</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">VolksWagen Golf 5</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:42.806</span><span class="res-gap">+9.850</span><br><span class="res-speed-inline">104.12 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm Grupa N" data-time="1:43.566" data-gap="+10.610" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 2000" data-cls-oprs="N3" data-cls-cez="" data-dclass="N 2000">
+           <td class="res-pos "><span class="pos-cell">6</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">80</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=322"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">JANKOVIĆ Marko</a><br><span class="res-club">AMSK GORŠTAK</span><br><span class="res-class-inline">N 2000</span><span class="res-vehicle-inline">Honda Civic</span></td>
+           <td class="col-class"><span class="res-class">N 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Honda Civic</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:43.566</span><span class="res-gap">+10.610</span><br><span class="res-speed-inline">103.11 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="1:44.523" data-gap="+11.567" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,CEZ,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="A 1600" data-cls-oprs="K2" data-cls-cez="G5" data-dclass="A 1600">
+           <td class="res-pos "><span class="pos-cell">7</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">7</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=310"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">VUJAČIĆ Mirko</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">A 1600</span><span class="res-vehicle-inline">Citroen C2</span></td>
+           <td class="col-class"><span class="res-class">A 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Citroen C2</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:44.523</span><span class="res-gap">+11.567</span><br><span class="res-speed-inline">102.12 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm Grupa N" data-time="1:44.701" data-gap="+11.745" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 2000" data-cls-oprs="N3" data-cls-cez="" data-dclass="N 2000">
+           <td class="res-pos "><span class="pos-cell">8</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">26</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=321"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">TUJKOVIĆ Dušan</a><br><span class="res-club">AMSK KOTOR</span><br><span class="res-class-inline">N 2000</span><span class="res-vehicle-inline">Honda Civic</span></td>
+           <td class="col-class"><span class="res-class">N 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Honda Civic</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:44.701</span><span class="res-gap">+11.745</span><br><span class="res-speed-inline">102.12 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="1:44.986" data-gap="+12.030" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="H 1600" data-cls-oprs="K2" data-cls-cez="" data-dclass="H 1600">
+           <td class="res-pos "><span class="pos-cell">9</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">310</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=307"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">BOJANOVIĆ Miloš</a><br><span class="res-club">AMSK GORŠTAK</span><br><span class="res-class-inline">H 1600</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">H 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:44.986</span><span class="res-gap">+12.030</span><br><span class="res-speed-inline">102.12 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 5 Open" data-time="1:45.034" data-gap="+12.078" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,OPRS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="Moto 1200" data-cls-oprs="f/moto" data-cls-cez="" data-dclass="Moto 1200">
+           <td class="res-pos "><span class="pos-cell">10</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">4</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=330"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">DOJČINOVIĆ Goran</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">Moto 1200</span><span class="res-vehicle-inline">Honda Civic</span></td>
+           <td class="col-class"><span class="res-class">Moto 1200</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Honda Civic</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:45.034</span><span class="res-gap">+12.078</span><br><span class="res-speed-inline">101.14 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm Grupa A" data-time="1:48.272" data-gap="+15.316" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 2000" data-cls-oprs="K3" data-cls-cez="" data-dclass="A 2000">
+           <td class="res-pos "><span class="pos-cell">11</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">43</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=375"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MASONIČIĆ Radovan</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">A 2000</span><span class="res-vehicle-inline">Honda Civic Type R</span></td>
+           <td class="col-class"><span class="res-class">A 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Honda Civic Type R</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:48.272</span><span class="res-gap">+15.316</span><br><span class="res-speed-inline">98.33 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 5 Open" data-time="1:49.764" data-gap="+16.808" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="H 2000+" data-cls-oprs="K4" data-cls-cez="" data-dclass="H 2000+">
+           <td class="res-pos "><span class="pos-cell">12</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">217</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=301"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">EFEMKIN Dimitrii</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">H 2000+</span><span class="res-vehicle-inline">BMW M3</span></td>
+           <td class="col-class"><span class="res-class">H 2000+</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">BMW M3</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:49.764</span><span class="res-gap">+16.808</span><br><span class="res-speed-inline">97.43 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:49.935" data-gap="+16.979" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1400" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1400">
+           <td class="res-pos "><span class="pos-cell">13</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">23</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=363"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ADŽIĆ Marko</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">A 1400</span><span class="res-vehicle-inline">Rover MG ZR 25</span></td>
+           <td class="col-class"><span class="res-class">A 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Rover MG ZR 25</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:49.935</span><span class="res-gap">+16.979</span><br><span class="res-speed-inline">97.43 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="1:52.510" data-gap="+19.554" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="N 1600" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1600">
+           <td class="res-pos "><span class="pos-cell">14</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">29</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=378"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MUGOŠA Slobodan</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">N 1600</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">N 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:52.510</span><span class="res-gap">+19.554</span><br><span class="res-speed-inline">94.82 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:52.731" data-gap="+19.775" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1400" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1400">
+           <td class="res-pos "><span class="pos-cell">15</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">115</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=331"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">KRIVOKAPIĆ Milutin</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">A 1400</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">A 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:52.731</span><span class="res-gap">+19.775</span><br><span class="res-speed-inline">94.82 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:53.941" data-gap="+20.985" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1400" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1400">
+           <td class="res-pos "><span class="pos-cell">16</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">89</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=326"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ĐONOVIĆ Dejan</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">N 1400</span><span class="res-vehicle-inline">Peugeot 106 Rally</span></td>
+           <td class="col-class"><span class="res-class">N 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106 Rally</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:53.941</span><span class="res-gap">+20.985</span><br><span class="res-speed-inline">93.98 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:54.299" data-gap="+21.343" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1400" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1400">
+           <td class="res-pos "><span class="pos-cell">17</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">13</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=327"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">VUJNOVIĆ Miloš</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">N 1400</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">N 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:54.299</span><span class="res-gap">+21.343</span><br><span class="res-speed-inline">93.16 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:54.809" data-gap="+21.853" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1400" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1400">
+           <td class="res-pos "><span class="pos-cell">18</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">19</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=329"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">KOVAČEVIĆ Dejan</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">N 1400</span><span class="res-vehicle-inline">VolksWagen Polo</span></td>
+           <td class="col-class"><span class="res-class">N 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">VolksWagen Polo</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:54.809</span><span class="res-gap">+21.853</span><br><span class="res-speed-inline">93.16 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:55.116" data-gap="+22.160" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1150" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1150">
+           <td class="res-pos "><span class="pos-cell">19</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">236</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=355"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MUDREŠA Dragan</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">A 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">A 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:55.116</span><span class="res-gap">+22.160</span><br><span class="res-speed-inline">92.35 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm Grupa A" data-time="1:55.573" data-gap="+22.617" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 2000" data-cls-oprs="K3" data-cls-cez="" data-dclass="A 2000">
+           <td class="res-pos "><span class="pos-cell">20</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">506</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=285"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ĆOROVIĆ Almin</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">A 2000</span><span class="res-vehicle-inline">Opel Astra</span></td>
+           <td class="col-class"><span class="res-class">A 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Opel Astra</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:55.573</span><span class="res-gap">+22.617</span><br><span class="res-speed-inline">92.35 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:56.038" data-gap="+23.082" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1150" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1150">
+           <td class="res-pos "><span class="pos-cell">21</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">92</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=349"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">DODEROVIĆ Božidar</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">A 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">A 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:56.038</span><span class="res-gap">+23.082</span><br><span class="res-speed-inline">91.55 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="1:57.305" data-gap="+24.349" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="1" data-junior="0" data-cls-scg="A 1600" data-cls-oprs="K2" data-cls-cez="" data-dclass="A 1600">
+           <td class="res-pos "><span class="pos-cell">22</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">48</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=379"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">IVANOVIĆ Marija</a><br><span class="res-club">AMK MONTE racing</span><br><span class="res-class-inline">A 1600</span><span class="res-vehicle-inline">Citroën Saxo</span></td>
+           <td class="col-class"><span class="res-class">A 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Citroën Saxo</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:57.305</span><span class="res-gap">+24.349</span><br><span class="res-speed-inline">90.77 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="1:57.761" data-gap="+24.805" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1150" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1150">
+           <td class="res-pos "><span class="pos-cell">23</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">30</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=333"><img src="https://flagcdn.com/16x12/rs.png" alt="SRB" style="height:12px;vertical-align:middle;margin-right:3px">JOVANOVIĆ Petar</a><br><span class="res-club">ASU Zeka Auto sport</span><br><span class="res-class-inline">A 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">A 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">1:57.761</span><span class="res-gap">+24.805</span><br><span class="res-speed-inline">90.77 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="2:00.590" data-gap="+27.634" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="1" data-junior="0" data-cls-scg="N 1600" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1600">
+           <td class="res-pos "><span class="pos-cell">24</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">666</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=382"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">PLAKALO Ena</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">N 1600</span><span class="res-vehicle-inline">Citroën Saxo</span></td>
+           <td class="col-class"><span class="res-class">N 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Citroën Saxo</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:00.590</span><span class="res-gap">+27.634</span><br><span class="res-speed-inline">88.50 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:00.592" data-gap="+27.636" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="H 1000" data-cls-oprs="K1" data-cls-cez="" data-dclass="H 1000">
+           <td class="res-pos "><span class="pos-cell">25</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">121</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=384"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ĐURIŠIĆ Andrija</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">H 1000</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">H 1000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:00.592</span><span class="res-gap">+27.636</span><br><span class="res-speed-inline">88.50 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="2:01.323" data-gap="+28.367" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,CEZ,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="A 1600" data-cls-oprs="K2" data-cls-cez="G5" data-dclass="A 1600">
+           <td class="res-pos "><span class="pos-cell">26</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">961</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=314"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MALTSEVA Margarita</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">A 1600</span><span class="res-vehicle-inline">Citroën Saxo</span></td>
+           <td class="col-class"><span class="res-class">A 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Citroën Saxo</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:01.323</span><span class="res-gap">+28.367</span><br><span class="res-speed-inline">87.77 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:01.474" data-gap="+28.518" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="H 1400" data-cls-oprs="K1" data-cls-cez="" data-dclass="H 1400">
+           <td class="res-pos "><span class="pos-cell">27</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">222</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=386"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ŠUĆUR Luka</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">H 1400</span><span class="res-vehicle-inline">Suzuki Swift GTI</span></td>
+           <td class="col-class"><span class="res-class">H 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Suzuki Swift GTI</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:01.474</span><span class="res-gap">+28.518</span><br><span class="res-speed-inline">87.77 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="2:02.614" data-gap="+29.658" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="N 1600" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1600">
+           <td class="res-pos "><span class="pos-cell">28</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">33</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=364"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ŠUŠIĆ Gligorije</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">N 1600</span><span class="res-vehicle-inline">Citroën Saxo</span></td>
+           <td class="col-class"><span class="res-class">N 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Citroën Saxo</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:02.614</span><span class="res-gap">+29.658</span><br><span class="res-speed-inline">87.05 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:02.638" data-gap="+29.682" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1400" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1400">
+           <td class="res-pos "><span class="pos-cell">29</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">119</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=332"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">DURAKOVIĆ Sahib</a><br><span class="res-club">AMSK CRMNICA</span><br><span class="res-class-inline">A 1400</span><span class="res-vehicle-inline">Rover</span></td>
+           <td class="col-class"><span class="res-class">A 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Rover</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:02.638</span><span class="res-gap">+29.682</span><br><span class="res-speed-inline">87.05 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:02.730" data-gap="+29.774" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 1150" data-cls-oprs="K1" data-cls-cez="" data-dclass="A 1150">
+           <td class="res-pos "><span class="pos-cell">30</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">197</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=351"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">NIKČEVIĆ Sava</a><br><span class="res-club">AMSK GORŠTAK</span><br><span class="res-class-inline">A 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">A 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:02.730</span><span class="res-gap">+29.774</span><br><span class="res-speed-inline">87.05 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:03.696" data-gap="+30.740" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">31</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">155</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=336"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">RADMILOVIĆ Igor</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:03.696</span><span class="res-gap">+30.740</span><br><span class="res-speed-inline">86.34 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:03.907" data-gap="+30.951" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">32</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">353</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=358"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MARKOVIĆ Matija</a><br><span class="res-club">AMKK LOVĆEN racing team</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:03.907</span><span class="res-gap">+30.951</span><br><span class="res-speed-inline">86.34 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:04.239" data-gap="+31.283" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1400" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1400">
+           <td class="res-pos "><span class="pos-cell">33</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">17</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=334"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ŠAPIĆ Ilija</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">N 1400</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">N 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:04.239</span><span class="res-gap">+31.283</span><br><span class="res-speed-inline">85.65 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:04.407" data-gap="+31.451" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1400" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1400">
+           <td class="res-pos "><span class="pos-cell">34</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">18</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=383"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">KOVAČEVIĆ Đorđe</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">N 1400</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">N 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:04.407</span><span class="res-gap">+31.451</span><br><span class="res-speed-inline">85.65 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:04.568" data-gap="+31.612" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">35</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">510</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=361"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MILIĆEVIĆ Stevan</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:04.568</span><span class="res-gap">+31.612</span><br><span class="res-speed-inline">85.65 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:04.699" data-gap="+31.743" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">36</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">287</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=357"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">RAŽNATOVIĆ Milorad</a><br><span class="res-club">ASK TIVAT</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:04.699</span><span class="res-gap">+31.743</span><br><span class="res-speed-inline">85.65 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:06.078" data-gap="+33.122" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">37</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">160</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=359"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">BRKAN Luka</a><br><span class="res-club">ASK TIVAT</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:06.078</span><span class="res-gap">+33.122</span><br><span class="res-speed-inline">84.29 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:06.486" data-gap="+33.530" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">38</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">200</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=365"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">DŽOGAZ Dragan</a><br><span class="res-club">AMSK AP sport</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:06.486</span><span class="res-gap">+33.530</span><br><span class="res-speed-inline">84.29 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm Grupa A" data-time="2:07.198" data-gap="+34.242" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="A 2000" data-cls-oprs="K3" data-cls-cez="" data-dclass="A 2000">
+           <td class="res-pos "><span class="pos-cell">39</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">930</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=376"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">RADANOVIĆ Radovan</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">A 2000</span><span class="res-vehicle-inline">Opel Astra</span></td>
+           <td class="col-class"><span class="res-class">A 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Opel Astra</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:07.198</span><span class="res-gap">+34.242</span><br><span class="res-speed-inline">83.62 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:07.875" data-gap="+34.919" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">40</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">76</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=335"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MILOŠEV Stevan</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:07.875</span><span class="res-gap">+34.919</span><br><span class="res-speed-inline">83.62 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:09.139" data-gap="+36.183" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1150" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1150">
+           <td class="res-pos "><span class="pos-cell">41</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">208</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=356"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">ZUROVAC Petar</a><br><span class="res-club">AMSK NILOVIĆ Racing</span><br><span class="res-class-inline">N 1150</span><span class="res-vehicle-inline">Zastava Yugo 55</span></td>
+           <td class="col-class"><span class="res-class">N 1150</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Zastava Yugo 55</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:09.139</span><span class="res-gap">+36.183</span><br><span class="res-speed-inline">82.33 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="2:10.827" data-gap="+37.871" data-hs="0" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="H 1000" data-cls-oprs="K1" data-cls-cez="" data-dclass="H 1000">
+           <td class="res-pos "><span class="pos-cell">42</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">81</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=337"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">RADANOVIĆ Vojo</a><br><span class="res-club">AMSK Herceg Novi</span><br><span class="res-class-inline">H 1000</span><span class="res-vehicle-inline">Peugeot 106</span></td>
+           <td class="col-class"><span class="res-class">H 1000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106</td>
+           
+           
+           <td class="res-time-cell"><span class="res-time">2:10.827</span><span class="res-gap">+37.871</span><br><span class="res-speed-inline">81.69 km/h</span></td>
+           
+        </tr>                  <tr data-class="Klasa 3 od 1401 do 1600 ccm 1600 E1" data-time="" data-gap="" data-hs="1" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="0" data-junior="0" data-cls-scg="H 1600" data-cls-oprs="K2" data-cls-cez="" data-dclass="H 1600">
+           <td class="res-pos "><span class="pos-cell">—</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">416</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=390"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">PEROVIĆ Damjan</a><br><span class="res-club">AMSK KOTOR</span><br><span class="res-class-inline">H 1600</span></td>
+           <td class="col-class"><span class="res-class">H 1600</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">—</td>
+           
+           
+           <td class="res-time-cell"><span class="time-status-badge status-dns">DNS</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm 2000 E1" data-time="" data-gap="" data-hs="1" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="1" data-female="0" data-junior="1" data-cls-scg="H 2000" data-cls-oprs="K3" data-cls-cez="" data-dclass="H 2000">
+           <td class="res-pos "><span class="pos-cell">—</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">313</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=292"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">MILINIĆ Stefan</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">H 2000</span><span class="res-vehicle-inline">Honda Civic</span></td>
+           <td class="col-class"><span class="res-class">H 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Honda Civic</td>
+           
+           
+           <td class="res-time-cell"><span class="time-status-badge status-dnf">DNF</span></td>
+           
+        </tr>                  <tr data-class="Klasa 4 od 1601 do 2000 ccm Grupa N" data-time="" data-gap="" data-hs="1" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 2000" data-cls-oprs="N3" data-cls-cez="" data-dclass="N 2000">
+           <td class="res-pos "><span class="pos-cell">—</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">681</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=323"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">VUČETIĆ Goran</a><br><span class="res-club">AMSK PODI</span><br><span class="res-class-inline">N 2000</span><span class="res-vehicle-inline">Honda Civic Type R</span></td>
+           <td class="col-class"><span class="res-class">N 2000</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Honda Civic Type R</td>
+           
+           
+           <td class="res-time-cell"><span class="time-status-badge status-dnf">DNF</span></td>
+           
+        </tr>                  <tr data-class="Klasa 2  do 1400 ccm" data-time="" data-gap="" data-hs="1" data-in-ns="0" data-in-os="1" data-champs="OPS,SCG" data-is-ref="0" data-female="0" data-junior="0" data-cls-scg="N 1400" data-cls-oprs="N2" data-cls-cez="" data-dclass="N 1400">
+           <td class="res-pos "><span class="pos-cell">—</span></td>
+           <td class="hide-mobile" style="font-weight:700;color:var(--text-muted);font-size:0.8667rem">224</td>
+           <td><a class="res-name" style="color:inherit;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.25)" href="/driver.php?event=10&entry=328"><img src="https://flagcdn.com/16x12/me.png" alt="MNE" style="height:12px;vertical-align:middle;margin-right:3px">NIKOLIĆ Miljan</a><br><span class="res-club">AMSK NILOVIĆ Racing</span><br><span class="res-class-inline">N 1400</span><span class="res-vehicle-inline">Peugeot 106 Rally</span></td>
+           <td class="col-class"><span class="res-class">N 1400</span></td>
+           <td class="hide-mobile" style="font-size:0.8rem;color:var(--text-soft)">Peugeot 106 Rally</td>
+           
+           
+           <td class="res-time-cell"><span class="time-status-badge status-dnf">DNF</span></td>
+           
+        </tr>              </tbody>
+    </table>
+  </div>
+  
+  
+</div><!-- /dt-main-col -->
+
+<aside class="dt-sidebar-col">
+  
+<!-- Klasement po klasama -->
+<div class="dt-sidebar-card">
+  <div class="dt-sidebar-head">📊 Vodeći po klasama</div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 5 Open</span>
+    <span class="dt-class-name">VUJOVIĆ Baćko</span>
+    <span class="dt-class-time">1:32.956</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm 2000 E1</span>
+    <span class="dt-class-name">BULATOVIĆ Dejan</span>
+    <span class="dt-class-time">1:39.695</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm Grupa N</span>
+    <span class="dt-class-name">JANKOVIĆ Marko</span>
+    <span class="dt-class-time">1:43.566</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 3 od 1401 do 1600 ccm 1600 E1</span>
+    <span class="dt-class-name">VUJAČIĆ Mirko</span>
+    <span class="dt-class-time">1:44.523</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm Grupa A</span>
+    <span class="dt-class-name">MASONIČIĆ Radovan</span>
+    <span class="dt-class-time">1:48.272</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 2  do 1400 ccm</span>
+    <span class="dt-class-name">ADŽIĆ Marko</span>
+    <span class="dt-class-time">1:49.935</span>
+  </div>
+  </div>
+
+<!-- Dokumenti / Preuzimanja -->
+<div class="dt-sidebar-card">
+  <div class="dt-sidebar-head">📁 Dokumenti</div>
+    <a href="/uploads/doc_10_1780671250_BAT_Nagrada_Grada_Kraljeva_-_Goc_2026_-_Bilten_br__1.pdf" target="_blank" class="dt-sidebar-doc">
+    <span class="doc-type-badge doc-img doc-ico-sm" role="img" aria-label="Bilten" title="Bilten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>    <span class="dt-sidebar-doc-name">Bilten br.1 - Nagrada Grada Kraljeva - Goč 2026</span>
+    <span class="dt-sidebar-doc-dl">↓</span>
+  </a>
+    <a href="/uploads/doc_10_1780671204_MBAT_CEZ-_Nagrada_Grada_Kraljeva_-_GOC_2026_-_Pravilnik-pp.pdf" target="_blank" class="dt-sidebar-doc">
+    <span class="doc-type-badge doc-doc doc-ico-sm" role="img" aria-label="Pravilnik" title="Pravilnik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>    <span class="dt-sidebar-doc-name">Pravilnik - Nagrada Grada Kraljeva - Goč 2026</span>
+    <span class="dt-sidebar-doc-dl">↓</span>
+  </a>
+  </div>
+
+
+</aside>
+
+</div><!-- /dt-tab-body -->
+</div><!-- /tab-results -->
+
+
+
+
+<!-- ══════════════════════════════════════════════
+     TAB: OBAVEŠTENJA / DOKUMENTI
+══════════════════════════════════════════════ -->
+<div class="tab-content " id="tab-docs">
+<div class="dt-tab-body">
+<div class="dt-main-col">
+
+  <!-- Filter chips -->
+  <div class="doc-filter" id="doc-filter">
+    <div class="doc-filter-chip active" data-cat="all">Svi</div>
+        <div class="doc-filter-chip" data-cat="bilten">
+      Bilteni    </div>
+        <div class="doc-filter-chip" data-cat="pravilnik">
+      Pravilnici    </div>
+      </div>
+
+  <div class="doc-list-section" id="doc-list">
+
+    
+        <div class="doc-item" data-cat="bilten">
+      <span class="doc-type-badge doc-img" role="img" aria-label="Bilten" title="Bilten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>      <div class="doc-info">
+        <div class="doc-name">
+          Bilten br.1 - Nagrada Grada Kraljeva - Goč 2026                  </div>
+        <div class="doc-meta">
+                    Bilten           · 05.06.2026.           · 1,118 KB        </div>
+      </div>
+              <a href="/uploads/doc_10_1780671250_BAT_Nagrada_Grada_Kraljeva_-_Goc_2026_-_Bilten_br__1.pdf" target="_blank" class="doc-download" title="Preuzmi">↓</a>
+          </div>
+        <div class="doc-item" data-cat="pravilnik">
+      <span class="doc-type-badge doc-doc" role="img" aria-label="Pravilnik" title="Pravilnik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>      <div class="doc-info">
+        <div class="doc-name">
+          Pravilnik - Nagrada Grada Kraljeva - Goč 2026                  </div>
+        <div class="doc-meta">
+                    Pravilnik           · 05.06.2026.           · 1,873 KB        </div>
+      </div>
+              <a href="/uploads/doc_10_1780671204_MBAT_CEZ-_Nagrada_Grada_Kraljeva_-_GOC_2026_-_Pravilnik-pp.pdf" target="_blank" class="doc-download" title="Preuzmi">↓</a>
+          </div>
+    
+      </div>
+</div><!-- /dt-main-col -->
+
+<aside class="dt-sidebar-col">
+  
+<!-- Klasement po klasama -->
+<div class="dt-sidebar-card">
+  <div class="dt-sidebar-head">📊 Vodeći po klasama</div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 5 Open</span>
+    <span class="dt-class-name">VUJOVIĆ Baćko</span>
+    <span class="dt-class-time">1:32.956</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm 2000 E1</span>
+    <span class="dt-class-name">BULATOVIĆ Dejan</span>
+    <span class="dt-class-time">1:39.695</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm Grupa N</span>
+    <span class="dt-class-name">JANKOVIĆ Marko</span>
+    <span class="dt-class-time">1:43.566</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 3 od 1401 do 1600 ccm 1600 E1</span>
+    <span class="dt-class-name">VUJAČIĆ Mirko</span>
+    <span class="dt-class-time">1:44.523</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 4 od 1601 do 2000 ccm Grupa A</span>
+    <span class="dt-class-name">MASONIČIĆ Radovan</span>
+    <span class="dt-class-time">1:48.272</span>
+  </div>
+    <div class="dt-class-row">
+        <span class="dt-class-badge">Klasa 2  do 1400 ccm</span>
+    <span class="dt-class-name">ADŽIĆ Marko</span>
+    <span class="dt-class-time">1:49.935</span>
+  </div>
+  </div>
+
+<!-- Dokumenti / Preuzimanja -->
+<div class="dt-sidebar-card">
+  <div class="dt-sidebar-head">📁 Dokumenti</div>
+    <a href="/uploads/doc_10_1780671250_BAT_Nagrada_Grada_Kraljeva_-_Goc_2026_-_Bilten_br__1.pdf" target="_blank" class="dt-sidebar-doc">
+    <span class="doc-type-badge doc-img doc-ico-sm" role="img" aria-label="Bilten" title="Bilten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>    <span class="dt-sidebar-doc-name">Bilten br.1 - Nagrada Grada Kraljeva - Goč 2026</span>
+    <span class="dt-sidebar-doc-dl">↓</span>
+  </a>
+    <a href="/uploads/doc_10_1780671204_MBAT_CEZ-_Nagrada_Grada_Kraljeva_-_GOC_2026_-_Pravilnik-pp.pdf" target="_blank" class="dt-sidebar-doc">
+    <span class="doc-type-badge doc-doc doc-ico-sm" role="img" aria-label="Pravilnik" title="Pravilnik"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>    <span class="dt-sidebar-doc-name">Pravilnik - Nagrada Grada Kraljeva - Goč 2026</span>
+    <span class="dt-sidebar-doc-dl">↓</span>
+  </a>
+  </div>
+
+
+</aside>
+
+</div><!-- /dt-tab-body -->
+</div><!-- /tab-docs -->
+
+<div style="height:80px;"></div>
+
+<!-- ─── BOTTOM NAVIGATION ──────────────────────── -->
+</main>
+<nav class="bottom-nav" role="navigation" aria-label="Glavna navigacija">
+  <a href="/" class="bn-item ">
+    <span class="bn-icon">🏠</span>Početna
+  </a>
+  <a href="/events.php" class="bn-item ">
+    <span class="bn-icon">🏁</span>Takmičenja
+  </a>
+  <a href="/results.php" class="bn-item ">
+    <span class="bn-icon">🏆</span>Rezultati
+  </a>
+      <a href="/events.php?status=active" class="bn-item  ">
+          <span class="bn-icon">📡</span>
+        Live  </a>
+</nav>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>© 2026 GAGA Chrono Squad</span>
+    <span class="footer-sep">·</span>
+    <a href="https://gaga.co.rs" target="_blank">gaga.co.rs</a>
+    <span class="footer-sep">·</span>
+    <span style="color:#444">Powered by Wiclax</span>
+  </div>
+</footer>
+<script src="/assets/js/filter-handler.js?v=1791354465" defer></script>
+<script src="/assets/js/gap-ahead.js?v=1789472378" defer></script>
+<script src="/assets/js/toast.js?v=1785156590" defer></script>
+<script src="/assets/js/favorites.js?v=1788899509" defer></script>
+
+<script nonce="DQ3-jLEsRKvPLvGDlIDeFw">
+/* ── CSP: delegacija klikova (zamena za inline onclick) ── */
+document.addEventListener('click', function (e) {
+  var tb = e.target.closest('#ev-tabs .ev-tab[data-tab]');
+  if (tb) { switchTab(tb.dataset.tab); return; }
+  var cc = e.target.closest('#res-class-filter .class-chip');
+  if (cc) { resFilterClass(cc.dataset.class, cc); return; }
+  var dc = e.target.closest('#res-demo-filter .class-chip');
+  if (dc) { resFilterDemo(dc.dataset.demo, dc); return; }
+  var kc = e.target.closest('#doc-filter .doc-filter-chip');
+  if (kc) { filterDocs(kc.dataset.cat, kc); return; }
+});
+
+/* ── Tab switching ──────────────────────────────── */
+function switchTab(t) {
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.ev-tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+t).classList.add('active');
+  // Tab indeksi se računaju dinamički — Live tab postoji samo kad ima active sesija.
+  // (V43) po `data-tab`, ne po tekstu — naziv taba „Startna lista" se menja po fazama (Lista prijavljenih → … → Startna lista).
+  const tabBtn = document.querySelector('.ev-tab[data-tab="' + t + '"]');
+  if (tabBtn) tabBtn.classList.add('active');
+  const sid = 79;
+  const sidStr = sid ? '&session_id='+sid : '';
+  history.replaceState(null,'','/event.php?slug=goc-2026&tab='+t+sidStr);
+}
+
+/* ── Class filter ────────────────────────────────── */
+function filterClass(cls, btn) {
+  document.querySelectorAll('#class-filter .class-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const tbody = document.querySelector('#results-tbody');
+  if (!tbody) return;
+  let pos = 1;
+  tbody.querySelectorAll('tr').forEach(tr => {
+    const show = cls==='all' || tr.dataset.class===cls;
+    tr.style.display = show ? '' : 'none';
+    if (show && tr.dataset.hs!=='1') {
+      tr.querySelector('.res-pos').textContent = pos++;
+    }
+  });
+}
+
+/* ── Doc filter ──────────────────────────────────── */
+function filterDocs(cat, chip) {
+  document.querySelectorAll('#doc-filter .doc-filter-chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  document.querySelectorAll('#doc-list .doc-item').forEach(el => {
+    el.style.display = (cat==='all' || el.dataset.cat===cat) ? '' : 'none';
+  });
+}
+
+/* ── Live AJAX polling ───────────────────────────── */
+
+/* ── (12.09.2026) Reli: vreme rezultata na propisane decimale ─────────────────────
+   Tabela nosi data-time-dec (< 3) kad profil discipline registruje grublje od 1 ms (reli: 1/10 s).
+   Isti algoritam kao includes/result_time.php i zvanična štampa etape: jedinice =
+   Math.round(sek × 10^dec); vreme i razlika iz jedinica; isto zaokruženo vreme deli mesto, a među
+   izjednačenima ide startni broj. Bez atributa → 3 i sve ide dosadašnjim putem.
+   Stoje VAN `if ($live_session_id)` bloka: applyResFilters() ih zove i kad nijedna sesija nije živa. */
+function rtDec(tbody) {
+  if (typeof tbody === 'string') tbody = document.getElementById(tbody);
+  const d = tbody ? parseInt(tbody.dataset.timeDec, 10) : NaN;
+  return (d >= 0 && d < 3) ? d : 3;
+}
+function rtUnits(t, dec) {
+  if (!t) return null;
+  const s = String(t).trim().split(':').reduce((a, v) => a * 60 + parseFloat(v), 0);
+  return (isFinite(s) && s > 0) ? Math.round(s * Math.pow(10, dec)) : null;
+}
+function rtSeconds(u, dec) {
+  const p = Math.pow(10, dec);
+  return Math.floor(u / p) + (dec > 0 ? '.' + String(u % p).padStart(dec, '0') : '');
+}
+function rtClock(u, dec) {
+  const p = Math.pow(10, dec), w = Math.floor(u / p);
+  const f = dec > 0 ? '.' + String(u % p).padStart(dec, '0') : '';
+  const h = Math.floor(w / 3600), m = Math.floor((w % 3600) / 60), s = w % 60;
+  if (h > 0) return h + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0') + f;
+  if (m > 0) return m + ':' + String(s).padStart(2, '0') + f;
+  return s + f;
+}
+function rtGap(u, lu, dec) { return (u !== null && lu !== null && u > lu) ? '+' + rtSeconds(u - lu, dec) : ''; }
+function rtBibCmp(a, b) {
+  const x = String(a ?? '').trim(), y = String(b ?? '').trim();
+  if (/^\d+$/.test(x) && /^\d+$/.test(y)) return parseInt(x, 10) - parseInt(y, 10);
+  if (!x || !y) return (x ? 0 : 1) - (y ? 0 : 1);
+  return x.localeCompare(y, 'sr', { numeric: true, sensitivity: 'base' });
+}
+// Klasifikovani po jedinicama pa startnom broju; statusi i redovi bez vremena ispod, zatečenim redom.
+function rtSort(rows, dec) {
+  const st = r => r.is_dnf == 1 || r.is_dns == 1 || r.is_dsq == 1 || r.is_dnq == 1;
+  return rows.map((r, i) => ({ r, i, u: st(r) ? null : rtUnits(r.best_time, dec) }))
+    .sort((a, b) => {
+      const ac = a.u !== null, bc = b.u !== null;
+      if (ac !== bc) return ac ? -1 : 1;
+      if (!ac) return a.i - b.i;
+      if (a.u !== b.u) return a.u - b.u;
+      return rtBibCmp(a.r.bib, b.r.bib) || ((parseInt(a.r.entry_id, 10) || 0) - (parseInt(b.r.entry_id, 10) || 0)) || (a.i - b.i);
+    })
+    .map(x => x.r);
+}
+/* ── Results tab class filter ────────────────────── */
+// ── Rezultati filteri: klasa + demo (Dame/Juniori) ──
+// Oba filtera su client-side i ortogonalna. applyResFilters() iterira
+// jednom kroz tabelu, kombinuje uslove, i recalculira pozicije.
+function resCurrentClass() {
+  const chip = document.querySelector('#res-class-filter .class-chip.active');
+  return chip ? (chip.dataset.class || 'all') : 'all';
+}
+// (T1.16) Skup klasa izabranog čipa: noseća klasa nosi data-classes (cela klasa), grupa i obična klasa jednu.
+function resCurrentClassSet() {
+  const chip = document.querySelector('#res-class-filter .class-chip.active');
+  if (!chip || (chip.dataset.class || 'all') === 'all') return null;
+  if (chip.dataset.classes) { try { return JSON.parse(chip.dataset.classes); } catch (e) {} }
+  return [chip.dataset.class];
+}
+function resCurrentDemo() {
+  const chip = document.querySelector('#res-demo-filter .class-chip.active');
+  return chip ? (chip.dataset.demo || 'all') : 'all';
+}
+function applyResFilters() {
+  const cls  = resCurrentClass();
+  const clsSet = resCurrentClassSet();
+  const demo = resCurrentDemo();
+  const tbody = document.querySelector('#res-results-tbody');
+  if (!tbody) return;
+  // Champ filter mora i ovde da važi (klasa + šampionat se kombinuju).
+  const champ = (window.CHAMP_FILTER || 'ops').toLowerCase();
+  // Treci put isto pravilo (v. evRenderTable i filter_results_by_championship):
+  // ako NIJEDAN red ne nosi sampionat, provera po sampionatu moze samo da sakrije
+  // ceo spisak. AK Becej 22.08.2026 — Rezultati tab je bio prazan iz ovog razloga.
+  const _anyChamps = [...tbody.querySelectorAll('tr')].some(tr =>
+    String(tr.dataset.champs || '').trim() !== '' || tr.dataset.inNs === '1' || tr.dataset.inOs === '1');
+  const champOk = (tr) => {
+    if (!_anyChamps) return true;
+    if (champ === 'ops' || champ === 'os') return true;
+    const codes = (tr.dataset.champs||'').toUpperCase().split(',').map(s=>s.trim()).filter(Boolean);
+    if (champ === 'nss' || champ === 'ns') return tr.dataset.inNs === '1' || codes.includes('NSS');
+    return codes.includes(champ.toUpperCase());
+  };
+  let pos = 1;
+  // Reli (data-time-dec < 3): isto zaokruženo vreme deli mesto i u izabranoj klasi / Dame / Juniori.
+  const rlDec = rtDec(tbody);
+  let rlPrevU = null, rlPrevP = 0;
+  tbody.querySelectorAll('tr').forEach(tr => {
+    const okClass = clsSet === null || clsSet.indexOf(tr.dataset.dclass) !== -1;
+    const okDemo  = demo === 'all'
+                 || (demo === 'female' && tr.dataset.female === '1')
+                 || (demo === 'junior' && tr.dataset.junior === '1');
+    const show = okClass && okDemo && champOk(tr);
+    tr.style.display = show ? '' : 'none';
+    if (show && tr.dataset.hs !== '1') {
+      const posCell = tr.querySelector('.res-pos');
+      if (rlDec < 3) {
+        const u = rtUnits(tr.dataset.time, rlDec);
+        const p = (u !== null && u === rlPrevU) ? rlPrevP : pos;
+        rlPrevU = u; rlPrevP = p; pos++;
+        if (posCell) posCell.textContent = p;
+      } else if (posCell) posCell.textContent = pos++;
+    }
+  });
+}
+function resFilterClass(cls, btn) {
+  const bar = document.getElementById('res-class-filter');
+  document.querySelectorAll('#res-class-filter .class-chip').forEach(b=>b.classList.remove('active', 'active-parent'));
+  btn.classList.add('active');
+  // (T1.16) Brdo: izbor noseće klase otvara red njenih grupa; izbor grupe drži noseću klasu označenom.
+  if (bar && bar.dataset.tree === '1') {
+    const top = btn.dataset.top || '';
+    bar.querySelectorAll('.class-subrow').forEach(r => { r.style.display = (top && r.dataset.parent === top) ? 'flex' : 'none'; });
+    if (btn.classList.contains('class-chip--grp')) {
+      const parent = bar.querySelector('.class-chip[data-top="' + top + '"]:not(.class-chip--grp)');
+      if (parent) parent.classList.add('active-parent');
+    }
+  }
+  applyResFilters();
+}
+function resFilterDemo(demo, btn) {
+  document.querySelectorAll('#res-demo-filter .class-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyResFilters();
+}
+
+/* ── Desktop stats clock ─────────────────────────── */
+(function() {
+  const el = document.getElementById('ev-dt-clock');
+  if (!el) return;
+  function tick() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    el.textContent = h+':'+m+':'+s;
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

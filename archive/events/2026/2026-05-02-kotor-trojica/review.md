@@ -661,3 +661,7 @@ DSQ pravila i nepoznatih bodova. Frontend build i lint su prošli. Backend je
 ponovo pokrenut; javni API aplikacije prikazuje 16 klasa i 68 vozača, od kojih
 43 imaju pozitivne bodove, uključujući dva rezultata od 12,5. Frontend prikazuje
 kolone ukupnih bodova i bodova nakon odbacivanja.
+
+## Naknadna potvrđena korekcija — jedinstveni VW POLO
+
+Pri pregledu Goča programer je izričito potvrdio da WV POLO i VW POLO predstavljaju jedan model. Nova migracija 017-merge-polo-spellings.yaml prenosi reference i izvorne alias-e sa potvrđenog duplikata vehicle-wv-polo na postojeći vehicle-vw-polo, zatim uklanja duplikat. Dejan Kovačević i svi raniji nastupi/rezultati ostaju sačuvani. Izvorni PDF-ovi, njihovi hashovi i stari izvorni zapisi u ovom pregledu/reconciliation.json ostaju neizmijenjeni; trenutno kanonsko upućivanje je vehicle-vw-polo. Odluka i poređenje su u Goč review.md. Primijenjena 015 nije mijenjana.

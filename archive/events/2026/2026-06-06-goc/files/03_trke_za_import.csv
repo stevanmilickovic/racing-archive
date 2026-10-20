@@ -1,0 +1,47 @@
+﻿broj,vozac,klub,klasa,vozilo,sesija_1,vrijeme_1,status_1,plasman_u_klasi_1,sesija_2,vrijeme_2,status_2,plasman_u_klasi_2
+4,DOJČINOVIĆ Goran,AMSK CRMNICA,E1 1200,Honda Civic,trka_1,1:45.034,FIN,1,trka_2,1:44.759,FIN,1
+7,VUJAČIĆ Mirko,AMSK CRMNICA,A 1600,Citroen C2,trka_1,1:44.523,FIN,1,trka_2,1:42.763,FIN,1
+12,BULATOVIĆ Dejan,AMSK KOTOR,H 2000,Peugeot 306,trka_1,1:39.695,FIN,1,trka_2,,DNS,
+13,VUJNOVIĆ Miloš,AMSK Herceg Novi,N 1400,Peugeot 106,trka_1,1:54.299,FIN,2,trka_2,1:55.384,FIN,3
+14,VUJOVIĆ Baćko,AMSK GORŠTAK,E2SH,NORMA M20,trka_1,1:32.956,FIN,1,trka_2,1:35.000,FIN,1
+16,VUČKOVIĆ Goran,AMSK KOTOR,H 2000+,VolksWagen Golf 5,trka_1,1:42.806,FIN,1,trka_2,1:43.522,FIN,1
+17,ŠAPIĆ Ilija,AMSK Herceg Novi,N 1400,Peugeot 106,trka_1,2:04.239,FIN,4,trka_2,,DNS,
+18,KOVAČEVIĆ Đorđe,AMSK Herceg Novi,N 1400,Peugeot 106,trka_1,2:04.407,FIN,5,trka_2,2:03.363,FIN,4
+19,KOVAČEVIĆ Dejan,AMSK Herceg Novi,N 1400,VolksWagen Polo,trka_1,1:54.809,FIN,3,trka_2,1:54.799,FIN,2
+21,ĆOROVIĆ Aldin,AMSK AP sport,E2SH,GLOBAL GT LIGHTS,trka_1,1:37.221,FIN,2,trka_2,,DNF,
+23,ADŽIĆ Marko,AMSK PODI,A 1400,Rover MG ZR 25,trka_1,1:49.935,FIN,1,trka_2,1:50.469,FIN,1
+26,TUJKOVIĆ Dušan,AMSK KOTOR,N 2000,Honda Civic,trka_1,1:44.701,FIN,2,trka_2,1:45.691,FIN,2
+29,MUGOŠA Slobodan,AMSK AP sport,N 1600,Peugeot 106,trka_1,1:52.510,FIN,1,trka_2,1:51.726,FIN,1
+30,JOVANOVIĆ Petar,ASU Zeka Auto sport,A 1150,Zastava Yugo 55,trka_1,1:57.761,FIN,3,trka_2,1:59.102,FIN,4
+33,ŠUŠIĆ Gligorije,AMSK PODI,N 1600,Citroën Saxo,trka_1,2:02.614,FIN,3,trka_2,2:01.222,FIN,3
+36,PERUNOVIĆ Jovan,AMSK PODI,E2SH,Fiat 750,trka_1,1:39.622,FIN,3,trka_2,1:38.026,FIN,2
+43,MASONIČIĆ Radovan,AMSK CRMNICA,A 2000,Honda Civic Type R,trka_1,1:48.272,FIN,1,trka_2,1:48.078,FIN,1
+48,IVANOVIĆ Marija,AMK MONTE racing,A 1600,Citroën Saxo,trka_1,1:57.305,FIN,2,trka_2,1:59.137,FIN,2
+76,MILOŠEV Stevan,AMSK Herceg Novi,N 1150,Zastava Yugo 55,trka_1,2:07.875,FIN,7,trka_2,2:05.722,FIN,7
+80,JANKOVIĆ Marko,AMSK GORŠTAK,N 2000,Honda Civic,trka_1,1:43.566,FIN,1,trka_2,1:43.657,FIN,1
+81,RADANOVIĆ Vojo,AMSK Herceg Novi,H 1000,Peugeot 106,trka_1,2:10.827,FIN,2,trka_2,2:07.991,FIN,2
+89,ĐONOVIĆ Dejan,AMSK CRMNICA,N 1400,Peugeot 106 Rally,trka_1,1:53.941,FIN,1,trka_2,1:53.542,FIN,1
+92,DODEROVIĆ Božidar,AMSK PODI,A 1150,Zastava Yugo 55,trka_1,1:56.038,FIN,2,trka_2,1:55.380,FIN,2
+115,KRIVOKAPIĆ Milutin,AMSK Herceg Novi,A 1400,Peugeot 106,trka_1,1:52.731,FIN,2,trka_2,1:56.553,FIN,2
+119,DURAKOVIĆ Sahib,AMSK CRMNICA,A 1400,Rover,trka_1,2:02.638,FIN,3,trka_2,2:00.304,FIN,3
+121,ĐURIŠIĆ Andrija,AMSK AP sport,H 1000,Zastava Yugo 55,trka_1,2:00.592,FIN,1,trka_2,1:59.393,FIN,1
+155,RADMILOVIĆ Igor,AMSK Herceg Novi,N 1150,Zastava Yugo 55,trka_1,2:03.696,FIN,1,trka_2,2:02.877,FIN,1
+160,BRKAN Luka,ASK TIVAT,N 1150,Zastava Yugo 55,trka_1,2:06.078,FIN,5,trka_2,2:05.108,FIN,5
+197,NIKČEVIĆ Sava,AMSK GORŠTAK,A 1150,Zastava Yugo 55,trka_1,2:02.730,FIN,4,trka_2,1:57.029,FIN,3
+200,DŽOGAZ Dragan,AMSK AP sport,N 1150,Zastava Yugo 55,trka_1,2:06.486,FIN,6,trka_2,2:05.221,FIN,6
+208,ZUROVAC Petar,AMSK NILOVIĆ Racing,N 1150,Zastava Yugo 55,trka_1,2:09.139,FIN,8,trka_2,2:08.815,FIN,8
+217,EFEMKIN Dimitrii,AMSK CRMNICA,H 2000+,BMW M3,trka_1,1:49.764,FIN,2,trka_2,1:49.597,FIN,2
+222,ŠUĆUR Luka,AMSK PODI,H 1400,Suzuki Swift GTI,trka_1,2:01.474,FIN,1,trka_2,1:59.583,FIN,1
+224,NIKOLIĆ Miljan,AMSK NILOVIĆ Racing,N 1400,Peugeot 106 Rally,trka_1,,DNF,,trka_2,,DNS,
+236,MUDREŠA Dragan,AMSK PODI,A 1150,Zastava Yugo 55,trka_1,1:55.116,FIN,1,trka_2,1:54.622,FIN,1
+287,RAŽNATOVIĆ Milorad,ASK TIVAT,N 1150,Zastava Yugo 55,trka_1,2:04.699,FIN,4,trka_2,2:03.508,FIN,2
+310,BOJANOVIĆ Miloš,AMSK GORŠTAK,H 1600,Peugeot 106,trka_1,1:44.986,FIN,1,trka_2,1:44.243,FIN,1
+313,MILINIĆ Stefan,AMSK PODI,H 2000,Honda Civic,trka_1,,DNF,,trka_2,,DNS,
+353,MARKOVIĆ Matija,AMKK LOVĆEN racing team,N 1150,Zastava Yugo 55,trka_1,2:03.907,FIN,2,trka_2,2:03.685,FIN,3
+416,PEROVIĆ Damjan,AMSK KOTOR,H 1600,,trka_1,,DNS,,trka_2,,DNS,
+506,ĆOROVIĆ Almin,AMSK AP sport,A 2000,Opel Astra,trka_1,1:55.573,FIN,2,trka_2,1:56.811,FIN,2
+510,MILIČKOVIĆ Stevan,AMSK AP sport,N 1150,Zastava Yugo 55,trka_1,2:04.568,FIN,3,trka_2,2:04.709,FIN,4
+666,PLAKALO Ena,AMSK AP sport,N 1600,Citroën Saxo,trka_1,2:00.590,FIN,2,trka_2,2:01.217,FIN,2
+681,VUČETIĆ Goran,AMSK PODI,N 2000,Honda Civic Type R,trka_1,,DNF,,trka_2,,DNS,
+930,RADANOVIĆ Radovan,AMSK Herceg Novi,A 2000,Opel Astra,trka_1,2:07.198,FIN,3,trka_2,2:06.701,FIN,3
+961,MALTSEVA Margarita,AMSK CRMNICA,A 1600,Citroën Saxo,trka_1,2:01.323,FIN,3,trka_2,1:59.681,FIN,3

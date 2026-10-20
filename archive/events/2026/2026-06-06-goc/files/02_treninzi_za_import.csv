@@ -1,0 +1,47 @@
+﻿broj,vozac,klub,klasa,vozilo,sesija_1,vrijeme_1,status_1,plasman_u_klasi_1,sesija_2,vrijeme_2,status_2,plasman_u_klasi_2
+4,DOJČINOVIĆ Goran,AMSK CRMNICA,E1 1200,Honda Civic,trening_1,1:51.854,FIN,1,trening_2,,DNS,
+7,VUJAČIĆ Mirko,AMSK CRMNICA,A 1600,Citroen C2,trening_1,1:45.545,FIN,1,trening_2,1:44.425,FIN,1
+12,BULATOVIĆ Dejan,AMSK KOTOR,H 2000,Peugeot 306,trening_1,1:40.501,FIN,1,trening_2,,DNS,
+13,VUJNOVIĆ Miloš,AMSK Herceg Novi,N 1400,Peugeot 106,trening_1,1:56.157,FIN,1,trening_2,,DNS,
+14,VUJOVIĆ Baćko,AMSK GORŠTAK,E2SH,NORMA M20,trening_1,1:32.438,FIN,1,trening_2,1:39.128,FIN,1
+16,VUČKOVIĆ Goran,AMSK KOTOR,H 2000+,VolksWagen Golf 5,trening_1,1:45.427,FIN,1,trening_2,1:49.157,FIN,1
+17,ŠAPIĆ Ilija,AMSK Herceg Novi,N 1400,Peugeot 106,trening_1,2:03.049,FIN,5,trening_2,2:03.974,FIN,3
+18,KOVAČEVIĆ Đorđe,AMSK Herceg Novi,N 1400,Peugeot 106,trening_1,2:07.085,FIN,6,trening_2,2:06.186,FIN,4
+19,KOVAČEVIĆ Dejan,AMSK Herceg Novi,N 1400,VolksWagen Polo,trening_1,1:58.799,FIN,4,trening_2,1:59.133,FIN,2
+21,ĆOROVIĆ Aldin,AMSK AP sport,E2SH,GLOBAL GT LIGHTS,trening_1,,DNF,,trening_2,,DNS,
+23,ADŽIĆ Marko,AMSK PODI,A 1400,Rover MG ZR 25,trening_1,1:55.737,FIN,1,trening_2,,DNS,
+26,TUJKOVIĆ Dušan,AMSK KOTOR,N 2000,Honda Civic,trening_1,1:44.417,FIN,1,trening_2,,DNS,
+29,MUGOŠA Slobodan,AMSK AP sport,N 1600,Peugeot 106,trening_1,1:56.422,FIN,1,trening_2,,DNS,
+30,JOVANOVIĆ Petar,ASU Zeka Auto sport,A 1150,Zastava Yugo 55,trening_1,2:00.224,FIN,3,trening_2,1:59.399,FIN,4
+33,ŠUŠIĆ Gligorije,AMSK PODI,N 1600,Citroën Saxo,trening_1,2:06.443,FIN,2,trening_2,2:05.116,FIN,2
+36,PERUNOVIĆ Jovan,AMSK PODI,E2SH,Fiat 750,trening_1,1:41.725,FIN,2,trening_2,,DNS,
+43,MASONIČIĆ Radovan,AMSK CRMNICA,A 2000,Honda Civic Type R,trening_1,1:52.369,FIN,1,trening_2,1:51.061,FIN,1
+48,IVANOVIĆ Marija,AMK MONTE racing,A 1600,Citroën Saxo,trening_1,2:12.383,FIN,3,trening_2,2:04.816,FIN,3
+76,MILOŠEV Stevan,AMSK Herceg Novi,N 1150,Zastava Yugo 55,trening_1,2:08.612,FIN,7,trening_2,2:07.186,FIN,4
+80,JANKOVIĆ Marko,AMSK GORŠTAK,N 2000,Honda Civic,trening_1,1:56.062,FIN,3,trening_2,1:45.740,FIN,1
+81,RADANOVIĆ Vojo,AMSK Herceg Novi,H 1000,Peugeot 106,trening_1,2:12.456,FIN,2,trening_2,,DNS,
+89,ĐONOVIĆ Dejan,AMSK CRMNICA,N 1400,Peugeot 106 Rally,trening_1,1:56.511,FIN,2,trening_2,1:55.973,FIN,1
+92,DODEROVIĆ Božidar,AMSK PODI,A 1150,Zastava Yugo 55,trening_1,2:10.285,FIN,4,trening_2,1:58.986,FIN,3
+115,KRIVOKAPIĆ Milutin,AMSK Herceg Novi,A 1400,Peugeot 106,trening_1,1:57.868,FIN,2,trening_2,1:58.927,FIN,1
+119,DURAKOVIĆ Sahib,AMSK CRMNICA,A 1400,Rover,trening_1,2:03.235,FIN,3,trening_2,2:02.033,FIN,2
+121,ĐURIŠIĆ Andrija,AMSK AP sport,H 1000,Zastava Yugo 55,trening_1,2:01.554,FIN,1,trening_2,2:00.061,FIN,1
+155,RADMILOVIĆ Igor,AMSK Herceg Novi,N 1150,Zastava Yugo 55,trening_1,2:06.947,FIN,3,trening_2,2:06.399,FIN,3
+160,BRKAN Luka,ASK TIVAT,N 1150,Zastava Yugo 55,trening_1,2:07.420,FIN,4,trening_2,2:05.479,FIN,1
+197,NIKČEVIĆ Sava,AMSK GORŠTAK,A 1150,Zastava Yugo 55,trening_1,1:59.852,FIN,2,trening_2,1:57.670,FIN,1
+200,DŽOGAZ Dragan,AMSK AP sport,N 1150,Zastava Yugo 55,trening_1,2:08.270,FIN,5,trening_2,2:06.184,FIN,2
+208,ZUROVAC Petar,AMSK NILOVIĆ Racing,N 1150,Zastava Yugo 55,trening_1,2:11.115,FIN,8,trening_2,2:10.770,FIN,6
+217,EFEMKIN Dimitrii,AMSK CRMNICA,H 2000+,BMW M3,trening_1,1:50.374,FIN,2,trening_2,1:51.863,FIN,2
+222,ŠUĆUR Luka,AMSK PODI,H 1400,Suzuki Swift GTI,trening_1,2:00.401,FIN,1,trening_2,2:11.273,FIN,1
+224,NIKOLIĆ Miljan,AMSK NILOVIĆ Racing,N 1400,Peugeot 106 Rally,trening_1,1:57.413,FIN,3,trening_2,2:54.032,FIN,5
+236,MUDREŠA Dragan,AMSK PODI,A 1150,Zastava Yugo 55,trening_1,1:59.123,FIN,1,trening_2,1:58.328,FIN,2
+287,RAŽNATOVIĆ Milorad,ASK TIVAT,N 1150,Zastava Yugo 55,trening_1,2:05.113,FIN,2,trening_2,2:31.139,FIN,7
+310,BOJANOVIĆ Miloš,AMSK GORŠTAK,H 1600,Peugeot 106,trening_1,,DNF,,trening_2,,DNS,
+313,MILINIĆ Stefan,AMSK PODI,H 2000,Honda Civic,trening_1,1:47.585,FIN,2,trening_2,1:48.197,FIN,1
+353,MARKOVIĆ Matija,AMKK LOVĆEN racing team,N 1150,Zastava Yugo 55,trening_1,2:04.169,FIN,1,trening_2,3:32.849,FIN,8
+416,PEROVIĆ Damjan,AMSK KOTOR,H 1600,,trening_1,,DNS,,trening_2,,DNS,
+506,ĆOROVIĆ Almin,AMSK AP sport,A 2000,Opel Astra,trening_1,1:56.367,FIN,2,trening_2,2:00.238,FIN,2
+510,MILIČKOVIĆ Stevan,AMSK AP sport,N 1150,Zastava Yugo 55,trening_1,2:08.382,FIN,6,trening_2,2:07.658,FIN,5
+666,PLAKALO Ena,AMSK AP sport,N 1600,Citroën Saxo,trening_1,2:07.163,FIN,3,trening_2,2:03.852,FIN,1
+681,VUČETIĆ Goran,AMSK PODI,N 2000,Honda Civic Type R,trening_1,1:45.598,FIN,2,trening_2,,DNS,
+930,RADANOVIĆ Radovan,AMSK Herceg Novi,A 2000,Opel Astra,trening_1,2:07.440,FIN,3,trening_2,2:14.355,FIN,3
+961,MALTSEVA Margarita,AMSK CRMNICA,A 1600,Citroën Saxo,trening_1,2:08.340,FIN,2,trening_2,2:04.480,FIN,2

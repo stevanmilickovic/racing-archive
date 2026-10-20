@@ -169,5 +169,15 @@
     "classificationResults": 136,
     "clubResults": 12,
     "sourceDocuments": 3
-  }
+  },
+  "corrections": [
+    {
+      "migration": "backend/src/main/resources/db/changelog/017-merge-polo-spellings.yaml",
+      "decision": "Programmer confirmed WV POLO and VW POLO are one model while reviewing Goč.",
+      "canonicalKey": "vehicle-vw-polo",
+      "supersededDuplicateKey": "vehicle-wv-polo",
+      "evidenceReview": "archive/events/2026/2026-06-06-goc/review.md",
+      "originalDocumentsModified": false
+    }
+  ]
 }

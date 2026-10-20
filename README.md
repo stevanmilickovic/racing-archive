@@ -23,10 +23,14 @@ Clubs and classes are established from reviewed sources rather than a predefined
 list. The existing scoring configuration remains available; seasons with unknown
 scoring rules show results without calculated points.
 
-Season standings sum the published points from finalized class results, then
-apply season drop rules. Overall/category tables are not counted a second time,
-and already awarded reduced points are not reduced again. Missing official
-points are shown as unavailable rather than zero.
+Season standings prefer published points from finalized class results. When
+points are absent, they are calculated from the final class position using the
+confirmed season rules: points schedule, class-size reduction (classified
+finishers) and foreign-host exception. Totals that include calculated points are
+marked with an asterisk; these are not stored as published awarded points.
+Season drop rules apply to the combined total. Overall/category tables are not
+counted twice, and published points are never reduced again. Unknown rules or
+missing required scoring information still mean unavailable points, not zero.
 
 See [the curation workflow](docs/curating-events.md) and [agent instructions](AGENTS.md).
 Existing manually entered records are preserved by schema upgrades; capturing
@@ -98,8 +102,9 @@ upgrade. For a full MySQL replay, provision an empty disposable schema named
 schema or the application database. It replays the curated event, checks the public
 results and verifies original document downloads. Set
 `RACING_ARCHIVE_TEST_MYSQL_UPGRADE_URL` to a second empty disposable schema to also
-test upgrading from the migrations preceding the first event, preserving legacy
-data and using different generated IDs. Both schemas must have names beginning
+test upgrading from the migrations preceding Goč (through 016), preserving Kotor
+results and legacy data while using different generated IDs for new records.
+Both schemas must have names beginning
 with `racing_archive_verify_`; use new empty schemas for another run.
 Reporting and automated ingestion are outside the current scope.
 

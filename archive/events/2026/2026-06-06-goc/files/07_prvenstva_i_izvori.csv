@@ -1,0 +1,6 @@
+﻿prvenstvo,naziv,broj_na_sajtu_za_generalni,link_generalnog_plasmana,napomena
+SCG,Šampionat Crne Gore,46,https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results,Detaljni CSV podaci u ZIP-u
+NSS,Nacionalni šampionat Srbije,62,https://timing.gaga.co.rs/event.php?champ=nss&session_id=73&slug=goc-2026&tab=results,CSV tabele detaljnih vremena obuhvataju samo SCG
+OPS,Otvoreno prvenstvo Srbije,115,https://timing.gaga.co.rs/event.php?champ=ops&session_id=73&slug=goc-2026&tab=results,CSV tabele detaljnih vremena obuhvataju samo SCG
+CEZ,FIA CEZ brdske trke,4,https://timing.gaga.co.rs/event.php?champ=cez&session_id=73&slug=goc-2026&tab=results,CSV tabele detaljnih vremena obuhvataju samo SCG
+OPRS,Otvoreno prvenstvo Republike Srpske,8,https://timing.gaga.co.rs/event.php?champ=oprs&session_id=73&slug=goc-2026&tab=results,CSV tabele detaljnih vremena obuhvataju samo SCG

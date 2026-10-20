@@ -6,8 +6,9 @@ const labels = {
   en: {
     seasons: 'Active seasons', rounds: 'Completed events', driver: 'Driver', raw: 'Total points',
     adjusted: 'Points after drops', sessions: 'Sessions', sources: 'Source documents', download: 'Download original',
-    standingsBasis: 'Points from finalized class results. Season drop rules are applied to the total.',
-    pointsIncomplete: 'Some official points have not been published yet. Incomplete totals are shown as —.',
+    standingsBasis: 'Published points take precedence; missing points are calculated from finalized class positions using the season rules. Season drop rules are applied to the total.',
+    calculatedPoints: '* Includes points calculated using the season rules, not published awarded points.',
+    pointsIncomplete: 'Some results lack the information needed to calculate points. Incomplete totals are shown as —.',
     noStandings: 'No finalized class results have been published yet.',
     noSources: 'No source documents published for this event yet.', noSessions: 'No sessions published yet.',
     noSeasons: 'No active seasons published yet.', noResults: 'No results published yet.',
@@ -22,8 +23,9 @@ const labels = {
   sr: {
     seasons: 'Aktivne sezone', rounds: 'Završene trke', driver: 'Vozač', raw: 'Ukupni bodovi',
     adjusted: 'Bodovi nakon odbacivanja', sessions: 'Sesije', sources: 'Izvorni dokumenti', download: 'Preuzmi original',
-    standingsBasis: 'Bodovi iz konačnih klasnih rezultata. Na zbir se primjenjuju sezonska pravila odbacivanja rezultata.',
-    pointsIncomplete: 'Neki zvanični bodovi još nijesu objavljeni. Nepotpuni zbirovi prikazani su kao —.',
+    standingsBasis: 'Objavljeni bodovi imaju prednost; nedostajući se računaju iz konačnog klasnog plasmana prema pravilima sezone. Na zbir se primjenjuju pravila odbacivanja rezultata.',
+    calculatedPoints: '* Zbir uključuje bodove izračunate prema pravilima sezone, a ne objavljene dodijeljene bodove.',
+    pointsIncomplete: 'Za neke rezultate nedostaju podaci potrebni za obračun bodova. Nepotpuni zbirovi prikazani su kao —.',
     noStandings: 'Još nema objavljenih konačnih klasnih rezultata.',
     noSources: 'Izvorni dokumenti za ovu trku još nisu objavljeni.', noSessions: 'Nema objavljenih sesija.',
     noSeasons: 'Nema objavljenih aktivnih sezona.', noResults: 'Nema objavljenih rezultata.',
@@ -41,7 +43,7 @@ type Round = { id: number; roundNumber: number; name: string; startsOn: string |
 type Season = {
   id: number; championshipName: string; championshipShortName: string | null; year: number
   scoringKnown: boolean; completedRounds: Round[]
-  standings: { classCode: string; drivers: { driverId: number; driverName: string; rawPoints: number | null; adjustedPoints: number | null }[] }[]
+  standings: { classCode: string; drivers: { driverId: number; driverName: string; rawPoints: number | null; adjustedPoints: number | null; hasCalculatedPoints: boolean }[] }[]
 }
 type Session = { id: number; name: string; type: string; sessionOrder: number }
 type Result = {
@@ -113,6 +115,7 @@ function Dashboard({ t }: { t: Labels }) {
       </li>)}</ol>
       {!season.scoringKnown && <p>{t.scoringUnknown}</p>}
       {season.scoringKnown && season.standings.length > 0 && <p>{t.standingsBasis}</p>}
+      {season.scoringKnown && season.standings.some((group) => group.drivers.some((driver) => driver.hasCalculatedPoints && driver.rawPoints !== null)) && <p>{t.calculatedPoints}</p>}
       {season.scoringKnown && season.standings.some((group) => group.drivers.some((driver) => driver.rawPoints === null)) && <p>{t.pointsIncomplete}</p>}
       {season.standings.length === 0 && <p className="empty">{t.noStandings}</p>}
       {season.standings.map((group) => <section className="standing" key={group.classCode}>
@@ -120,7 +123,10 @@ function Dashboard({ t }: { t: Labels }) {
           <thead><tr><th>{t.driver}</th>{season.scoringKnown && <><th>{t.raw}</th><th>{t.adjusted}</th></>}</tr></thead>
           <tbody>{group.drivers.map((driver) => <tr key={driver.driverId}>
             <td><a href={`/?page=driver&id=${driver.driverId}`}>{driver.driverName}</a></td>
-            {season.scoringKnown && <><td>{driver.rawPoints ?? '—'}</td><td><strong>{driver.adjustedPoints ?? '—'}</strong></td></>}
+            {season.scoringKnown && <>
+              <td>{driver.rawPoints ?? '—'}{driver.hasCalculatedPoints && driver.rawPoints !== null && <abbr title={t.calculatedPoints}>*</abbr>}</td>
+              <td><strong>{driver.adjustedPoints ?? '—'}{driver.hasCalculatedPoints && driver.adjustedPoints !== null && <abbr title={t.calculatedPoints}>*</abbr>}</strong></td>
+            </>}
           </tr>)}</tbody>
         </table></div>
       </section>)}

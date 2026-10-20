@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include: { file: pre-event-changelog.yaml }
+  - include: { file: db/changelog/014-official-event-results.yaml }
+  - include: { file: db/changelog/015-kotor-trojica-2026.yaml }
+  - include: { file: db/changelog/016-cg-2026-scoring-system.yaml }

@@ -89,7 +89,7 @@ class PublicDashboardControllerTest {
         when(seasons.findAll()).thenReturn(List.of(season));
         when(participations.findBySeasonId(1L)).thenReturn(List.of(participation));
         assertThat(controller.dashboard().getFirst().scoringKnown()).isFalse();
-        verify(standings).standings(season, List.of(1L), false);
+        verify(standings).standings(season, List.of(1L), java.util.Map.of());
         verifyNoInteractions(results);
     }
 

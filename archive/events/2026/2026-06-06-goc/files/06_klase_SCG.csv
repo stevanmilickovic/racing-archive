@@ -1,0 +1,16 @@
+﻿klasa,broj_vozaca,startni_brojevi,izvor
+A 1150,4,"30, 92, 197, 236",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+A 1400,3,"23, 115, 119",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+A 1600,3,"7, 48, 961",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+A 2000,3,"43, 506, 930",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+E1 1200,1,4,https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+E2SH,3,"14, 21, 36",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+H 1000,2,"81, 121",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+H 1400,1,222,https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+H 1600,2,"310, 416",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+H 2000,2,"12, 313",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+H 2000+,2,"16, 217",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+N 1150,8,"76, 155, 160, 200, 208, 287, 353, 510",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+N 1400,6,"13, 17, 18, 19, 89, 224",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+N 1600,3,"29, 33, 666",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
+N 2000,3,"26, 80, 681",https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results

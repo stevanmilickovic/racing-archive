@@ -1,0 +1,8 @@
+﻿sesija,datum,tip,broj_zapisa,url
+placeni_trening_1,2026-06-06,paid_training,33,https://timing.gaga.co.rs/event.php?champ=scg&session_id=74&slug=goc-2026&tab=results
+placeni_trening_2,2026-06-06,paid_training,28,https://timing.gaga.co.rs/event.php?champ=scg&session_id=75&slug=goc-2026&tab=results
+trening_1,2026-06-06,training,46,https://timing.gaga.co.rs/event.php?champ=scg&session_id=76&slug=goc-2026&tab=results
+trening_2,2026-06-06,training,46,https://timing.gaga.co.rs/event.php?champ=scg&session_id=77&slug=goc-2026&tab=results
+trka_1,2026-06-07,race_run,46,https://timing.gaga.co.rs/event.php?champ=scg&session_id=79&slug=goc-2026&tab=results
+trka_2,2026-06-07,race_run,46,https://timing.gaga.co.rs/event.php?champ=scg&session_id=80&slug=goc-2026&tab=results
+generalni_plasman,2026-06-07,final_classification,46,https://timing.gaga.co.rs/event.php?champ=scg&session_id=73&slug=goc-2026&tab=results
