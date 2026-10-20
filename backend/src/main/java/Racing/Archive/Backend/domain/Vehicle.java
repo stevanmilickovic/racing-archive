@@ -21,6 +21,12 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "archive_key", unique = true, length = 160)
+    private String archiveKey;
+
+    @Column(name = "identity_notes", columnDefinition = "TEXT")
+    private String identityNotes;
+
     @Column(nullable = false, length = 100)
     private String manufacturer;
 

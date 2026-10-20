@@ -43,8 +43,8 @@ public class Entry {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "competition_class_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "competition_class_id")
     private CompetitionClass competitionClass;
 
     @Column(name = "race_number")

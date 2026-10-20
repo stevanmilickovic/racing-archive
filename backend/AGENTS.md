@@ -2,6 +2,11 @@
 
 ## Project
 
+Read the root `AGENTS.md` and `docs/curating-events.md` for the authoritative
+event curation workflow. The application is read-only: archive content is managed
+by reviewed, append-only Liquibase migrations and versioned event source files.
+Do not add runtime editors, imports, converters, or administrator setup flows.
+
 Racing Archive is a backend service for storing and serving motorsport archive data, including championships, events, competitors, vehicles, classes, and results.
 
 The initial use case is Montenegrin hillclimb racing, but the domain model should remain generic enough to support other countries, federations, championships, and motorsport disciplines later.

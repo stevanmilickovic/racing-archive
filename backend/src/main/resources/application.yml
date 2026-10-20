@@ -10,6 +10,4 @@ spring:
       ddl-auto: validate
 
 racing-archive:
-  admin:
-    username: ${RACING_ARCHIVE_ADMIN_USERNAME:admin}
-    password: ${RACING_ARCHIVE_ADMIN_PASSWORD:}
+  sources-directory: ${RACING_ARCHIVE_SOURCES_DIRECTORY:../archive/events}

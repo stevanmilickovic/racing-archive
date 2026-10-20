@@ -4,6 +4,12 @@ This document describes the initial domain model for Racing Archive. It is inten
 
 ## Core hierarchy
 
+Published archive data is now curated through versioned migrations. Read
+`../../docs/curating-events.md` for the event-source and identity-review workflow.
+The scoring sections below describe the intended domain; the existing dashboard
+still calculates standings from session results and does not yet consume all
+official classification rules.
+
 ```text
 Federation
   └─ Championship
@@ -59,6 +65,23 @@ A category that groups competitors with comparable machinery. Competition classe
 ### Entry
 
 An entry is a driver's participation in one championship round. It records the driver, vehicle, club, competition class, race number, and participation status.
+
+Club/team, vehicle and competition class are optional. Missing details remain
+NULL and can be supplied later by a new migration. Session and driver result views
+keep such entries visible; class positions and class standings exclude entries
+whose class is unknown. Drivers may also exist without any round entries.
+
+Tracks are reusable identities and a round may link to a track when known.
+Drivers, clubs/teams, vehicles, classes, tracks and rounds have immutable archive
+keys for migration references and optional identity notes. Legacy records may
+initially have no key. Confirmed alternate labels live in `identity_aliases`, which
+links each alias to exactly one canonical identity. Labels need not be globally
+unique: two distinct drivers can have the same name or alias.
+
+Each round can have multiple `source_documents` containing the original file's
+title, relative path, media type, SHA-256, optional original URL and public notes.
+The source files themselves live under `archive/events/` and are deployed with
+the app. Unregistered documents and developer review notes are not downloadable.
 
 `Entry` is the historical snapshot of a driver's representation at a round. Club, vehicle, and class must not be stored only on `Driver`, because each can change between events.
 

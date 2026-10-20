@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 012-optional-entry-class
+      author: codex
+      changes:
+        - dropNotNullConstraint:
+            tableName: entries
+            columnName: competition_class_id
+            columnDataType: BIGINT
+  - changeSet:
+      id: 012-curated-archive
+      author: codex
+      changes:
+        - sqlFile:
+            path: 012-curated-archive.sql
+            relativeToChangelogFile: true

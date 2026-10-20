@@ -28,6 +28,12 @@ public class ChampionshipRound {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "archive_key", unique = true, length = 160)
+    private String archiveKey;
+
+    @Column(name = "identity_notes", columnDefinition = "TEXT")
+    private String identityNotes;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "season_id", nullable = false)
     private Season season;
@@ -35,6 +41,10 @@ public class ChampionshipRound {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "host_federation_id")
     private Federation hostFederation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "track_id")
+    private Track track;
 
     @Column(name = "round_number", nullable = false)
     private Integer roundNumber;

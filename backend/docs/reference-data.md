@@ -1,4 +1,9 @@
-# Initial Reference Data
+# Historical reference seed list
+
+The list below records what migration 005 originally supplied. Migration 013
+retires these seeds when they have no archive key or historical references.
+New clubs and classes must be established from reviewed event documents.
+The scoring system is retained but is not automatically assigned to seasons.
 
 ## Montenegro clubs
 

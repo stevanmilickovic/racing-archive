@@ -1,30 +1,42 @@
-.app-shell { max-width: 1280px; margin: 0 auto; padding: 36px 28px 64px; }
-.topbar, .section-heading, .form-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.eyebrow { margin: 0 0 4px; color: #a83b25; font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-h1, h2 { color: #1c2630; } h1 { margin: 0; font-size: 2rem; } h2 { margin: 0; font-size: 1.2rem; } p { margin: 0; }
-.intro { margin: 32px 0 20px; color: #52616e; }
-.import-panel { display: grid; grid-template-columns: minmax(230px, 1fr) minmax(300px, 1.3fr); gap: 20px; border: 1px solid #d9e0e5; border-left: 4px solid #a83b25; border-radius: 9px; background: white; padding: 20px; margin-bottom: 24px; }
-.import-copy h2 { margin: 0 0 7px; } .import-copy > p:last-child { color: #52616e; font-size: .9rem; }
-.import-form { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 10px; } .import-form input { min-width: 0; } .template-link { grid-column: 1 / -1; color: #8d321e; font-size: .86rem; font-weight: 700; text-decoration: none; }
-.import-summary { grid-column: 1 / -1; border-top: 1px solid #e5eaed; margin: 0; padding-top: 14px; color: #236238; font-size: .88rem; }
-.pdf-converter { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 10px; padding-top: 14px; border-top: 1px solid #e5eaed; }.pdf-converter p { grid-column: 1 / -1; color: #65737d; font-size: .82rem; }.pdf-converter label { min-width: 0; }.pdf-converter input { min-width: 0; }
-.driver-import-panel { border-left-color: #536d7a; }.driver-import-form { grid-template-columns: 1fr auto; }.driver-import-form .template-link { grid-column: 1 / -1; }
-.login-link, button { border-radius: 6px; font: inherit; cursor: pointer; }
-.login-link, .primary { background: #a83b25; color: white; padding: 9px 14px; text-decoration: none; border: 1px solid #a83b25; }
-button { padding: 7px 10px; border: 1px solid #cbd4db; background: white; color: #283742; } button:hover { border-color: #7e8d97; }
-.resource-nav { display: flex; gap: 8px; overflow-x: auto; border-bottom: 1px solid #d9e0e5; padding-bottom: 12px; }
-.resource-nav button { white-space: nowrap; border: 0; background: transparent; } .resource-nav button.active { background: #edf1f3; color: #a83b25; font-weight: 700; }
-.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 28px; margin-top: 26px; }
-.list-panel, .form-panel { border: 1px solid #d9e0e5; border-radius: 9px; background: white; padding: 20px; }
-.section-heading p { color: #71808b; font-size: .88rem; margin-top: 3px; }
-.table-scroll { overflow-x: auto; margin-top: 18px; } table { border-collapse: collapse; width: 100%; font-size: .9rem; text-align: left; } th, td { border-bottom: 1px solid #e5eaed; padding: 11px 9px; white-space: nowrap; } th { color: #65737d; font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; } .actions { display: flex; gap: 6px; } button.danger { color: #a22727; }
-.form-panel { align-self: start; } .form-panel h2 { margin-bottom: 18px; } form { display: grid; gap: 14px; } label { display: grid; gap: 6px; font-size: .85rem; color: #46545e; font-weight: 600; } input, select { box-sizing: border-box; width: 100%; padding: 9px; border: 1px solid #cbd4db; border-radius: 5px; font: inherit; color: #1c2630; background: white; } .form-actions { justify-content: flex-start; margin-top: 6px; }
-.notice { border-radius: 6px; margin-top: 18px; padding: 11px 13px; } .notice.error { background: #fff0ef; color: #8f2420; } .notice.success { background: #eef8f0; color: #236238; } .notice a { color: inherit; font-weight: bold; }
-.modal-backdrop { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 20px; background: rgba(21, 31, 38, .45); }
-.error-modal { width: min(620px, 100%); max-height: min(650px, 90vh); overflow: auto; border-radius: 10px; background: white; box-shadow: 0 16px 48px rgba(0, 0, 0, .25); padding: 24px; }
-.modal-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }.modal-heading button { border: 0; font-size: 1.6rem; line-height: 1; padding: 0 4px; }.error-modal ul { display: grid; gap: 10px; list-style: none; margin: 20px 0; padding: 0; }.error-modal li { display: grid; gap: 3px; border-left: 3px solid #b23927; background: #fff4f3; padding: 10px 12px; color: #65231e; }.error-modal li span { font-size: .88rem; }
+h1, h2 { color: #1c2630; }
+h1 { margin: 0; font-size: 2rem; }
+h2 { margin: 0; font-size: 1.2rem; }
+p { margin: 0; }
+select { padding: 6px; border: 1px solid #cbd4db; border-radius: 5px; color: #1c2630; background: white; }
+.public-shell { max-width: 1180px; margin: auto; padding: 22px; }
+.public-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.brand { color: #1c2630; font-weight: 800; text-decoration: none; font-size: 1.2rem; }
+.public-header nav { display: flex; gap: 16px; align-items: center; }
+.public-header a { color: #52616e; text-decoration: none; }
+.public-hero { padding: 72px 0 42px; }
+.public-hero p { color: #a83b25; text-transform: uppercase; font-weight: 700; letter-spacing: .1em; }
+.public-hero h1 { font-size: 3.2rem; margin: 8px 0 22px; }
+.season-grid { display: grid; gap: 22px; }
+.season-card { background: white; border: 1px solid #d9e0e5; border-radius: 10px; padding: 24px; }
+.season-card > p { color: #a83b25; font-weight: 700; }
+.season-card h2 { margin: 6px 0 24px; }
+.round-list { color: #52616e; padding-left: 20px; }
+.round-list li { margin: 8px 0; }
+.standing { margin-top: 24px; }
+.standing h3 { border-bottom: 2px solid #a83b25; padding-bottom: 8px; }
+.standing table { margin-top: 8px; }
+.table-scroll { overflow-x: auto; margin-top: 18px; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; text-align: left; }
+th, td { border-bottom: 1px solid #e5eaed; padding: 11px 9px; white-space: nowrap; }
+th { color: #65737d; font-size: .76rem; text-transform: uppercase; letter-spacing: .04em; }
 .empty { color: #71808b; padding: 25px 0; }
-.session-results { margin: 24px 0; }.session-results select { min-width: 180px; }
-.manual-result-form { grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 18px 0; }.manual-result-form input { min-width: 0; }.time-input { min-width: 100px; }
-.public-shell { max-width: 1180px; margin: auto; padding: 22px; }.public-header { display:flex; justify-content:space-between; align-items:center; }.brand { color:#1c2630; font-weight:800; text-decoration:none; font-size:1.2rem; }.public-header nav { display:flex; gap:16px; align-items:center; }.public-header a { color:#52616e; text-decoration:none; }.public-header select { width:auto; padding:6px; }.public-hero { padding:72px 0 42px; }.public-hero p { color:#a83b25; text-transform:uppercase; font-weight:700; letter-spacing:.1em; }.public-hero h1 { font-size:3.2rem; margin:8px 0 22px; }.public-hero input { max-width:460px; }.season-grid { display:grid; gap:22px; }.season-card { background:#fff; border:1px solid #d9e0e5; border-radius:10px; padding:24px; }.season-card > p { color:#a83b25; font-weight:700; }.season-card h2 { margin:6px 0 24px; }.round-list { color:#52616e; padding-left:20px; }.standing { margin-top:24px; }.standing h3 { border-bottom:2px solid #a83b25; padding-bottom:8px; }.standing table { margin-top:8px; }.public-error { color:#8f2420; }
-@media (max-width: 850px) { .app-shell { padding: 24px 16px; } .workspace, .import-panel { grid-template-columns: 1fr; } .import-form, .pdf-converter { grid-template-columns: 1fr; } .topbar { align-items: flex-start; } }
+.public-error { color: #8f2420; }
+.detail-page { margin-top: 28px; }
+.detail-page h1 { margin: 20px 0; }
+.detail-page h2 { margin: 28px 0 12px; }
+.source-list { list-style: none; padding: 0; display: grid; gap: 16px; }
+.source-list li { display: grid; gap: 8px; border: 1px solid #d9e0e5; border-radius: 6px; padding: 16px; }
+.source-list code { overflow-wrap: anywhere; }
+.source-list details { color: #52616e; font-size: .85rem; }
+.source-list details p { overflow-wrap: anywhere; margin-top: 8px; }
+@media (max-width: 600px) {
+  .public-shell { padding: 16px; }
+  .public-header { align-items: flex-start; flex-wrap: wrap; }
+  .season-card { padding: 16px; }
+  .public-hero h1 { font-size: 2.4rem; }
+}

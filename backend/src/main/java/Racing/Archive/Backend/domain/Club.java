@@ -24,6 +24,12 @@ public class Club {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "archive_key", unique = true, length = 160)
+    private String archiveKey;
+
+    @Column(name = "identity_notes", columnDefinition = "TEXT")
+    private String identityNotes;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "federation_id")
     private Federation federation;

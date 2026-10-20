@@ -1,0 +1,11 @@
+{
+  "eventKey": "YYYY-MM-DD-event-slug",
+  "name": "Event name",
+  "startsOn": "YYYY-MM-DD",
+  "endsOn": "YYYY-MM-DD",
+  "status": "awaiting-sources",
+  "championshipSeasons": [],
+  "trackKey": null,
+  "documents": [],
+  "migrations": []
+}

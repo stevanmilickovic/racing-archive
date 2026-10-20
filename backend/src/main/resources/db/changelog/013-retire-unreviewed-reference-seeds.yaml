@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 013-retire-unreviewed-reference-seeds
+      author: codex
+      changes:
+        - sqlFile:
+            path: 013-retire-unreviewed-reference-seeds.sql
+            relativeToChangelogFile: true
