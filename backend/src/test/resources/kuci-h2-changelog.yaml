@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include: { file: kuci-h2-baseline.yaml }
+  - include: { file: db/changelog/019-kuci-2026.yaml }

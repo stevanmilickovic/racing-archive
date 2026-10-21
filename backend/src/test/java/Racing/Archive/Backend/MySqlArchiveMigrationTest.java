@@ -25,18 +25,24 @@ import static org.assertj.core.api.Assertions.*;
 @EnabledIfEnvironmentVariable(named = "RACING_ARCHIVE_TEST_MYSQL_URL", matches = "jdbc:mysql:.*")
 class MySqlArchiveMigrationTest {
     private static final String MASTER = "classpath:db/changelog/db.changelog-master.yaml";
+    private static final String PRE_KUCI = "classpath:pre-kuci-changelog.yaml";
     private static final Path EVENT_DIRECTORY = Path.of("..", "archive", "events", "2026", "2026-05-02-kotor-trojica");
     private final JsonMapper json = JsonMapper.builder().build();
 
     @Test
     void cleanReplayPublishesReviewedEventAndExactOriginalDownloads() throws Exception {
         DriverManagerDataSource dataSource = emptySchema("RACING_ARCHIVE_TEST_MYSQL_URL");
-        migrate(dataSource, MASTER);
+        migrate(dataSource, PRE_KUCI);
         verifyEvent(dataSource, 135);
         verifyGoc(dataSource);
-        migrate(dataSource, MASTER);
+        migrate(dataSource, PRE_KUCI);
         assertThat(new JdbcTemplate(dataSource).queryForObject("SELECT COUNT(*) FROM DATABASECHANGELOG", Long.class)).isEqualTo(23);
         verifyPublicApi(dataSource);
+        migrate(dataSource, MASTER);
+        KuciArchiveMigrationTest.verifyArchive(dataSource);
+        KuciArchiveMigrationTest.verifyPublicApi(dataSource, MASTER);
+        migrate(dataSource, MASTER);
+        assertThat(new JdbcTemplate(dataSource).queryForObject("SELECT COUNT(*) FROM DATABASECHANGELOG", Long.class)).isEqualTo(26);
     }
 
     @Test
@@ -55,7 +61,7 @@ class MySqlArchiveMigrationTest {
                 "classifications", "source_documents")) {
             jdbc.execute("ALTER TABLE " + table + " AUTO_INCREMENT=10000");
         }
-        migrate(dataSource, MASTER);
+        migrate(dataSource, PRE_KUCI);
         verifyEvent(dataSource, 136);
         verifyGoc(dataSource);
         assertThat(jdbc.queryForList("SELECT * FROM session_results WHERE id IN (" +
@@ -64,8 +70,14 @@ class MySqlArchiveMigrationTest {
                 preservedClassifications.stream().map(row -> row.get("id").toString()).collect(java.util.stream.Collectors.joining(",")) + ") ORDER BY id")).isEqualTo(preservedClassifications);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM drivers WHERE first_name='Preserved' AND last_name='Legacy' AND archive_key IS NULL", Long.class)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT MIN(e.id) FROM entries e JOIN championship_rounds r ON r.id=e.round_id WHERE r.archive_key='2026-06-06-goc'", Long.class)).isGreaterThanOrEqualTo(10000);
-        migrate(dataSource, MASTER);
+        migrate(dataSource, PRE_KUCI);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM entries", Long.class)).isEqualTo(114);
+        migrate(dataSource, MASTER);
+        KuciArchiveMigrationTest.verifyArchive(dataSource);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM entries", Long.class)).isEqualTo(176);
+        assertThat(jdbc.queryForList("SELECT * FROM session_results WHERE id IN (" +
+                preservedResults.stream().map(row -> row.get("id").toString()).collect(java.util.stream.Collectors.joining(",")) + ") ORDER BY id")).isEqualTo(preservedResults);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM drivers WHERE first_name='Preserved' AND last_name='Legacy' AND archive_key IS NULL", Long.class)).isEqualTo(1);
     }
 
     private DriverManagerDataSource emptySchema(String variable) {
@@ -195,6 +207,7 @@ class MySqlArchiveMigrationTest {
     private void verifyPublicApi(DriverManagerDataSource dataSource) throws Exception {
         try (var context = new SpringApplicationBuilder(BackendApplication.class).run(
                 "--server.port=0", "--spring.datasource.url=" + dataSource.getUrl(),
+                "--spring.liquibase.change-log=" + PRE_KUCI,
                 "--spring.datasource.username=" + dataSource.getUsername(),
                 "--spring.datasource.password=" + dataSource.getPassword(),
                 "--racing-archive.sources-directory=" + Path.of("..", "archive", "events").toAbsolutePath())) {

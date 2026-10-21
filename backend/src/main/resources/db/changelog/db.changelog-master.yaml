@@ -35,3 +35,5 @@ databaseChangeLog:
       file: db/changelog/017-merge-polo-spellings.yaml
   - include:
       file: db/changelog/018-goc-2026.yaml
+  - include:
+      file: db/changelog/019-kuci-2026.yaml
